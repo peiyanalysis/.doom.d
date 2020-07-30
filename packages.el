@@ -65,3 +65,8 @@
 (package! magic-latex-buffer
   :recipe (:host github :repo "zk-phi/magic-latex-buffer"))
 (package! sis)
+(package! lsp-latex
+  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
+(package! magic-latex-buffer
+  :recipe (:host github :repo "zk-phi/magic-latex-buffer"))
+(package! ace-pinyin)

@@ -60,7 +60,9 @@
 ;;
 ;;
 ;;
-(use-package! sis
+;;
+;; Smart input_method switch
+(use-package! sis                       ; :ID:       f09244df-4c0e-4c93-861a-c648265d284f
 :config
   (sis-ism-lazyman-config nil nil 'fcitx5)
   ;; enable the /cursor color/ mode
@@ -72,3 +74,26 @@
   ;; enable the /inline english/ mode for all buffers
   (sis-global-inline-mode t)
   )
+;;
+;;
+;; Get XeLaTeX in TeX mode
+;;
+;; LSP for LaTeX-mode and TeX-mode
+(use-package! lsp-latex
+  :config
+    (setq lsp-latex-texlab-executable "/usr/bin/")
+    (with-eval-after-load "tex-mode"
+      (add-hook 'tex-mode-hook 'lsp)
+      (add-hook 'latex-mode-hook 'lsp))
+  )
+(use-package! magic-latex-buffer
+  :commands magic-latex-buffer
+  :delight magic-latex-buffer
+  :ghook ('LaTeX-mode-hook #'magic-latex-buffer)
+  :init
+  (progn
+    (setq magic-latex-enable-block-highlight t ;; Prettify blocks that change their font size
+           magic-latex-enable-suscript t        ;; Prettify sub and super script blocks
+           magic-latex-enable-pretty-symbols t  ;; Convert latex variables into their UTF8 symbol
+           magic-latex-enable-block-align nil   ;; Don't make \centering blocks appear centered in the LaTeX buffer
+           magic-latex-enable-inline-image t))) ;; Display images inline in the LaTeX document

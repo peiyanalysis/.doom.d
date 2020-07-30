@@ -1,30 +1,41 @@
 #+TITLE: Twinking Log
 
-* Visual settings
+* DONE Visual settings
 
-** font size
+** DONE font size
 :PROPERTIES:
 :ID:       f09244df-4c0e-4c93-861a-c648265d284f
 :END:
 Follow codes in the following disscusing in emacs-china.
 https://emacs-china.org/t/org-mode/440/81
 
-** Fcitx-input
+** DONE Fcitx-input
 :PROPERTIES:
 :ID:       18a6b0ad-264d-456b-b30b-c497f8796681
 :END:
 Using package =sis= in melpa.
 
-* LaTeX mode
-
+* HOLD LaTeX mode
 ** Find lost XeLaTeX
+:PROPERTIES:
+:ID:       efe16e71-b3e0-413d-8f1e-cd9f081845d1
+:END:
+Could use other command to xelatex.
+Could use latexmk.
 
-** LaTeXmk
+** DONE Latex prettify
 
-** LSP in LaTeX-mode
+** TODO LSP in LaTeX-mode
 
-* Vaniile todo list config
+* HOLD Projectile
+It seems that no need projectile in LaTeX project
+However, project side bar is good, use vaillni projectile.
+maybe, it coulde be even better.
 
-* Magit
+* DONE Evil - Sniper
 
-*
+* avy-pinyin-goto-char-2
+
+* TODO Vanilla todolist configuation
+
+* TODO Magit
