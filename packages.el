@@ -51,7 +51,11 @@
 
 
 (package! dired-narrow)
+(package! deadgrep)
 (package! org-clock-convenience)
+(package! easy-kill)
+(package! org-clock-convenience)
+(package! company-posframe)
 (package! org-roam
   :recipe (:host github :repo "org-roam/org-roam"))
 (package! org-roam-bibtex
@@ -70,3 +74,16 @@
 (package! magic-latex-buffer
   :recipe (:host github :repo "zk-phi/magic-latex-buffer"))
 (package! ace-pinyin)
+(package! evil-find-char-pinyin
+  :recipe (:host github :repo "cute-jumper/evil-find-char-pinyin"))
+(package! ace-jump-mode)
+(package! gif-screencast
+  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
+(package! nov
+  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
+(package! org-download)
+(package! modus-operandi-theme)
+(package! outshine)
+(package! git-link)
+(package! buttercup)
+(package! buttercup)

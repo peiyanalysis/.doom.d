@@ -14,6 +14,7 @@ https://emacs-china.org/t/org-mode/440/81
 :ID:       18a6b0ad-264d-456b-b30b-c497f8796681
 :END:
 Using package =sis= in melpa.
+https://emacs-china.org/t/emacs-fcitx5-gnome-on-wayland/13650
 
 * HOLD LaTeX mode
 ** Find lost XeLaTeX
@@ -29,13 +30,20 @@ Could use latexmk.
 
 * HOLD Projectile
 It seems that no need projectile in LaTeX project
-However, project side bar is good, use vaillni projectile.
-maybe, it coulde be even better.
+However, project side bar is good, use vanillni projectile.
+maybe, it could be even better.
 
 * DONE Evil - Sniper
 
-* avy-pinyin-goto-char-2
+* TODO avy-pinyin-goto-char-2
+Emacs Doom E06: Quick, horizontal movements with evil-snipe
+Zaiste Programming
+https://www.youtube.com/watch?v=ywRExNOyybY&list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj&index=6
+- [X] across windows and buffers
+- [X] jump mode ok
+- [X] keybindings use ace-jump-pinyin
 
-* TODO Vanilla todolist configuation
+* TODO Vanilla todolist configuration
 
 * TODO Magit
+* TODO Deadgrep, what is this?

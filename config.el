@@ -34,7 +34,9 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Dropbox/org/")
+(setq org-directory "~/Dropbox/org/"
+      org-ellipsis " ▼ "
+      org-adapt-indentation nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -59,9 +61,20 @@
 ;; they are implemented.
 ;;
 ;;
+;; Search settings
+;; (setq search-highlight t
+;;       search-whitespace-regexp ".*?"
+;;       isearch-lax-whitespace t
+;;       isearch-regexp-lax-whitespace nil
+;;       isearch-lazy-highlight t
+;;       isearch-lazy-count t
+;;       lazy-count-prefix-format " (%s/%s) "
+;;       lazy-count-suffix-format nil
+;;       isearch-yank-on-move 'shift
+;;       isearch-allow-scroll 'unlimited)
 ;;
 ;;
-;; Smart input_method switch
+;;  Smart input_method switch
 (use-package! sis                       ; :ID:       f09244df-4c0e-4c93-861a-c648265d284f
 :config
   (sis-ism-lazyman-config nil nil 'fcitx5)
@@ -86,6 +99,9 @@
       (add-hook 'tex-mode-hook 'lsp)
       (add-hook 'latex-mode-hook 'lsp))
   )
+;;
+;;
+;; Magic latex buffer
 (use-package! magic-latex-buffer
   :commands magic-latex-buffer
   :delight magic-latex-buffer
@@ -97,3 +113,90 @@
            magic-latex-enable-pretty-symbols t  ;; Convert latex variables into their UTF8 symbol
            magic-latex-enable-block-align nil   ;; Don't make \centering blocks appear centered in the LaTeX buffer
            magic-latex-enable-inline-image t))) ;; Display images inline in the LaTeX document
+;;
+;;
+;; ace pinyin
+(use-package! ace-pinyin
+  :after evil
+  :config
+  (setq avy-all-windows t)
+  (ace-pinyin-global-mode t))
+;;
+;;
+;; evil-find-char-pinyin
+(use-package! evil-find-char-pinyin
+  :after evil
+  :config
+  (setq avy-all-windows t)
+  (evil-find-char-pinyin-mode t))
+;;
+;;
+;; deadgrep, an rg search engien
+;; (use-package! deadgrep
+;;   :if (executable-find "rg")
+;;   :init
+;;   (map! "<F5>" #'deadgrep))
+;;
+;;
+;;
+;; magit
+;; (use-package! magit
+;;   :init
+;;   (map! "s-g" #'magit-status
+;;         "C-c g" #'magit-status
+;;         "s-G" #'magit-blame-addition
+;;         "C-c G" #'magit-blame-addition)
+;;   :config
+;;   (transient-append-suffix 'magit-log "a"
+;;     '("w" "Wip" magit-wip-log-current))
+;;   (magit-define-popup-switch 'magit-log-popup
+;;                              ?m "Omit merge commits" "--no-merges")
+;;   (transient-append-suffix 'magit-log "-A"
+;;     '("-m" "Omit merge commits" "--no-merges")))
+;; (use-package! git-link
+;;   :commands
+;;   (git-link git-link-commit git-link-homepage)
+;;   :custom
+;;   (git-link-use-commit t))
+;;(use-package! smartparens
+;; :init
+;; (map! :map smartparens-mode-map
+;;       "C-M-f" #'sp-forward-sexp
+;;       "C-M-b" #'sp-backward-sexp
+;;       "C-M-u" #'sp-backward-up-sexp
+;;       "C-M-d" #'sp-down-sexp
+;;       "C-M-p" #'sp-backward-down-sexp
+;;       "C-M-n" #'sp-up-sexp
+;;       "C-M-s" #'sp-splice-sexp
+;;       "C-)" #'sp-forward-slurp-sexp
+;;       "C-}" #'sp-forward-barf-sexp
+;;       "C-(" #'sp-backward-slurp-sexp
+;;       "C-M-)" #'sp-backward-slurp-sexp
+;;       "C-M-)" #'sp-backward-barf-sexp))
+;;
+;;
+;; nov-mode
+(use-package! nov
+  :hook (nov-mode . variable-pitch-mode)
+  :mode ("\\.\\(epub\\|mobi\\)\\'" . nov-mode))
+;;
+;;
+;; org-capture
+(setq pei/org-agenda-directory "~/Dropbox/org/gtd/")
+(require 'find-lisp)
+(setq org-agenda-files
+      (find-lisp-find-files pei/org-agenda-directory "\.org$"))
+
+;; (setq org-capture-templates
+;;         `(("i" "inbox" entry (file ,(concat pei/org-agenda-directory "inbox.org"))
+;;            "* TODO %?")
+;;           ;; ("e" "email" entry (file+headline ,(concat pei/org-agenda-directory "emails.org") "Emails")
+;;           ;; "* TODO [#A] Reply: %a :@home:@office:"
+;;           ;; :immediate-finish t)
+;;           ("c" "org-protocol-capture" entry (file ,(concat pei/org-agenda-directory "inbox.org"))
+;;                "* TODO [[%:link][%:description]]\n\n %i"
+;;                :immediate-finish t)
+;;           ("w" "Weekly Review" entry (file+olp+datetree ,(concat pei/org-agenda-directory "reviews.org"))
+;;            (file ,(concat pei/org-agenda-directory "templates/weekly_review.org")))
+;;           ("r" "Reading" todo ""
+;;                ((org-agenda-files '(,(concat pei/org-agenda-directory "reading.org")))))))
