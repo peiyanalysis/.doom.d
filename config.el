@@ -19,7 +19,7 @@
 
 ;; Font settings
 ;; :ID:       f09244df-4c0e-4c93-861a-c648265d284f
-(load-file "~/.doom.d/+ui/font.el")
+(load! "~/.doom.d/+ui/font.el")
 
 
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
@@ -38,11 +38,6 @@
       org-ellipsis " ▼ "
       org-adapt-indentation nil)
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
-
-
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -60,20 +55,16 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 ;;
-;;
-;; Search settings
-;; (setq search-highlight t
-;;       search-whitespace-regexp ".*?"
-;;       isearch-lax-whitespace t
-;;       isearch-regexp-lax-whitespace nil
-;;       isearch-lazy-highlight t
-;;       isearch-lazy-count t
-;;       lazy-count-prefix-format " (%s/%s) "
-;;       lazy-count-suffix-format nil
-;;       isearch-yank-on-move 'shift
-;;       isearch-allow-scroll 'unlimited)
-;;
-;;
+;; Hide-Show keybinds
+(map! :leader
+       (:prefix-map ("H" . "hide code")
+        :desc "hide block"                 "b" #'hs-hide-block
+        :desc "hide level"                 "l" #'hs-hide-level
+        :desc "hide all"                   "a" #'hs-hide-all)
+       (:prefix-map ("S" . "show code")
+        :desc "show block"                 "b" #'hs-show-block
+        :desc "show all"                   "a" #'hs-show-all
+))
 ;;  Smart input_method switch
 (use-package! sis                       ; :ID:       f09244df-4c0e-4c93-861a-c648265d284f
 :config
@@ -88,9 +79,7 @@
   (sis-global-inline-mode t)
   )
 ;;
-;;
 ;; Get XeLaTeX in TeX mode
-;;
 ;; LSP for LaTeX-mode and TeX-mode
 (use-package! lsp-latex
   :config
@@ -99,7 +88,6 @@
       (add-hook 'tex-mode-hook 'lsp)
       (add-hook 'latex-mode-hook 'lsp))
   )
-;;
 ;;
 ;; Magic latex buffer
 (use-package! magic-latex-buffer
@@ -114,14 +102,12 @@
            magic-latex-enable-block-align nil   ;; Don't make \centering blocks appear centered in the LaTeX buffer
            magic-latex-enable-inline-image t))) ;; Display images inline in the LaTeX document
 ;;
-;;
 ;; ace pinyin
 (use-package! ace-pinyin
   :after evil
   :config
   (setq avy-all-windows t)
   (ace-pinyin-global-mode t))
-;;
 ;;
 ;; evil-find-char-pinyin
 (use-package! evil-find-char-pinyin
@@ -130,73 +116,53 @@
   (setq avy-all-windows t)
   (evil-find-char-pinyin-mode t))
 ;;
-;;
-;; deadgrep, an rg search engien
-;; (use-package! deadgrep
-;;   :if (executable-find "rg")
-;;   :init
-;;   (map! "<F5>" #'deadgrep))
-;;
-;;
-;;
-;; magit
-;; (use-package! magit
-;;   :init
-;;   (map! "s-g" #'magit-status
-;;         "C-c g" #'magit-status
-;;         "s-G" #'magit-blame-addition
-;;         "C-c G" #'magit-blame-addition)
-;;   :config
-;;   (transient-append-suffix 'magit-log "a"
-;;     '("w" "Wip" magit-wip-log-current))
-;;   (magit-define-popup-switch 'magit-log-popup
-;;                              ?m "Omit merge commits" "--no-merges")
-;;   (transient-append-suffix 'magit-log "-A"
-;;     '("-m" "Omit merge commits" "--no-merges")))
-;; (use-package! git-link
-;;   :commands
-;;   (git-link git-link-commit git-link-homepage)
-;;   :custom
-;;   (git-link-use-commit t))
-;;(use-package! smartparens
-;; :init
-;; (map! :map smartparens-mode-map
-;;       "C-M-f" #'sp-forward-sexp
-;;       "C-M-b" #'sp-backward-sexp
-;;       "C-M-u" #'sp-backward-up-sexp
-;;       "C-M-d" #'sp-down-sexp
-;;       "C-M-p" #'sp-backward-down-sexp
-;;       "C-M-n" #'sp-up-sexp
-;;       "C-M-s" #'sp-splice-sexp
-;;       "C-)" #'sp-forward-slurp-sexp
-;;       "C-}" #'sp-forward-barf-sexp
-;;       "C-(" #'sp-backward-slurp-sexp
-;;       "C-M-)" #'sp-backward-slurp-sexp
-;;       "C-M-)" #'sp-backward-barf-sexp))
-;;
-;;
 ;; nov-mode
 (use-package! nov
   :hook (nov-mode . variable-pitch-mode)
   :mode ("\\.\\(epub\\|mobi\\)\\'" . nov-mode))
 ;;
-;;
-;; org-capture
-(setq pei/org-agenda-directory "~/Dropbox/org/gtd/")
+;; agenda
 (require 'find-lisp)
-(setq org-agenda-files
-      (find-lisp-find-files pei/org-agenda-directory "\.org$"))
+(setq org-agenda-files '("~/Dropbox/org/gtd/inbox.org" "~/Dropbox/org/gtd/projects.org" "~/Dropbox/org/gtd/next.org" "~/Dropbox/org/gtd/test.org"))
+(setq pei/org-gtd-directory "~/Dropbox/org/gtd/")
+;;
 
-;; (setq org-capture-templates
-;;         `(("i" "inbox" entry (file ,(concat pei/org-agenda-directory "inbox.org"))
-;;            "* TODO %?")
-;;           ;; ("e" "email" entry (file+headline ,(concat pei/org-agenda-directory "emails.org") "Emails")
-;;           ;; "* TODO [#A] Reply: %a :@home:@office:"
-;;           ;; :immediate-finish t)
-;;           ("c" "org-protocol-capture" entry (file ,(concat pei/org-agenda-directory "inbox.org"))
-;;                "* TODO [[%:link][%:description]]\n\n %i"
-;;                :immediate-finish t)
-;;           ("w" "Weekly Review" entry (file+olp+datetree ,(concat pei/org-agenda-directory "reviews.org"))
-;;            (file ,(concat pei/org-agenda-directory "templates/weekly_review.org")))
-;;           ("r" "Reading" todo ""
-;;                ((org-agenda-files '(,(concat pei/org-agenda-directory "reading.org")))))))
+;; todo-keywords
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)" "STUCK(s)")))
+  (setq org-todo-keyword-faces '(("TODO" . "red") ("NEXT" . "yellow") ("HOLD" . "orange")
+                                 ("DONE" . "green") ("KILL" . "grey") ("STUCK". "blue")))
+  )
+;; Capture-Refile
+(after! org 
+  (setq org-capture-templates
+        `(("i" "inbox" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
+           "* TODO %?")
+          ;; ("e" "email" entry (file+headline ,(concat pei/org-agenda-directory "emails.org") "Emails")
+          ;;      "* TODO [#A] Reply: %a :@home:@office:"
+          ;;      :immediate-finish t)
+          ("c" "org-protocol-capture" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
+               "* TODO [[%:link][%:description]]\n\n %i"
+               :immediate-finish t))))
+;; 
+;; refile
+(after! org
+  (setq org-refile-targets '(("next.org" :level . 0)
+                             ("someday.org":level . 2)
+                             ("tickler.org":level . 0)
+                             ("projects.org":level . 2))))
+;;
+;; agenda ui, time grid
+;; (after! org
+;;  (setq org-agenda-time-grid (quote ((daily today require-timed)
+;;                                     (300 600 900 1200 1500 1800 2100 2400)
+;;                                    "......" "-----------------------------------------------------"))))
+;; ;;
+;; ;;agenda ui, column view
+;;  (after! org
+;;    (setq org-columns-default-format "%25ITEM %TODO %3PRIORITY %TAGS %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)"))
+
+  (let ((org-super-agenda-groups
+       '((:auto-group t))))
+  (org-agenda-list))
