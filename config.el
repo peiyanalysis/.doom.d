@@ -127,32 +127,32 @@
 (setq pei/org-gtd-directory "~/Dropbox/org/gtd/")
 ;;
 
-;; todo-keywords
-(after! org
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)" "STUCK(s)")))
-  (setq org-todo-keyword-faces '(("TODO" . "red") ("NEXT" . "yellow") ("HOLD" . "orange")
-                                 ("DONE" . "green") ("KILL" . "grey") ("STUCK". "blue")))
-  )
-;; Capture-Refile
-(after! org 
-  (setq org-capture-templates
-        `(("i" "inbox" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
-           "* TODO %?")
-          ;; ("e" "email" entry (file+headline ,(concat pei/org-agenda-directory "emails.org") "Emails")
-          ;;      "* TODO [#A] Reply: %a :@home:@office:"
-          ;;      :immediate-finish t)
-          ("c" "org-protocol-capture" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
-               "* TODO [[%:link][%:description]]\n\n %i"
-               :immediate-finish t))))
-;; 
-;; refile
-(after! org
-  (setq org-refile-targets '(("next.org" :level . 0)
-                             ("someday.org":level . 2)
-                             ("tickler.org":level . 0)
-                             ("projects.org":level . 2))))
-;;
+;; ;; todo-keywords
+;; (after! org
+;;   (setq org-todo-keywords
+;;         '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)" "STUCK(s)")))
+;;   (setq org-todo-keyword-faces '(("TODO" . "red") ("NEXT" . "yellow") ("HOLD" . "orange")
+;;                                  ("DONE" . "green") ("KILL" . "grey") ("STUCK". "blue")))
+;;   )
+;; ;; Capture-Refile
+;; (after! org 
+;;   (setq org-capture-templates
+;;         `(("i" "inbox" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
+;;            "* TODO %?")
+;;           ;; ("e" "email" entry (file+headline ,(concat pei/org-agenda-directory "emails.org") "Emails")
+;;           ;;      "* TODO [#A] Reply: %a :@home:@office:"
+;;           ;;      :immediate-finish t)
+;;           ("c" "org-protocol-capture" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
+;;                "* TODO [[%:link][%:description]]\n\n %i"
+;;                :immediate-finish t))))
+;; ;; 
+;; ;; refile
+;; (after! org
+;;   (setq org-refile-targets '(("next.org" :level . 0)
+;;                              ("someday.org":level . 2)
+;;                              ("tickler.org":level . 0)
+;;                              ("projects.org":level . 2))))
+;; ;;
 ;; agenda ui, time grid
 ;; (after! org
 ;;  (setq org-agenda-time-grid (quote ((daily today require-timed)

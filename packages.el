@@ -95,3 +95,4 @@
 (package! ht)
 (package! s)
 (package! ts)
+(package! window-purpose)
