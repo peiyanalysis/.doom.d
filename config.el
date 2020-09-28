@@ -127,42 +127,46 @@
 (setq pei/org-gtd-directory "~/Dropbox/org/gtd/")
 ;;
 
-;; ;; todo-keywords
-;; (after! org
-;;   (setq org-todo-keywords
-;;         '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)" "STUCK(s)")))
-;;   (setq org-todo-keyword-faces '(("TODO" . "red") ("NEXT" . "yellow") ("HOLD" . "orange")
-;;                                  ("DONE" . "green") ("KILL" . "grey") ("STUCK". "blue")))
-;;   )
-;; ;; Capture-Refile
-;; (after! org 
-;;   (setq org-capture-templates
-;;         `(("i" "inbox" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
-;;            "* TODO %?")
-;;           ;; ("e" "email" entry (file+headline ,(concat pei/org-agenda-directory "emails.org") "Emails")
-;;           ;;      "* TODO [#A] Reply: %a :@home:@office:"
-;;           ;;      :immediate-finish t)
-;;           ("c" "org-protocol-capture" entry (file ,(concat pei/org-gtd-directory "inbox.org"))
-;;                "* TODO [[%:link][%:description]]\n\n %i"
-;;                :immediate-finish t))))
-;; ;; 
-;; ;; refile
-;; (after! org
-;;   (setq org-refile-targets '(("next.org" :level . 0)
-;;                              ("someday.org":level . 2)
-;;                              ("tickler.org":level . 0)
-;;                              ("projects.org":level . 2))))
-;; ;;
-;; agenda ui, time grid
-;; (after! org
-;;  (setq org-agenda-time-grid (quote ((daily today require-timed)
-;;                                     (300 600 900 1200 1500 1800 2100 2400)
-;;                                    "......" "-----------------------------------------------------"))))
-;; ;;
-;; ;;agenda ui, column view
-;;  (after! org
-;;    (setq org-columns-default-format "%25ITEM %TODO %3PRIORITY %TAGS %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)"))
+(use-package! org-super-agenda
+  :init
 
-  (let ((org-super-agenda-groups
-       '((:auto-group t))))
-  (org-agenda-list))
+  )
+
+
+(use-package! pyim
+  :ensure nil
+  :demand t
+  :config
+  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  (use-package pyim-basedict
+    :ensure nil
+    :config (pyim-basedict-enable))
+
+  (setq default-input-method "pyim")
+
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'quanpin)
+
+  ;; 开启拼音搜索功能
+  (pyim-isearch-mode 1)
+
+  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;; 手动安装 posframe 包。
+  (setq pyim-page-tooltip 'posframe)
+
+  ;; 选词框显示5个候选词
+  (setq pyim-page-length 9)
+
+  :bind
+  (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+   ("C-;" . pyim-delete-word-from-personal-buffer)))
+
+
+(use-package easy-jekyll
+  :init
+  (setq easy-jekyll-basedir "~/blog/")
+  (setq easy-jekyll-url "https://peiyanalysis.github.io")
+  :bind
+  ("C-c C-e" . easy-jekyll)
+  )

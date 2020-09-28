@@ -96,3 +96,5 @@
 (package! s)
 (package! ts)
 (package! window-purpose)
+(package! pyim)
+(package! easy-jekyll)
