@@ -16,16 +16,16 @@
 ;; + `doom-variable-pitch-font'
 ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
+;;
 
-;; Font settings
-;; :ID:       f09244df-4c0e-4c93-861a-c648265d284f
+
 (load! "~/.doom.d/+ui/font.el")
 
 
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "Sarasa Nerd" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "Sarasa Nerd Font" :size 15))
+;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
+;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -34,9 +34,14 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Dropbox/org/"
+(setq org-directory "~/org/"
       org-ellipsis " ▼ "
       org-adapt-indentation nil)
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type t)
+
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -54,7 +59,7 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-;;
+
 ;; Hide-Show keybinds
 (map! :leader
        (:prefix-map ("H" . "hide code")
@@ -65,20 +70,7 @@
         :desc "show block"                 "b" #'hs-show-block
         :desc "show all"                   "a" #'hs-show-all
 ))
-;;  Smart input_method switch
-(use-package! sis                       ; :ID:       f09244df-4c0e-4c93-861a-c648265d284f
-:config
-  (sis-ism-lazyman-config nil nil 'fcitx5)
-  ;; enable the /cursor color/ mode
-  (sis-global-cursor-color-mode t)
-  ;; enable the /respect/ mode
-  (sis-global-respect-mode t)
-  ;; enable the /follow context/ mode for all buffers
-  (sis-global-follow-context-mode t)
-  ;; enable the /inline english/ mode for all buffers
-  (sis-global-inline-mode t)
-  )
-;;
+
 ;; Get XeLaTeX in TeX mode
 ;; LSP for LaTeX-mode and TeX-mode
 (use-package! lsp-latex
@@ -90,56 +82,30 @@
   )
 ;;
 ;; Magic latex buffer
-(use-package! magic-latex-buffer
-  :commands magic-latex-buffer
-  :delight magic-latex-buffer
-  :ghook ('LaTeX-mode-hook #'magic-latex-buffer)
-  :init
-  (progn
-    (setq magic-latex-enable-block-highlight t ;; Prettify blocks that change their font size
-           magic-latex-enable-suscript t        ;; Prettify sub and super script blocks
-           magic-latex-enable-pretty-symbols t  ;; Convert latex variables into their UTF8 symbol
-           magic-latex-enable-block-align nil   ;; Don't make \centering blocks appear centered in the LaTeX buffer
-           magic-latex-enable-inline-image t))) ;; Display images inline in the LaTeX document
-;;
 ;; ace pinyin
 (use-package! ace-pinyin
   :after evil
   :config
   (setq avy-all-windows t)
   (ace-pinyin-global-mode t))
-;;
+
 ;; evil-find-char-pinyin
 (use-package! evil-find-char-pinyin
   :after evil
   :config
   (setq avy-all-windows t)
   (evil-find-char-pinyin-mode t))
-;;
-;; nov-mode
-(use-package! nov
-  :hook (nov-mode . variable-pitch-mode)
-  :mode ("\\.\\(epub\\|mobi\\)\\'" . nov-mode))
-;;
-;; agenda
-(require 'find-lisp)
-(setq org-agenda-files '("~/Dropbox/org/gtd/inbox.org" "~/Dropbox/org/gtd/projects.org" "~/Dropbox/org/gtd/next.org" "~/Dropbox/org/gtd/test.org"))
-(setq pei/org-gtd-directory "~/Dropbox/org/gtd/")
-;;
 
-(use-package! org-super-agenda
+(use-package! deadgrep
+  :if (executable-find "rg")
   :init
-
-  )
-
+  (map! "M-s" #'deadgrep))
 
 (use-package! pyim
-  :ensure nil
   :demand t
   :config
   ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
   (use-package pyim-basedict
-    :ensure nil
     :config (pyim-basedict-enable))
 
   (setq default-input-method "pyim")
@@ -163,10 +129,95 @@
    ("C-;" . pyim-delete-word-from-personal-buffer)))
 
 
-(use-package easy-jekyll
+(use-package! smartparens
   :init
-  (setq easy-jekyll-basedir "~/blog/")
-  (setq easy-jekyll-url "https://peiyanalysis.github.io")
-  :bind
-  ("C-c C-e" . easy-jekyll)
-  )
+  (map! :map smartparens-mode-map
+        "C-M-f" #'sp-forward-sexp
+        "C-M-b" #'sp-backward-sexp
+        "C-M-u" #'sp-backward-up-sexp
+        "C-M-d" #'sp-down-sexp
+        "C-M-p" #'sp-backward-down-sexp
+        "C-M-n" #'sp-up-sexp
+        "C-M-s" #'sp-splice-sexp
+        "C-)" #'sp-forward-slurp-sexp
+        "C-}" #'sp-forward-barf-sexp
+        "C-(" #'sp-backward-slurp-sexp
+        "C-M-)" #'sp-backward-slurp-sexp
+        "C-M-)" #'sp-backward-barf-sexp))
+
+
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+  :hook
+  (after-init . org-roam-mode)
+  :init
+  (map! :leader
+        :prefix "n"
+        :desc "org-roam" "l" #'org-roam
+        :desc "org-roam-insert" "i" #'org-roam-insert
+        :desc "org-roam-switch-to-buffer" "b" #'org-roam-switch-to-buffer
+        :desc "org-roam-find-file" "f" #'org-roam-find-file
+        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+        :desc "org-roam-insert" "i" #'org-roam-insert
+        :desc "org-roam-capture" "c" #'org-roam-capture)
+  (setq org-roam-directory (file-truename "~/.org/roam/")
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-roam-graph-exclude-matcher "private"
+        org-roam-tag-sources '(prop last-directory)
+        org-id-link-to-org-use-id t)
+  :config
+  (setq org-roam-capture-templates
+        '(("l" "lit" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "lit/${slug}"
+           :head "#
+#+hugo_slug: ${slug}
+#+title: ${title}\n"
+           :unnarrowed t)
+          ("c" "concept" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "concepts/${slug}"
+           :head "#
+#+hugo_slug: ${slug}
+#+title: ${title}\n"
+           :unnarrowed t)
+          ("p" "private" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "private/${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)))
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "lit/${slug}"
+           :head "#
+#+roam_key: ${ref}
+#+hugo_slug: ${slug}
+#+roam_tags: website
+#+title: ${title}
+
+- source :: ${ref}"
+           :unnarrowed t)))
+  (set-company-backend! 'org-mode '(company-capf)))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+
+(use-package! org-roam-protocol
+
+  :after org-protocol)

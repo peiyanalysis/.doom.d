@@ -52,10 +52,30 @@
 
 (package! dired-narrow)
 (package! deadgrep)
-(package! org-clock-convenience)
 (package! easy-kill)
-(package! org-clock-convenience)
 (package! company-posframe)
+(package! lsp-latex
+  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
+(package! ace-pinyin)
+(package! evil-find-char-pinyin
+  :recipe (:host github :repo "cute-jumper/evil-find-char-pinyin"))
+(package! ace-jump-mode)
+(package! gif-screencast
+  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
+(package! org-download)
+(package! modus-operandi-theme)
+(package! outshine)
+(package! git-link)
+(package! buttercup)
+(package! s)
+(package! vterm)
+(package! vterm-toggle)
+(package! org-super-agenda)
+(package! dash)
+(package! ht)
+(package! ts)
+(package! window-purpose)
+(package! pyim)
 (package! org-roam
   :recipe (:host github :repo "org-roam/org-roam"))
 (package! org-roam-bibtex
@@ -64,37 +84,5 @@
   :recipe (:host github :repo "jethrokuan/company-org-roam"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
-(package! nov
-  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
-(package! magic-latex-buffer
-  :recipe (:host github :repo "zk-phi/magic-latex-buffer"))
-(package! sis)
-(package! lsp-latex
-  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
-(package! magic-latex-buffer
-  :recipe (:host github :repo "zk-phi/magic-latex-buffer"))
-(package! ace-pinyin)
-(package! evil-find-char-pinyin
-  :recipe (:host github :repo "cute-jumper/evil-find-char-pinyin"))
-(package! ace-jump-mode)
-(package! gif-screencast
-  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
-(package! nov
-  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
-(package! org-download)
-(package! modus-operandi-theme)
-(package! outshine)
-(package! git-link)
-(package! buttercup)
-(package! buttercup)
-(package! s)
-(package! vterm)
-(package! vterm-toggle)
-(package! org-super-agenda)
-(package! dash)
-(package! ht)
-(package! s)
-(package! ts)
-(package! window-purpose)
-(package! pyim)
-(package! easy-jekyll)
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
