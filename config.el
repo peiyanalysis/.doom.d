@@ -36,10 +36,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/.org/"
       org-ellipsis " ▼ "
-      org-adapt-indentation nil
-      org-agenda-files '("~/.org/agenda/inbox.org"
-              "~/.org/agenda/gtd.org"
-              "~/.org/agenda/tickler.org"))
+      org-adapt-indentation nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -131,7 +128,6 @@
   (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
    ("C-;" . pyim-delete-word-from-personal-buffer)))
 
-
 (use-package! smartparens
   :init
   (map! :map smartparens-mode-map
@@ -147,7 +143,6 @@
         "C-(" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-barf-sexp))
-
 
 (use-package! org-roam
   :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
@@ -191,8 +186,7 @@
         '(("r" "ref" plain (function org-roam-capture--get-point)
            "%?"
            :file-name "lit/${slug}"
-           :head "#
-#+roam_key: ${ref}
+           :head "#+roam_key: ${ref}
 #+hugo_slug: ${slug}
 #+roam_tags: website
 #+title: ${title}
@@ -205,7 +199,6 @@
   :after org-protocol)
 
 (use-package org-roam-server
-  :after org-roam
   :config
   (setq org-roam-server-host "127.0.0.1"
         org-roam-server-port 9090
@@ -220,8 +213,8 @@
         org-roam-server-network-label-wrap-length 20))
 
 (use-package! org-roam-protocol
-  :after org-protocol)
 
+  :after org-protocol)
 
 (setq org-capture-templates '(("t" "Todo [inbox]" entry (file+headline "~/.org/agenda/inbox.org" "Tasks")
               "* TODO %i%?")
