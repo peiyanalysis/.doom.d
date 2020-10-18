@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name:sobolev space
+# key:sobolevs
+# --
+W^{$1,$2}$0

@@ -52,8 +52,8 @@
 
 (package! dired-narrow)
 (package! deadgrep)
-(package! easy-kill)
 (package! company-posframe)
+(package! easy-kill)
 (package! lsp-latex
   :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
 (package! ace-pinyin)
@@ -74,6 +74,7 @@
 (package! dash)
 (package! ht)
 (package! ts)
+(package! oauth2)
 (package! window-purpose)
 (package! pyim)
 (package! org-roam
@@ -86,3 +87,9 @@
   :recipe (:host github :repo "org-roam/org-roam-server"))
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+(package! helm-bibtex
+  :recipe (:host github :repo "tmalsburg/helm-bibtex" :branch "master"))
+(package! org-ref
+  :recipe (:host github :repo "jkitchin/org-ref" :branch "master"))
+(package! hexo)
+(package! easy-hugo)

@@ -34,9 +34,12 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/"
+(setq org-directory "~/.org/"
       org-ellipsis " ▼ "
-      org-adapt-indentation nil)
+      org-adapt-indentation nil
+      org-agenda-files '("~/.org/agenda/inbox.org"
+              "~/.org/agenda/gtd.org"
+              "~/.org/agenda/tickler.org"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -170,15 +173,13 @@
         '(("l" "lit" plain (function org-roam--capture-get-point)
            "%?"
            :file-name "lit/${slug}"
-           :head "#
-#+hugo_slug: ${slug}
+           :head "#+hugo_slug: ${slug}
 #+title: ${title}\n"
            :unnarrowed t)
           ("c" "concept" plain (function org-roam--capture-get-point)
            "%?"
            :file-name "concepts/${slug}"
-           :head "#
-#+hugo_slug: ${slug}
+           :head "#+hugo_slug: ${slug}
 #+title: ${title}\n"
            :unnarrowed t)
           ("p" "private" plain (function org-roam-capture--get-point)
@@ -204,7 +205,7 @@
   :after org-protocol)
 
 (use-package org-roam-server
-  :ensure t
+  :after org-roam
   :config
   (setq org-roam-server-host "127.0.0.1"
         org-roam-server-port 9090
@@ -219,5 +220,24 @@
         org-roam-server-network-label-wrap-length 20))
 
 (use-package! org-roam-protocol
-
   :after org-protocol)
+
+
+(setq org-capture-templates '(("t" "Todo [inbox]" entry (file+headline "~/.org/agenda/inbox.org" "Tasks")
+              "* TODO %i%?")
+              ("T" "Tickler" entry (file+headline "~/.org/agenda/tickler.org" "Tickler")
+              "* %i%?\n %U")))
+
+
+(setq org-refile-targets '(("~/.org/agenda/gtd.org" :maxlevel . 3)
+                           ("~/.org/someday.org" :level . 1)
+                           ("~/.org/tickler.org" :maxlevel . 2)))
+
+(use-package deft
+  :after org
+  :bind ("<f9>" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/.org/"))

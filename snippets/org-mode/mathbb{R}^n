@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name:mathbb{R}^n
+# key: mbbrn
+# --
+\mathbb{R}^n
