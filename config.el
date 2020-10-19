@@ -234,3 +234,92 @@
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
   (deft-directory "~/.org/"))
+
+;; (setq org-ref-bibliography-notes "~/.ref/notes_of_refs.org"
+;;       org-ref-default-bibliography '("~/.ref/reference.bib")
+;;       org-ref-pdf-directory "~/.ref/pdfs/")
+
+;; (setq bibtex-completion-bibliography
+;;       '("~/.ref/notes_of_refs.org" . "~/.ref/reference.bib"))
+
+;; ebib
+(use-package! ebib
+  :init
+  (setq ebib-preload-bib-files '("~/.ref/reference.bib")
+        ebib-notes-file "~/.ref/notes_of_refs.org"
+        ebib-file-associations '(("pdf" . "okular")))
+  :bind
+  ("<f5>" . ebib))
+
+;; (require 'org-ref-arxiv)
+;; (require 'doi-utils)
+
+;; (use-package! org-ref
+;;   :init
+;;   (setq org-ref-bibliography-notes "~/.ref/notes_of_refs.org"
+;;         org-ref-default-bibliography '("~/.ref/reference.bib")
+;;         org-ref-pdf-directory "~/.ref/pdfs/"))
+  (setq bibtex-completion-pdf-open-function '("/usr/bin/okular") )
+
+(use-package helm-bibtex :ensure t
+  :bind ("<f11>" . helm-bibtex)
+  :commands (helm-bibtex)
+  :init
+  (add-hook 'bibtex-completion-edit-notes 'org-ref-open-bibtex-notes)
+  (setq bibtex-completion-open-any 'org-ref-open-bibtex-pdf)
+  :config
+  (setq bibtex-completion-bibliography "~/.ref/reference.bib"
+      bibtex-completion-library-path "~/.ref/pdfs/"
+      bibtex-completion-notes-path "~/.ref/notes_of_refs.org")
+  ;(setq bibtex-completion-display-formats
+  ;  '((t . "${=type=:7} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${author:30} ${title:72} ")))
+  (setq bibtex-completion-additional-search-fields '(keywords))
+  (setq bibtex-completion-notes-template-one-file
+	(format "\n** TODO ${=key=} - ${title}\n  :PROPERTIES:\n    :Author: ${author-or-editor}\n    :Journal: ${journal}\n  :END:\n\n"))
+  (setq bibtex-completion-display-formats
+	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
+  (setq bibtex-completion-pdf-field "file")
+  (setq bibtex-completion-pdf-symbol "PDF")
+  (setq bibtex-completion-notes-symbol "N")
+ )
+
+(use-package org-ref :ensure t
+  ;;:defer 1
+  :after (org)
+  :config
+  ;;(setq reftex-default-bibliography '("~/.ref/Literature.bib"))
+  ;; see org-ref for use of these variables
+  (setq bibtex-completion-pdf-field "file")
+  (setq org-ref-bibliography-notes "~/.ref/notes_of_refs.org"
+        org-ref-default-bibliography '("~/.ref/reference.bib")
+	      org-ref-pdf-directory "~/.ref/pdfs/")
+  ;;(setq bibtex-completion-bibliography "~/.ref/Literature.bib"
+  ;;    bibtex-completion-library-path "~/.ref/PDFs"
+  ;;    bibtex-completion-notes-path "~/.ref/Literature-manuscript.org")
+  (setq org-ref-show-broken-links nil)
+  ;; (setq bibtex-completion-pdf-open-function 'org-open-file)
+  (setq org-ref-note-title-format
+   "** TODO %k - %t
+ :PROPERTIES:
+  :CUSTOM_ID: %k
+  :AUTHOR: %9a
+  :JOURNAL: %j
+  :DOI: %D
+  :URL: %U
+ :END:
+")
+
+  (setq bibtex-completion-display-formats
+	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
+  (defun my/org-ref-notes-function (candidates)
+    (let ((key (helm-marked-candidates)))
+      (funcall org-ref-notes-function (car key))))
+
+  (helm-delete-action-from-source "Edit notes" helm-source-bibtex)
+;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
+  (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
+)
+
+
+
+

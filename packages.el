@@ -86,3 +86,7 @@
   :recipe (:host github :repo "org-roam/org-roam-server"))
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+(package! org-ref)
+(package! parsebib
+  :recipe (:host github :repo " joostkremers/parsebib"))
+(package! ebib)
