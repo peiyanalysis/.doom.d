@@ -319,7 +319,3 @@
 ;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
   (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
 )
-
-
-
-
