@@ -86,7 +86,18 @@
   :recipe (:host github :repo "org-roam/org-roam-server"))
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+(unpin! bibtex-completion helm-bibtex ivy-bibtex)
 (package! org-ref)
 (package! parsebib
-  :recipe (:host github :repo " joostkremers/parsebib"))
+  :recipe (:host github :repo "joostkremers/parsebib"))
 (package! ebib)
+(package! ace-window
+  :recipe (:host github
+           :repo "notmgsk/ace-window"
+           :branch "feature/posframe"
+           :files ("ace-window.el" "ace-window-posframe.el")))
+;; (package! feedly
+;;   :recipe (:host github :repo "codecoll/feedly"))
+(package! elfeed)
+(package! elfeed-goodies)
+(package! elfeed-org)

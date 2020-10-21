@@ -181,7 +181,15 @@
            "%?"
            :file-name "private/${slug}"
            :head "#+title: ${title}\n"
-           :unnarrowed t)))
+           :unnarrowed t)
+          ("p"  "phd")
+          ("pp" "phd-project" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "project-phd/${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)
+          ("pt" "phd-ticklers")
+          ))
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            "%?"
@@ -193,6 +201,13 @@
 
 - source :: ${ref}"
            :unnarrowed t)))
+  (add-to-list 'org-roam-capture-ref-templates
+               '("a" "Annotation" plain (function org-roam-capture--get-point)
+               "%U ${body}\n"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+               :immediate-finish t
+               :unnarrowed t))
   (set-company-backend! 'org-mode '(company-capf)))
 
 (use-package! org-roam-protocol
@@ -211,6 +226,9 @@
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
+
+(unless (server-running-p)
+  (org-roam-server-mode))
 
 (use-package! org-roam-protocol
 
@@ -247,6 +265,10 @@
   :init
   (setq ebib-preload-bib-files '("~/.ref/reference.bib")
         ebib-notes-file "~/.ref/notes_of_refs.org"
+        ebib-default-directory "~/.ref/pdfs"
+        ebib-import-directory "~/.ref/pdfs"
+        ;; ebib-notes-directory "~/.ref/notes"
+        ebib-file-search-dirs '("~/.ref/pdfs")
         ebib-file-associations '(("pdf" . "okular")))
   :bind
   ("<f5>" . ebib))
@@ -319,3 +341,54 @@
 ;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
   (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
 )
+
+
+(use-package! ace-window
+  :config
+  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+  :init
+  (map! :leader
+        :prefix "w"
+        :desc "ace-window-select" "a" #'ace-window))
+
+
+(use-package! ace-window-posframe
+  :after ace-window
+  :config
+  (defun pretty-aw-posframe-show (str)
+    (list :string str
+          :poshandler aw-posframe-position-handler
+          :font (face-font 'aw-leading-char-face)
+          :foreground-color (face-foreground 'aw-leading-char-face)
+          :background-color (face-background 'aw-leading-char-face)
+          :internal-border-width 10
+          :internal-border-color "magenta"))
+  (setq ace-window-posframe-show-fn #'pretty-aw-posframe-show)
+  (custom-set-faces '(aw-background-face ((t nil)))
+                    '(aw-leading-char-face
+                      ((t (:foreground "magenta" :box
+                           (:line-width 2 :color "magenta" :style released-button) :height 4.0)))))
+  (ace-window-posframe-mode +1))
+
+
+;; feedly
+;; (setq feedly-access-token "A2gZtusVeED16ZsAA-PPHZrC-iu937_Bq6rbok_HQW86u8o8BLLiRBIMR3ev9MM87JI89MvRe5ZUTjbsh-X17Z96RpxTXU1WKld_LVo4ZuXqd83cUd2-BOTVeNXi7NdPmDasVP66WGo1Yg4tgueQYIePZ9JoGOOl1zuHC25aFj5-NigxLQGDL76vB9iFKoP0VBaat--RzGNj4DmSN-tD8FmBkveKbqz5WWH2uQt76W5KLF555seaXuXUMVLq5g:feedlydev")
+;; (require 'feedly)
+
+;; feed
+(global-set-key (kbd "C-x w") 'elfeed)
+
+;; Comment lines
+;; (global-set-key (kbd "C-x M-;") 'comment-line)
+
+;; elfeed-org
+;; (require 'elfeed-org)
+
+;; ;; Initialize elfeed-org
+;; ;; This hooks up elfeed-org to read the configuration when elfeed
+;; ;; is started with =M-x elfeed=
+;; (elfeed-org)
+;; ;; Optionally specify a number of files containing elfeed
+;; ;; configuration. If not set then the location below is used.
+;; ;; Note: The customize interface is also supported.
+;; (setq rmh-elfeed-org-files (list "~/.rss/elfeed.org"))
