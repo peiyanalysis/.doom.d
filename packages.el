@@ -51,7 +51,6 @@
 
 
 (package! dired-narrow)
-(package! deadgrep)
 (package! easy-kill)
 (package! company-posframe)
 (package! lsp-latex
@@ -66,38 +65,25 @@
 (package! modus-operandi-theme)
 (package! outshine)
 (package! git-link)
-(package! buttercup)
-(package! s)
 (package! vterm)
 (package! vterm-toggle)
-(package! org-super-agenda)
-(package! dash)
-(package! ht)
-(package! ts)
+;; (package! org-super-agenda)
 (package! window-purpose)
 (package! pyim)
-(package! org-roam
-  :recipe (:host github :repo "org-roam/org-roam"))
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-(package! company-org-roam
-  :recipe (:host github :repo "jethrokuan/company-org-roam"))
+;; (package! org-roam
+;;   :recipe (:host github :repo "org-roam/org-roam"))
+;; (package! org-roam-bibtex
+;;   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+;; (package! company-org-roam
+;;   :recipe (:host github :repo "jethrokuan/company-org-roam"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-(unpin! bibtex-completion helm-bibtex ivy-bibtex)
-(package! org-ref)
-(package! parsebib
-  :recipe (:host github :repo "joostkremers/parsebib"))
-(package! ebib)
+;; (package! org-roam-bibtex
+;;   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+;; (unpin! bibtex-completion helm-bibtex ivy-bibtex)
+;; (package! org-ref)
 (package! ace-window
   :recipe (:host github
            :repo "notmgsk/ace-window"
            :branch "feature/posframe"
            :files ("ace-window.el" "ace-window-posframe.el")))
-;; (package! feedly
-;;   :recipe (:host github :repo "codecoll/feedly"))
-(package! elfeed)
-(package! elfeed-goodies)
-(package! elfeed-org)
