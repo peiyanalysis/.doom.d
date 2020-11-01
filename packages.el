@@ -65,6 +65,7 @@
 (package! modus-operandi-theme)
 (package! outshine)
 (package! git-link)
+(package! easy-hugo)
 (package! vterm)
 (package! vterm-toggle)
 ;; (package! org-super-agenda)
