@@ -148,7 +148,7 @@
         :desc "ace-window-select" "a" #'ace-window))
 
 ;; org-mode
-(setq org-directory "~/.org"
+(setq org-directory "~/Dropbox/.org"
       org-ellipsis " ▼ "
       org-adapt-indentation nil)
 (setq org-id-link-to-org-use-id t)
@@ -161,22 +161,40 @@
         "M-p" #'outline-previous-visible-heading)
 ;; set agenda directory
 (require 'find-lisp)
-(setq pei/org-agenda-directory (file-truename "~/.org/"))
+(setq pei/org-agenda-directory (file-truename "~/Dropbox/.org/"))
 (setq org-agenda-files (find-lisp-find-files pei/org-agenda-directory "\.org$")))
 
-;; set capture-templates
-(after! org
-        (setq org-capture-templates
-                `(("i" "Inbox" entry (file "~/.org/inbox.org")
-                ,(concat "* TODO %?\n"
-                        "/Entered on/ %u")))))
+;; todo tags
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
 
 ;; tag system
 (setq org-tag-alist '(("@errand" . ?e)
                       ("@office" . ?o)
                       ("@home" . ?h)
                       (:newline)
+                      ("@repeater" . ?r)
+                      (:newline)
                       ("CANCELLED" . ?c)))
+;; files in /.org/gtd/
+;; capture /.org/gtd/inbox.org
+;; /.org/gtd/next.org
+;; /.org/gtd/project/xxxx
+;; /.org/gtd/repeaters.org
+;; /.org/gtd/ticklers.org
+
+(after! org
+        (setq org-capture-templates
+                `(("i" "Inbox" entry (file "~/Dropbox/.org/inbox.org")
+                ,(concat "* TODO %?\n"
+                         "/Entered on/ %u"))
+                  ("e" "emacs configs" entry (file "~/.doom.d/demands.org")
+                ,(concat "* TODO %?\n"
+                         "/Entered on/ %u")))))
+
+;; agenda view
+
 
 ;; org-roam
 (use-package! org-roam
@@ -198,7 +216,7 @@
                       :desc "Today"          "t" #'org-roam-dailies-today
                       :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
                       :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
-  (setq org-roam-directory (file-truename "~/.org/braindump/org/")
+  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-graph-exclude-matcher "private"
         org-roam-tag-sources '(prop last-directory)
@@ -260,7 +278,7 @@
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
-  (deft-directory "~/.org/"))
+  (deft-directory "~/Dropbox/.org/"))
 
 ;; clock block view
 (use-package! org-clock-convenience
@@ -269,3 +287,4 @@
               ("<S-down>" . org-clock-convenience-timestamp-down)
               ("o" . org-clock-convenience-fill-gap)
               ("e" . org-clock-convenience-fill-gap-both)))
+

@@ -65,9 +65,10 @@
 (package! modus-operandi-theme)
 (package! outshine)
 (package! git-link)
-(package! easy-hugo)
 (package! vterm)
 (package! vterm-toggle)
+(package! cnfonts
+  :recipe (:host github :repo "tumashu/cnfonts"))
 ;; (package! org-super-agenda)
 (package! window-purpose)
 (package! pyim)
