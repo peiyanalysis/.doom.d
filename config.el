@@ -223,8 +223,8 @@
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
 
-(unless (server-running-p)
-  (org-roam-server-mode))
+;; (unless (server-running-p)
+;;   (org-roam-server-mode))
 
 ;; deft
 (use-package deft
