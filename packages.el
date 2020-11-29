@@ -89,3 +89,5 @@
            :repo "notmgsk/ace-window"
            :branch "feature/posframe"
            :files ("ace-window.el" "ace-window-posframe.el")))
+(package! org-bullets)
+(package! org-pomodoro)

@@ -57,16 +57,17 @@
 
 ;; emacs-application-framework
 ;; https://github.com/manateelazycat/emacs-application-framework
-(use-package eaf
-  :load-path "~/.emacs.d/pei-config/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
-  :custom
-  (eaf-find-alternate-file-in-dired t)
-  :config
-  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+;; (use-package eaf
+;;   :load-path "~/.emacs.d/pei-config/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+;;   :custom
+;;   (eaf-find-alternate-file-in-dired t)
+;;   :config
+;;   (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;;   (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+;;   (eaf-bind-key take_photo "p" eaf-camera-keybinding))
 
 ;; Chinese
+(cnfonts-enable)
 ;; search
 (use-package! ace-pinyin
   :after evil
@@ -100,7 +101,7 @@
   ;; 手动安装 posframe 包。
   (setq pyim-page-tooltip 'posframe)
 
-  ;; 选词框显示5个候选词
+  ;; 选词框显示9个候选词
   (setq pyim-page-length 9)
 
   :bind
@@ -147,54 +148,9 @@
         :prefix "w"
         :desc "ace-window-select" "a" #'ace-window))
 
-;; org-mode
-(setq org-directory "~/Dropbox/.org"
-      org-ellipsis " ▼ "
-      org-adapt-indentation nil)
-(setq org-id-link-to-org-use-id t)
 
-(after! org
-  ;; set `SPC n c' as capture keymap
-  ;; outline move method
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading)
-;; set agenda directory
-(require 'find-lisp)
-(setq pei/org-agenda-directory (file-truename "~/Dropbox/.org/"))
-(setq org-agenda-files (find-lisp-find-files pei/org-agenda-directory "\.org$")))
-
-;; todo tags
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
-
-;; tag system
-(setq org-tag-alist '(("@errand" . ?e)
-                      ("@office" . ?o)
-                      ("@home" . ?h)
-                      (:newline)
-                      ("@repeater" . ?r)
-                      (:newline)
-                      ("CANCELLED" . ?c)))
-;; files in /.org/gtd/
-;; capture /.org/gtd/inbox.org
-;; /.org/gtd/next.org
-;; /.org/gtd/project/xxxx
-;; /.org/gtd/repeaters.org
-;; /.org/gtd/ticklers.org
-
-(after! org
-        (setq org-capture-templates
-                `(("i" "Inbox" entry (file "~/Dropbox/.org/inbox.org")
-                ,(concat "* TODO %?\n"
-                         "/Entered on/ %u"))
-                  ("e" "emacs configs" entry (file "~/.doom.d/demands.org")
-                ,(concat "* TODO %?\n"
-                         "/Entered on/ %u")))))
-
-;; agenda view
-
+;; About org-gtd
+(load "~/.doom.d/org-gtd.el")
 
 ;; org-roam
 (use-package! org-roam
@@ -217,6 +173,7 @@
                       :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
                       :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
   (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
+        org-roam-index-file "~/Dropbox/.org/roams/index.org"
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-graph-exclude-matcher "private"
         org-roam-tag-sources '(prop last-directory)
@@ -269,9 +226,8 @@
 (unless (server-running-p)
   (org-roam-server-mode))
 
-
 ;; deft
-(use-package! deft
+(use-package deft
   :after org
   :bind ("<f9>" . deft)
   :custom
@@ -280,11 +236,24 @@
   (deft-default-extension "org")
   (deft-directory "~/Dropbox/.org/"))
 
-;; clock block view
-(use-package! org-clock-convenience
-  :bind (:map org-agenda-mode-map
-              ("<S-up>" . org-clock-convenience-timestamp-up)
-              ("<S-down>" . org-clock-convenience-timestamp-down)
-              ("o" . org-clock-convenience-fill-gap)
-              ("e" . org-clock-convenience-fill-gap-both)))
 
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+;;(setq TeX-view-program-selection '((output-pdf "Okular")))
+
+(setq TeX-view-program-selection
+   (quote
+    (((output-dvi has-no-display-manager)
+      "dvi2tty")
+     ((output-dvi style-pstricks)
+      "dvips and gv")
+     (output-dvi "xdvi")
+;;     (output-pdf "Zathura")
+     (output-pdf "Okular")
+     (output-html "xdg-open"))))
+
+;;(server-start)
+(setq TeX-source-correlate-mode t)
+(setq TeX-source-correlate-start-server t)
+(setq TeX-PDF-mode t)
