@@ -10,7 +10,34 @@
  '(org-agenda-files '("~/Dropbox/.org/inbox.org"))
  '(org-roam-index-file "~/.org/index.org")
  '(safe-local-variable-values
-   '((org-refile-targets)
+   '((org-refile-targets
+      (gtd-file-maybe/someday :maxlevel . 1)
+      (gtd-file-todolist :maxlevel . 3)
+      (gtd-file-trash :maxlevel . 1))
+     (org-refile-targets
+      (gtd-file-todolist :maxlevel . 3)
+      (gtd-file-trash :maxlevel . 1))
+     (org-refile-targets
+      (gtd-file-maybe/someday :maxlevel . 1)
+      (gtd-file-todolist :maxlevel . 3)
+      (gtd-file-trash :maxlevel 0.1))
+     (org-refile-targets
+      (gtd-file-maybe/someday :maxlevel . 1)
+      (gtd-file-todolist :maxlevel . 3))
+     (org-refile-targets
+      (gtd-file-maybe/someday :maxlevel . 3)
+      (gtd-file-todolist :maxlevel . 3))
+     (org-refile-targets
+      (gtd-file-maybe/someday :maxlevel . 3))
+     (org-refile-targets
+      (nil :maxlevel . 3)
+      (gtd-file-todolist :maxlevel . 3))
+     (org-refile-targets
+      (nil :maxlevel . 3)
+      (gtd-file-maybe/someday :maxlevel . 3))
+     (dodododlalala . ttt)
+     (lalala . ttt)
+     (org-refile-targets)
      (org-refile-targets list
                          (concat org-agenda-directory "next.org"))
      (org-refile-targets . "~/.org/agenda/next.org")

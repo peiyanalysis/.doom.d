@@ -16,15 +16,24 @@
   (map! :map org-mode-map
         "M-n" #'outline-next-visible-heading
         "M-p" #'outline-previous-visible-heading))
+
+;; initial variables
+(after! org
+  (setq org-capture-templates nil)
+  )
+
+;; Get-things-done
+;; initial documents
+(after! org
+  (setq gtd-file-inbox "~/Dropbox/.org/inbox.org")
+  (setq gtd-file-trash "~/Dropbox/.org/trash.org")
+  (setq gtd-file-maybe/someday "~/Dropbox/.org/maybe_someday.org")
+  (setq gtd-file-todolist "~/Dropbox/.org/todolist.org"))
 ;; capture
 (after! org
-        (require 'find-lisp)
-        (setq org-capture-templates
-              `(("i" "inbox" entry (file "~/Dropbox/.org/inbox.org")
-                 ,(concat "* TODO %?\n"))
-                ("e" "emacs configs" entry (file "~/.doom.d/demands.org")
-                 ,(concat "* TODO %?\n"))))
-        (add-hook 'org-capture-mode-hook #'org-id-get-create))
+  (add-hook 'org-capture-mode-hook #'org-id-get-create)
+  (add-to-list 'org-capture-templates `("i" "inbox" entry (file gtd-file-inbox) ,(concat "* %?\n"))))
+
 
 ;; keyword
 (after! org
@@ -54,10 +63,6 @@
      ;; ("CANCELLED" . (:foreground "darkgray"      :weight bold))
 )
 
-;; org and timers
-(use-package! org-pomodoro
-
-  )
 ;; clock block view
 (use-package! org-clock-convenience
   :bind (:map org-agenda-mode-map
