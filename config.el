@@ -25,7 +25,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+
+(setq doom-theme 'doom-solarized-dark)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -52,19 +53,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-
-
-
-;; emacs-application-framework
-;; https://github.com/manateelazycat/emacs-application-framework
-;; (use-package eaf
-;;   :load-path "~/.emacs.d/pei-config/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
-;;   :custom
-;;   (eaf-find-alternate-file-in-dired t)
-;;   :config
-;;   (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-;;   (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-;;   (eaf-bind-key take_photo "p" eaf-camera-keybinding))
 
 ;; Chinese
 (cnfonts-enable)
@@ -97,7 +85,7 @@
   (pyim-isearch-mode 1)
 
   ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;; 为'posframe, 速度很快并且菜单不会变形，不过需要用户
   ;; 手动安装 posframe 包。
   (setq pyim-page-tooltip 'posframe)
 
@@ -106,7 +94,9 @@
 
   :bind
   (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-   ("C-;" . pyim-delete-word-from-personal-buffer)))
+   ("C-;" . pyim-delete-word-from-personal-buffer)
+   ("C-c M-c C-w" . pyim-forward-word)
+   ("C-c M-c C-b" . pyim-backward-word)))
 
 ;; text editor
 ;; smartparens
@@ -127,14 +117,16 @@
         "C-M-)" #'sp-backward-barf-sexp))
 ;; block
 (map! :leader
-       (:prefix-map ("H" . "hide code")
-        :desc "hide block"                 "b" #'hs-hide-block
-        :desc "hide level"                 "l" #'hs-hide-level
-        :desc "hide all"                   "a" #'hs-hide-all)
-       (:prefix-map ("S" . "show code")
-        :desc "show block"                 "b" #'hs-show-block
-        :desc "show all"                   "a" #'hs-show-all
-        ))
+      (:prefix-map ("H" . "hide code")
+       :desc "hide block"                 "b" #'hs-hide-block
+       :desc "hide level"                 "l" #'hs-hide-level
+       :desc "hide all"                   "a" #'hs-hide-all)
+      (:prefix-map ("S" . "show code")
+       :desc "show block"                 "b" #'hs-show-block
+       :desc "show all"                   "a" #'hs-show-all))
+
+(map! :leader
+       :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
 ;; comment
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
 
@@ -148,9 +140,11 @@
         :prefix "w"
         :desc "ace-window-select" "a" #'ace-window))
 
+;; default org-mode settings
+;; (load "~/.doom.d/org.el")
 
-;; About org-gtd
-(load "~/.doom.d/org-gtd.el")
+;; org-gtd
+;; (load "~/.doom.d/gtd.el")
 
 ;; org-roam
 (use-package! org-roam
@@ -222,9 +216,8 @@
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
-
-;; (unless (server-running-p)
-;;   (org-roam-server-mode))
+(unless (server-running-p)
+  (org-roam-server-mode))
 
 ;; deft
 (use-package deft
@@ -235,7 +228,6 @@
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
   (deft-directory "~/Dropbox/.org/"))
-
 
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
@@ -253,7 +245,23 @@
      (output-pdf "Okular")
      (output-html "xdg-open"))))
 
-;;(server-start)
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-start-server t)
 (setq TeX-PDF-mode t)
+
+;; eaf
+(use-package eaf
+  :load-path "~/.emacs.d/.local/straight/repos/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+  :custom
+  (eaf-find-alternate-file-in-dired t)
+  :config
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+
+;; telega
+(setq telega-proxies
+      (list
+       '(:server "127.0.0.1" :port 1080 :enable :false
+                 :type (:@type "proxyTypeSocks5"
+                               :username "" :password ""))))

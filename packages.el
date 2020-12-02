@@ -53,6 +53,8 @@
 (package! dired-narrow)
 (package! easy-kill)
 (package! company-posframe)
+(package! eaf
+  :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
 (package! lsp-latex
   :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
 (package! ace-pinyin)
@@ -69,21 +71,10 @@
 (package! vterm-toggle)
 (package! cnfonts
   :recipe (:host github :repo "tumashu/cnfonts"))
-;; (package! org-super-agenda)
 (package! window-purpose)
 (package! pyim)
-;; (package! org-roam
-;;   :recipe (:host github :repo "org-roam/org-roam"))
-;; (package! org-roam-bibtex
-;;   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-;; (package! company-org-roam
-;;   :recipe (:host github :repo "jethrokuan/company-org-roam"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
-;; (package! org-roam-bibtex
-;;   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-;; (unpin! bibtex-completion helm-bibtex ivy-bibtex)
-;; (package! org-ref)
 (package! ace-window
   :recipe (:host github
            :repo "notmgsk/ace-window"
@@ -91,3 +82,10 @@
            :files ("ace-window.el" "ace-window-posframe.el")))
 (package! org-bullets)
 (package! org-pomodoro)
+(package! telega
+  :recipe (:host github :repo "zevlg/telega.el"))
+(package! dash)
+(package! f)
+(package! magit-todos
+  :recipe (:host github :repo "alphapapa/magit-todos"))
+(package! org-gtd)
