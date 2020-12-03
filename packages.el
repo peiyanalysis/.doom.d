@@ -53,8 +53,8 @@
 (package! dired-narrow)
 (package! easy-kill)
 (package! company-posframe)
-(package! eaf
-  :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
+;; (package! eaf
+;;   :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
 (package! lsp-latex
   :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
 (package! ace-pinyin)
@@ -72,6 +72,7 @@
 (package! cnfonts
   :recipe (:host github :repo "tumashu/cnfonts"))
 (package! window-purpose)
+;; TODO initial punctution , ; Thu 03 Dec 2020 03:42:48 PM CST
 (package! pyim)
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
@@ -81,11 +82,20 @@
            :branch "feature/posframe"
            :files ("ace-window.el" "ace-window-posframe.el")))
 (package! org-bullets)
+;; TODO Add Notifications like sound/vib/blink ;; Thu 03 Dec 2020 03:31:15 PM CST
 (package! org-pomodoro)
 (package! telega
   :recipe (:host github :repo "zevlg/telega.el"))
 (package! dash)
 (package! f)
+;; TODO Add the todo supports on magit todos ; Thu 03 Dec 2020 03:32:59 PM CST
 (package! magit-todos
   :recipe (:host github :repo "alphapapa/magit-todos"))
-(package! org-gtd)
+;; DONE Thu 03 Dec 2020 03:30:41 PM CST
+;; Added the todos
+(package! hl-todo)
+;; use poporg to edit commentaries in org-mode
+(package! poporg)
+;; baidu-translate with unicode-escape support
+(package! baidu-translate)
+(package! unicode-escape)
