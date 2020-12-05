@@ -1,3 +1,32 @@
+#+TITLE: Config
+
+* COMMENT basic
+
+#+begin_src emacs-lisp
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+#+end_src
+Place your private configuration here! Remember, you do not need to run 'doom sync' after modifying this file!
+
+Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
+#+begin_src emacs-lisp
+(setq user-full-name "Pei Yu"
+      user-mail-address "yp9106@outlook.com")
+#+END_SRC
+
+set up themes
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-nord-light)
+#+end_src
+
+and editor basic views
+#+begin_src emacs-lisp
+(setq display-line-numbers-type nil)
+#+end_src
+
+
+* private setting in use
+** smartparens
+#+begin_src emacs-lisp
 ;; smartparens
 (use-package! smartparens
   :init
@@ -14,7 +43,10 @@
         "C-(" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-barf-sexp))
+#+end_src
 
+** chinese
+#+begin_src emacs-lisp
 ;; Chinese
 (cnfonts-enable)
 
@@ -58,7 +90,10 @@
    ("C-;" . pyim-delete-word-from-personal-buffer)
    ("C-c M-c C-w" . pyim-forward-word)
    ("C-c M-c C-b" . pyim-backward-word)))
+#+end_src
 
+** hl-todo
+#+begin_src emacs-lisp
 ;; hl-todo-mode
 (use-package! hl-todo
   :init
@@ -87,29 +122,43 @@
   (map! :leader
         :prefix "c"
         :desc "show comment tags" "g" #'hl-todo-mode))
-
+#+end_src
+and related magit todo
+#+begin_src emacs-lisp
 (map! :leader
       :desc "ivy magit todo"             "g i" #'ivy-magit-todos)
+#+end_src
+** org-settings
 
+#+begin_src emacs-lisp
 ;; basic org settings
 (require 'find-lisp)
 (setq org-directory "~/Dropbox/.org"
       org-ellipsis " ▼ "
       org-adapt-indentation nil)
 (setq org-id-link-to-org-use-id t)
+#+end_src
 
+*** bullet
+#+begin_src emacs-lisp
 ;; bullet settings
 (use-package org-bullets
   :after org
   :hook (org-mode . org-bullets-mode))
+#+end_src
+*** quick-movement
 
+#+begin_src emacs-lisp
 ;; org-outline quick movement
 (after! org
   (map! :map org-mode-map
         "M-n" #'outline-next-visible-heading
         "M-p" #'outline-previous-visible-heading)
   (add-hook 'org-capture-mode-hook #'org-id-get-create))
+#+end_src
 
+*** org-roam
+#+begin_src emacs-lisp
 ;; org-roam
 (use-package! org-roam
   :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
@@ -182,10 +231,18 @@
         org-roam-server-network-label-wrap-length 20))
 (unless (server-running-p)
   (org-roam-server-mode))
+#+end_src
 
+*** save all buffers
+
+#+begin_src emacs-lisp
 (map! :leader
       :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
+#+end_src
 
+*** deft
+
+#+begin_src emacs-lisp
 ;; deft
 (use-package deft
   :after org
@@ -195,7 +252,11 @@
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
   (deft-directory "~/Dropbox/.org/"))
+#+end_src
 
+** latex
+
+#+begin_src emacs-lisp
 ;; tex-live
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
@@ -214,7 +275,10 @@
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-start-server t)
 (setq TeX-PDF-mode t)
+#+end_src
 
+** ace-windows
+#+begin_src emacs-lisp
 ;; window
 ;; window swap - ace-window
 (use-package! ace-window
@@ -224,17 +288,43 @@
   (map! :leader
         :prefix "w"
         :desc "ace-window-select" "a" #'ace-window))
+#+end_src
 
+** COMMENT eaf
+
+#+begin_src emacs-lisp
+;; eaf
+(use-package eaf
+  :load-path "~/.emacs.d/.local/straight/repos/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+  :custom
+  (eaf-find-alternate-file-in-dired t)
+  :config
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+#+end_src
+
+** telega
+
+#+begin_src emacs-lisp
 ;; telega
 (setq telega-proxies
       (list
        '(:server "127.0.0.1" :port 1080 :enable :false
                  :type (:@type "proxyTypeSocks5"
                                :username "" :password ""))))
+#+end_src
 
+** poporg
+
+edit comment in org-mode
+#+begin_src emacs-lisp
 (use-package! poporg
   :bind (("C-c '" . poporg-dwim)))
+#+end_src
 
+** baidu-translate
+
+#+begin_src emacs-lisp
 ;; Baidu translate
 (use-package! baidu-translate
   :init
@@ -249,7 +339,11 @@
         :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
         :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
         :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
+#+end_src
 
+** hide-show-mode
+
+#+begin_src emacs-lisp
 ;; block
 (map! :leader
       :prefix "c"
@@ -261,7 +355,13 @@
        :desc "show block"               "b" #'hs-show-block
        :desc "show level"               "l" #'hs-show-level
        :desc "show all"                 "a" #'hs-show-all))
+#+end_src
 
+** functions
+
+*** time-insert
+
+#+begin_src emacs-lisp
 ;; feature-functions
 (defun insert-time ()
   "Insert a timestamp according to locale's date and time format."
@@ -271,22 +371,43 @@
 (map! :leader
       :desc "insert time"                "i t" #'insert-time)
 
+#+end_src
+
+** key maps
+
+*** comment lines
+
+#+begin_src emacs-lisp
 ;; comment
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
+#+end_src
 
+*** workspaces
+
+#+begin_src emacs-lisp
 ;; keybindings
 (map! :leader
       :desc "Left workspace"                    "TAB ," #'+workspace/switch-left
       :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
       :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
+#+end_src
 
+*** applications
+
+#+begin_src emacs-lisp
 ;; map
 (map! :leader
       (:prefix-map ("a" . "applications")
        :desc "eaf-browser-link"          "l" #'eaf-open-browser
        :desc "eaf-browser-bookmark"      "b" #'eaf-open-bookmark
        :desc "eaf-search-it"             "s" #'haf-open-bookmark))
+#+end_src
 
+** a simple gtd way to go
+
+*** todo keyword
+
+#+begin_src emacs-lisp
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
@@ -301,19 +422,149 @@
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold)
               ("BREAK" :foreground "forest green" :weight bold))))
+#+end_src
 
+#+begin_src emacs-lisp
 (setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+#+end_src
 
+*** Capture
+
+#+begin_src emacs-lisp
 (setq org-capture-templates
       (quote (("t" "todo" entry (file "~/Dropbox/.org/inbox.org")
                "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t))))
+#+end_src
 
+
+#+begin_src emacs-lisp
 (setq org-refile-targets ())
+#+end_src
 
+*** agenda
+
+#+begin_src emacs-lisp
 (setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
                                "~/Dropbox/.org/todolist.org")))
 (setq org-agenda-bin (quote ("~/Dropbox/.org/bin.org")))
+#+end_src
+
+#+RESULTS:
+| ~/Dropbox/.org/inbox.org | ~/Dropbox/.org/todolist.org |
+
+
+#+begin_src emacs-lisp
 
 (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                  (org-agenda-files :maxlevel . 9)
                                  (org-agenda-bin :maxlevel . 1))))
+#+end_src
+
+
+* COMMENT test area
+
+** COMMENT TODOkeywords
+*** COMMENT todo keywords and faces
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
+
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("MEETING" :foreground "forest green" :weight bold)
+              ("PHONE" :foreground "forest green" :weight bold)
+              ("BREAK" :foreground "forest green" :weight bold))))
+#+end_src
+
+*** COMMENT todo keyworkd change wth S-left and S-right
+#+begin_src emacs-lisp
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+#+end_src
+
+*** COMMENT todo keyword triggers filter task in agenda view
+#+begin_src emacs-lisp
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+#+end_src
+
+*** COMMENT org-directory and default file
+#+begin_src emacs-lisp
+;(setq org-directory "~/git/org")
+;(setq org-default-notes-file "~/git/org/refile.org")
+
+;; I use C-c c to start capture mode
+(global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+
+** COMMENT capture templates
+#+begin_src emacs-lisp
+;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
+(setq org-capture-templates
+      (quote (("t" "todo" entry (file "~/org/refile.org")
+               "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+              ("r" "respond" entry (file "~/org/refile.org")
+               "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+              ("n" "note" entry (file "~/org/refile.org")
+               "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+              ("j" "Journal" entry (file+datetree "~/org/diary.org")
+               "* %?\n%U\n" :clock-in t :clock-resume t)
+              ("w" "org-protocol" entry (file "~/org/refile.org")
+               "* TODO Review %c\n%U\n" :immediate-finish t)
+              ("m" "Meeting" entry (file "~/org/refile.org")
+               "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+              ("p" "Phone call" entry (file "~/org/refile.org")
+               "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+              ("b" "Break" entry (file "~/org/refile.org")
+               "* BREAK %? :BREAK:\n%U" :clock-in t :clock-resume t)
+              ("h" "Habit" entry (file "~/org/refile.org")
+               "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+#+end_src
+** COMMENT refile files
+*** COMMENT agenda file
+#+begin_src emacs-lisp
+(setq org-agenda-files (quote ("~/git/test.org")))
+#+end_src
+
+*** COMMENT refile target
+#+begin_src emacs-lisp
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                 (org-agenda-files :maxlevel . 9))))
+#+end_src
+** COMMENT custom agenda mode
+
+#+begin_src emacs-lisp
+(require 'find-lisp)
+(setq jethro/org-agenda-directory (file-truename "~/org/"))
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+(setq org-agenda-files
+        (find-lisp-find-files jethro/org-agenda-directory "\.org$"))
+(setq org-agenda-custom-commands `((" " "Agenda"
+                                    ((agenda ""
+                                             ((org-agenda-span 'week)
+                                              (org-deadline-warning-days 365)))
+                                     (todo "NEXT"
+                                           ((org-agenda-overriding-header "Inbox")
+                                            (org-agenda-files '(,(expand-file-name "refile.org" jethro/org-agenda-directory)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "Emails")
+                                            (org-agenda-files '(,(expand-file-name "refile.org" jethro/org-agenda-directory)))))
+                                     (todo "NEXT"
+                                           ((org-agenda-overriding-header "In Progress")
+                                            (org-agenda-files '(,(expand-file-name "refile.org" jethro/org-agenda-directory)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "One-off Tasks")
+                                            (org-agenda-files '(,(expand-file-name "refile.org" jethro/org-agenda-directory)))
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))))))
+#+end_src
