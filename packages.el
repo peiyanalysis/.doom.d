@@ -82,6 +82,7 @@
            :branch "feature/posframe"
            :files ("ace-window.el" "ace-window-posframe.el")))
 (package! org-bullets)
+(package! org-superstar)
 ;; TODO Add Notifications like sound/vib/blink ;; Thu 03 Dec 2020 03:31:15 PM CST
 (package! org-pomodoro)
 (package! telega
