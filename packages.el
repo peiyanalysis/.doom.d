@@ -55,8 +55,8 @@
 (package! company-posframe)
 ;; (package! eaf
 ;;   :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
-(package! lsp-latex
-  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
+;; (package! lsp-latex
+;;  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
 (package! ace-pinyin)
 (package! evil-find-char-pinyin
   :recipe (:host github :repo "cute-jumper/evil-find-char-pinyin"))
