@@ -54,7 +54,11 @@
 (package! easy-kill)
 (package! company-posframe)
 ;; (package! eaf
+<<<<<<< HEAD
+;;  :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
+=======
 ;;   :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
+>>>>>>> 4c3c0efafa60ad06a60ab22a9b985513d901b4ca
 ;; (package! lsp-latex
 ;;  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
 (package! ace-pinyin)
