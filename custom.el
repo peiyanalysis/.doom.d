@@ -4,12 +4,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(safe-local-variable-values
-<<<<<<< HEAD
-   '((reftex-default-bibliography "~/Dropbox/phd-master/reference.bib")
-     (reftex-default-bibliography "~/Dropbox/phd-thesis/reference.bib"))))
-=======
-   '((reftex-default-bibliography "~/Dropbox/phd-thesis/reference.bib"))))
->>>>>>> 4c3c0efafa60ad06a60ab22a9b985513d901b4ca
+   '((reftex-default-bibliography "~/Dropbox/ThesisUESTC/reference.bib")
+     (reftex-external-file-finders
+      ("tex" . "make FILE=%f find-tex")
+      ("bib" . "make FILE=%f find-bib"))
+     (reftex-use-external-file-finders . t)
+     (reftex-default-bibliography "/home/py06/Dropbox/ThesisUESTC/reference.bib"))))
+   '((reftex-default-bibliography "~/Dropbox/phd-thesis/reference.bib"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

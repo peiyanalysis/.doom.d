@@ -50,17 +50,14 @@
 ;(unpin! t)
 
 
+(package! eaf :recipe
+  (:host github
+   :repo "manateelazycat/emacs-application-framework"
+   :files ("*.el" "*.py" "core" "app")
+   :no-byte-compile t))
 (package! dired-narrow)
 (package! easy-kill)
 (package! company-posframe)
-;; (package! eaf
-<<<<<<< HEAD
-;;  :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
-=======
-;;   :recipe (:host github :repo "manateelazycat/emacs-application-framework"))
->>>>>>> 4c3c0efafa60ad06a60ab22a9b985513d901b4ca
-;; (package! lsp-latex
-;;  :recipe (:host github :repo "ROCKTAKEY/lsp-latex"))
 (package! ace-pinyin)
 (package! evil-find-char-pinyin
   :recipe (:host github :repo "cute-jumper/evil-find-char-pinyin"))
@@ -104,3 +101,13 @@
 ;; baidu-translate with unicode-escape support
 (package! baidu-translate)
 (package! unicode-escape)
+(package! easy-hugo)
+(package! ox-hugo)
+(package! nano-emacs
+  :recipe (:host github :repo "rougier/nano-emacs"))
+(when IS-LINUX
+  (package! eaf :recipe (:host github
+                            :repo "manateelazycat/emacs-application-framework"
+                            :files ("*")
+                            :no-byte-compile t))
+  )
