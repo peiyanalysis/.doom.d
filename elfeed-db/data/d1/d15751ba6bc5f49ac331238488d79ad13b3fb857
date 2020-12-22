@@ -1,0 +1,12 @@
+<p>We show that the functor of $p$-typical co-Witt vectors on commutative
+algebras over a perfect field $k$ of characteristic $p$ is defined on, and in
+fact only depends on, a weaker structure than that of a $k$-algebra. We call
+this structure a $p$-polar $k$-algebra. By extension, the functors of points
+for any $p$-adic affine commutative group scheme and for any formal group are
+defined on, and only depend on, $p$-polar structures. In terms of abelian Hopf
+algebras, we show that a cofree cocommutative Hopf algebra can be defined on
+any $p$-polar $k$-algebra $P$, and it agrees with the cofree commutative Hopf
+algebra on a commutative $k$-algebra $A$ if $P$ is the $p$-polar algebra
+underlying $A$; a dual result holds for free commutative Hopf algebras on
+finite $k$-coalgebras.
+</p>

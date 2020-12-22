@@ -2,38 +2,56 @@
 
 * basic
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-#+end_src
-Place your private configuration here! Remember, you do not need to run 'doom sync' after modifying this file!
-
-Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
+#+END_SRC
 #+begin_src emacs-lisp
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 #+END_SRC
-
-theme
-#+begin_src emacs-lisp
+** COMMENT theme
+#+BEGIN_SRC emcs-lisp
 (setq doom-theme 'nil)
 (require 'nano-theme-dark)
-(require 'nano-modeline)
 (require 'nano-help)
-#+end_src
-
-set fonts
-#+begin_src emacs-lisp
+#+END_SRC
+** fonts
+#+BEGIN_SRC emacs-lisp
 (setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
         doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
         doom-unicode-font (font-spec :family "Sarasa Mono SC")
         ;; doom-big-font (font-spec :family "Fira Mono" :size 19)
         )
 (set-fontset-font t 'unicode "Symbola" nil 'prepend)
-#+end_src
-
-and editor basic views
-#+begin_src emacs-lisp
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
 (setq display-line-numbers-type nil)
+#+END_SRc
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :hook
+  (window-setup . doom-modeline-mode)
+  :config
+  (use-package nyan-mode
+    :hook (doom-modeline-mode . nyan-mode)
+    :config
+    (nyan-mode 1)
+    (setq nyan-animate-nyancat t)
+    (setq nyan-wavy-trail t)
+    (setq mode-line-format
+          (list
+           '(:eval (list (nyan-create))))))
+  (display-time-mode t)
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-height 40)
+  (setq doom-modeline-bar-width 3)
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-buffer-state-icon t)
+  (setq doom-modeline-buffer-modification-icon t)
+  (setq doom-modeline-modal-icon t)
+  (setq doom-modeline-buffer-encoding nil))
+(use-package posframe)
 #+end_src
 
 * private setting in use
@@ -57,16 +75,71 @@ and editor basic views
         "C-M-)" #'sp-backward-barf-sexp))
 #+end_src
 
-** chinese
+** pyim
 
-cnfonts settings
 #+begin_src emacs-lisp
+;; input method
+(use-package! pyim
+  :demand t
+  :config
+  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  ;; (use-package pyim-basedict
+  ;;   :config (pyim-basedict-enable))
+  ;; 设置 zh－wiki 词库和 zh－moegirl 词库
+  (setq pyim-dicts
+        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
+          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
+          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
+          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'quanpin)
+  ;; 开启拼音搜索功能
+  (pyim-isearch-mode 1)
+  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+  ;; 为'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;; 手动安装 posframe 包。
+  (setq pyim-page-tooltip 'posframe)
+  ;; 选词框显示 9 个候选词
+  (setq pyim-page-length 9)
+  ;; 半角标点
+  (setq pyim-punctuation-dict nil)
+  :bind
+  (("C-c M-c C-w" . pyim-forward-word)
+   ("C-c M-c C-b" . pyim-backward-word)))
+(define-key pyim-mode-map "." 'pyim-page-next-page)
+(define-key pyim-mode-map "," 'pyim-page-previous-page)
+(define-key pyim-mode-map ";"
+  (lambda ()
+    (interactive)
+    (pyim-page-select-word-by-number 2)))
+ #+end_src
+
+** emacs-rime
+#+begin_src emacs-lisp
+(use-package rime
+  :config
+  (setq rime-user-data-dir "~/.local/share/fcitx5/rime/")
+  (setq default-input-method "rime")
+  (setq rime-posframe-properties
+        (list :background-color "#333333"
+              :foreground-color "#dcdccc"
+              :internal-border-width 10))
+  (setq default-input-method "rime"
+        rime-show-candidate 'posframe))
+;;  http://ergoemacs.org/emacs/emacs_bind_number_pad_keys.html
+  (map! "<kp-1>" "1"
+        "<kp-2>" "2"
+        "<kp-3>" "3"
+        "<kp-4>" "4"
+        "<kp-5>" "5"
+        "<kp-6>" "6"
+        "<kp-7>" "7"
+        "<kp-8>" "8"
+        "<kp-9>" "9"
+        "<kp-0>" "0")
 #+end_src
 
-#+RESULTS:
-| doom-modeline-refresh-font-width-cache | cnfonts-set-font-first-time | doom-init-ui-h | doom-display-benchmark-h | doom-init-tty-h |
-
-ace pinyin
+** avy-pinyin
 #+begin_src emacs-lisp
 ;; search
 (use-package! ace-pinyin
@@ -82,40 +155,7 @@ ace pinyin
   (setq avy-all-windows t)
   (evil-find-char-pinyin-mode t))
 
-
-;; input method
-(use-package! pyim
-  :demand t
-  :config
-  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  ;; (use-package pyim-basedict
-  ;;   :config (pyim-basedict-enable))
-  ;; 设置zh－wiki词库和zh－moegirl词库
-  (setq pyim-dicts
-        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
-          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
-          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
-          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
-  (setq default-input-method "pyim")
-  ;; 我使用全拼
-  (setq pyim-default-scheme 'quanpin)
-  ;; 开启拼音搜索功能
-  (pyim-isearch-mode 1)
-  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;; 手动安装 posframe 包。
-  (setq pyim-page-tooltip 'posframe)
-  ;; 选词框显示 9 个候选词
-  (setq pyim-page-length 9)
-  ;; 半角标点
-  (setq pyim-punctuation-dict nil)
-  :bind
-  (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-   ("C-;" . pyim-delete-word-from-personal-buffer)
-   ("C-c M-c C-w" . pyim-forward-word)
-   ("C-c M-c C-b" . pyim-backward-word)))
 #+end_src
-测试, 哈哈哈
 ** hl-todo
 #+begin_src emacs-lisp
 ;; hl-todo-mode
@@ -147,13 +187,12 @@ ace pinyin
         :prefix "c"
         :desc "show comment tags" "g" #'hl-todo-mode))
 #+end_src
-and related magit todo
 #+begin_src emacs-lisp
 (map! :leader
       :desc "ivy magit todo"             "g i" #'ivy-magit-todos)
 #+end_src
-** elisp
 
+** elisp
 #+begin_src emacs-lisp
 (use-package parinfer
   :bind
@@ -175,38 +214,533 @@ and related magit todo
     (add-hook 'lisp-mode-hook #'parinfer-mode)))
 #+end_src
 
-** org-settings
+** latex
 
+*** forward and inverse search
+#+begin_src emacs-lisp
+;; tex-live
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+(setq TeX-view-program-selection '((output-pdf "Okular")))
+;; (setq TeX-view-program-selection
+;;    (quote
+;;     (((output-dvi has-no-display-manager)
+;;       "dvi2tty")
+;;      ((output-dvi style-pstricks)
+;;       "dvips and gv")
+;;      (output-dvi "xdvi")
+;;      (output-pdf "Okular")
+;;      (output-html "xdg-open"))))
+(setq TeX-source-correlate-mode t)
+(setq TeX-source-correlate-start-server t)
+(setq TeX-PDF-mode t)
+#+end_src
+
+*** set engine
+#+begin_src emacs-lisp
+(setq TeX-engine 'xetex)
+#+end_src
+
+*** org-download
+#+begin_src emacs-lisp
+(use-package! org-download
+  :commands
+  org-download-dnd
+  org-download-yank
+  org-download-screenshot
+  org-download-dnd-base64
+  :init
+  (map! :map org-mode-map
+        "s-Y" #'org-download-screenshot
+        "s-y" #'org-download-yank)
+  (pushnew! dnd-protocol-alist
+            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
+            '("^data:" . org-download-dnd-base64))
+  (advice-add #'org-download-enable :override #'ignore)
+  :config
+  (defun +org/org-download-method (link)
+    (let* ((filename
+            (file-name-nondirectory
+             (car (url-path-and-query
+                   (url-generic-parse-url link)))))
+           ;; Create folder name with current buffer name, and place in root dir
+           (dirname (concat "./images/"
+                            (replace-regexp-in-string " " "_"
+                                                      (downcase (file-name-base buffer-file-name)))))
+           (filename-with-timestamp (format "%s%s.%s"
+                                            (file-name-sans-extension filename)
+                                            (format-time-string org-download-timestamp)
+                                            (file-name-extension filename))))
+      (make-directory dirname t)
+      (expand-file-name filename-with-timestamp dirname)))
+  :config
+  (setq org-download-screenshot-method
+        (cond (IS-MAC "screencapture -i %s")
+              (IS-LINUX
+               (cond ((executable-find "maim")  "maim -u -s %s")
+                     ((executable-find "scrot") "scrot -s %s")))))
+  (setq org-download-method '+org/org-download-method))
+#+end_src
+
+*** mathpix.el
+#+begin_src emacs-lisp
+(add-to-list 'load-path "/home/py06/.doom.d/packages")
+(require 'mathpix)
+(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
+      mathpix-app-key "b667a7350e26f378b208"
+      mathpix-screenshot-method "scrot -s %s")
+#+end_src
+** pdf-noter
+#+begin_src emacs-lisp
+(use-package org-pdftools
+  :hook (org-mode . org-pdftools-setup-link))
+
+(use-package org-noter-pdftools
+  :after org-noter
+  :config
+  (with-eval-after-load 'pdf-annot
+    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+#+end_src
+
+** ace-windows
+#+begin_src emacs-lisp
+;; window
+;; window swap - ace-window
+(use-package! ace-window
+  :config
+  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+  :init
+  (map! :leader
+        :prefix "w"
+        :desc "ace-window-select" "a" #'ace-window))
+#+end_src
+
+** eaf
+#+begin_src emacs-lisp
+(use-package! eaf
+  :config
+  ;; (setq eaf-enable-debug t) ; should only be used when eaf is wigging out
+  (eaf-setq eaf-browser-dark-mode "false")
+  (setq eaf-browser-default-search-engine "duckduckgo")
+  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com"))
+#+end_src
+
+** telega
+#+begin_src emacs-lisp
+;; telega
+(setq telega-proxies
+      (list
+       '(:server "127.0.0.1" :port 1080 :enable t
+                 :type (:@type "proxyTypeSocks5"
+                               :username "" :password ""))))
+#+end_src
+** elfeed
+
+#+begin_src emacs-lisp
+(setq elfeed-use-curl nil)
+(setq elfeed-protocol-ttrss-maxsize 200) ;; bigger than 200 is invalid
+(setq elfeed-feeds
+      '(("ttrss+https://pei@rss.archpei.ink"
+         :password "fee8deb91c")))
+(elfeed-protocol-enable)
+#+end_src
+
+#+RESULTS:
+| http://nullprogram.com/feed/ | http://planet.emacsen.org/atom.xml |   |
+
+#+begin_src emacs-lisp
+(use-package elfeed
+  :config
+  (setq elfeed-use-curl t)
+  (setq elfeed-curl-max-connections 10)
+  (setq elfeed-db-directory "~/.doom.d/elfeed-db/")) ; customize this ofc
+#+end_src
+
+*** elfeed-org
+#+begin_src emacs-lisp
+(use-package elfeed-org
+  :init
+  (use-package elfeed)
+  :config
+  (setq rmh-elfeed-org-files (list "~/Dropbox/.org/feed/elfeed.org")))
+#+end_src
+
+*** elffed functions Shameless copy [[https://github.com/earnestma/earnemacs/blob/a84c693bc3fdc65eb42d26adb5accd32c5368b85/config.org#elfeed-rss-reader][earnemacs]]
+#+begin_src emacs-lisp
+(defun elfeed-mark-all-as-read ()
+  "Mark the whole buffer as read."
+  (interactive)
+  (mark-whole-buffer)
+  (elfeed-search-untag-all-unread))
+
+(defun bjm/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
+
+(defun bjm/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+#+end_src
+
+*** elfeed-goodies
+#+begin_src emacs-lisp
+(use-package elfeed-goodies
+  :config
+  (elfeed-goodies/setup))
+#+end_src
+
+** poporg
+#+begin_src emacs-lisp
+(use-package! poporg
+  :bind (("C-c '" . poporg-dwim)))
+#+end_src
+
+** easy-hugo
+#+begin_src emacs-lisp
+(use-package! easy-hugo
+  :config
+  (setq! easy-hugo-root "~/Blog/RandN/"
+         easy-hugo-basedir "~/Blog/RandN/"
+         easy-hugo-url "https://peiyanalysis.github.io"
+         easy-hugo-previewtime "300"
+         easy-hugo-default-ext ".md"
+         easy-hugo-server-flags "-D"
+         easy-hugo-postdir "content/post/")
+  (map! :leader :desc "hugo blog" "B" #'easy-hugo)
+  (map! :map easy-hugo-mode-map
+      :nivm "n" 'easy-hugo-newpost
+      :nivm "D" 'easy-hugo-article
+      :nivm "p" 'easy-hugo-preview
+      :nivm "P" 'easy-hugo-publish
+      :nivm "o" 'easy-hugo-open
+      :nivm "d" 'easy-hugo-delete
+      :nivm "e" 'easy-hugo-open
+      :nivm "c" 'easy-hugo-open-config
+      :nivm "f" 'easy-hugo-open
+      :nivm "N" 'easy-hugo-no-help
+      :nivm "v" 'easy-hugo-view
+      :nivm "r" 'easy-hugo-refresh
+      :nivm "g" 'easy-hugo-refresh
+      :nivm "s" 'easy-hugo-sort-time
+      :nivm "S" 'easy-hugo-sort-char
+      :nivm "G" 'easy-hugo-github-deploy
+      :nivm "A" 'easy-hugo-amazon-s3-deploy
+      :nivm "C" 'easy-hugo-google-cloud-storage-deploy
+      :nivm "q" 'evil-delete-buffer
+      :nivm "TAB" 'easy-hugo-open
+      :nivm "RET" 'easy-hugo-preview))
+#+end_src
+
+** COMMENT ox-hugo
+#+begin_src emacs-lisp
+(use-package ox-hugo
+  :after ox)
+#+end_src
+
+** baidu-translate
+#+begin_src emacs-lisp
+;; Baidu translate
+(use-package! baidu-translate
+  :init
+  (global-set-key (kbd "C-c m") 'baidu-translate-zh-mark)
+  (global-set-key (kbd "C-c M") 'baidu-translate-zh-whole-buffer)
+  ;;设置你的百度翻译 APPID
+  (setq baidu-translate-appid "20200510000447604")
+  ;;设置你的秘钥
+  (setq baidu-translate-security "Z5Ga8KOYLjto3H3VN8Pi")
+  (map! :leader
+        :desc "EN->ZH marks"            "a z" #'baidu-translate-zh-mark
+        :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
+        :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
+        :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
+#+end_src
+
+** company-poseframe
+#+begin_src emacs-lisp
+(use-package! company-posframe
+  :hook (company-mode . company-posframe-mode))
+#+end_src
+
+** buildin modes
+*** hide-show-mode
+#+begin_src emacs-lisp
+(map! :leader
+      :prefix "c"
+      (:prefix-map ("H" . "hide code")
+       :desc "hide block"               "b" #'hs-hide-block
+       :desc "hide level"               "l" #'hs-hide-level
+       :desc "hide all"                 "a" #'hs-hide-all)
+      (:prefix-map ("S" . "show code")
+       :desc "show block"               "b" #'hs-show-block
+       :desc "show level"               "l" #'hs-show-level
+       :desc "show all"                 "a" #'hs-show-all))
+#+end_src
+
+*** winner-mode
+#+begin_src emacs-lisp
+(use-package winner-mode
+  :hook (after-init . winner-mode))
+#+end_src
+
+*** COMMENT ediff
+#+begin_src emacs-lisp
+(use-package ediff
+  :hook (ediff-quit . winner-undo)
+#+end_src
+
+*** savespace
+#+begin_src emacs-lisp
+(use-package saveplace
+  :hook (after-init . save-place-mode))
+#+end_src
+
+*** whitespace
+#+begin_src emacs-lisp
+(use-package whitespace
+  :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
+  :config
+  (setq whitespace-style '(face trailing)))
+#+end_src
+
+*** so-long
+#+begin_src emacs-lisp
+(use-package so-long
+  :config (global-so-long-mode 1))
+#+end_src
+
+*** autorevert
+#+begin_src emacs-lisp
+(use-package autorevert
+  :hook (after-init . global-auto-revert-mode))
+#+end_src
+
+** functions
+*** time-insert
+#+begin_src emacs-lisp
+;; feature-functions
+(defun insert-time ()
+  "Insert a timestamp according to locale's date and time format."
+  (interactive)
+  (insert (format-time-string "%c" (current-time))))
+;; key-bindings
+(map! :leader
+      :desc "insert time"                "i t" #'insert-time)
+
+#+end_src
+
+
+** key maps
+*** scratch
+#+begin_src emacs-lisp
+(map! :leader :desc"doom/scratch"            "X" #'doom/open-scratch-buffer)
+#+end_src
+
+*** org-mode
+**** org-capture
+#+begin_src emacs-lisp
+(after! org
+  (map! :leader :desc "org-capture"           "x" #'org-capture))
+#+end_src
+
+*** comment lines
+#+begin_src emacs-lisp
+;; comment
+(global-set-key (kbd "C-c C-\\") (quote comment-line))
+#+end_src
+
+*** workspaces
+#+begin_src emacs-lisp
+;; keybindings
+(map! :leader
+      :desc "Left workspace"                    "TAB ," #'+workspace/switch-left
+      :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
+      :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
+#+end_src
+
+*** frame
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Other frame"                       "o o" #'other-frame)
+#+end_src
+
+*** applications
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Other frame"                       "o o" #'other-frame)
+#+end_src
+
+
+
+
+* COMMENT gtd
+*** todo keyword
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
+
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("MEETING" :foreground "forest green" :weight bold)
+              ("PHONE" :foreground "forest green" :weight bold)
+              ("BREAK" :foreground "forest green" :weight bold))))
+#+end_src
+#+begin_src emacs-lisp
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+#+end_src
+
+*** capture
+#+begin_src emacs-lisp
+(after! org
+  (setq org-capture-templates nil)
+  (add-to-list 'org-capture-templates
+             '("t" "todo" entry (file "~/Dropbox/.org/inbox.org") "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)))
+#+end_src
+
+*** agenda
+**** agenda-files
+#+begin_src emacs-lisp
+(setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
+                               "~/Dropbox/.org/repeater.org"
+                               "~/Dropbox/.org/todolist.org" )))
+(setq org-agenda-bin  '("~/Dropbox/.org/bin.org"))
+(setq org-agenda-future  '("~/Dropbox/.org/future.org"))
+#+end_src
+
+**** refile targets
+#+begin_src emacs-lisp
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                 (org-agenda-files :maxlevel . 9)
+                                 (org-agenda-bin :maxlevel . 1))))
+#+end_src
+
+**** use-package
+#+begin_src emacs-lisp
+(use-package! org-agenda
+  :init
+  ;; customize ort-agenda custom command
+  (map! "<f1>" #'jethro/switch-to-agenda)
+  ;; ?
+  (setq org-agenda-block-separator nil
+        org-agenda-start-with-log-mode t)
+  ;; useful switch direct
+  (defun jethro/switch-to-agenda ()
+    (interactive)
+    (org-agenda nil " "))
+  :config
+  ;; is project mode
+  (defun jethro/is-project-p ()
+  "Any task with a todo keyword subtask"
+  (save-restriction
+    (widen)
+    (let ((has-subtask)
+          (subtree-end (save-excursion (org-end-of-subtree t)))
+          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+      (save-excursion
+        (forward-line 1)
+        (while (and (not has-subtask)
+                    (< (point) subtree-end)
+                    (re-search-forward "^\*+ " subtree-end t))
+          (when (member (org-get-todo-state) org-todo-keywords-1)
+            (setq has-subtask t))))
+      (and is-a-task has-subtask))))
+  ;; skip project
+  (defun jethro/skip-projects ()
+  "Skip trees that are projects"
+  (save-restriction
+    (widen)
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      (cond
+       ((org-is-habit-p)
+        next-headline)
+       ((jethro/is-project-p)
+        next-headline)
+       (t
+        nil)))))
+#+end_src
+
+**** apperance
+#+begin_src emacs-lisp
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+(setq org-agenda-custom-commands
+    `((" " "Agenda"
+       ((agenda ""
+               ((org-agenda-span 'week)
+                (org-deadline-warning-days 365)))
+       (todo "TODO"
+             ((org-agenda-overriding-header "Inbox")
+              (org-agenda-files '("~/Dropbox/.org/inbox.org"))))
+       (todo "NEXT"
+             ((org-agenda-overriding-header "In Progress")
+              (org-agenda-files '("~/Dropbox/.org/todolist.org"))))
+       ;; (todo "TODO"
+       ;;       ((org-agenda-overriding-header "Active Projects")
+       ;;        (org-agenda-skip-function #'jethro/skip-projects)
+       ;;        (org-agenda-files '(,(expand-file-name "projects.org" jethro/org-agenda-directory)))))
+       (todo "TODO"
+             ((org-agenda-overriding-header "One-off Tasks")
+              (org-agenda-files '("~/Dropbox/.org/todolist.org" "~/Dropbox/.org/inbox.org"))
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
+#+end_src
+
+**** functions
+***** skip project
+#+begin_src emacs-lisp
+(defun jethro/skip-projects ()
+"Skip trees that are projects"
+(save-restriction
+  (widen)
+  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+    (cond
+     ((org-is-habit-p)
+      next-headline)
+     ((jethro/is-project-p)
+      next-headline)
+     (t
+      nil)))))
+#+end_src
+
+* org-settings
+** org-directory
 #+begin_src emacs-lisp
 ;; basic org settings
 (require 'find-lisp)
-(setq org-directory "~/Dropbox/.org"
-      org-ellipsis " ▼ "
-      org-adapt-indentation nil)
+(setq org-directory "~/Dropbox/.org/")
+#+end_src
+
+#+RESULTS:
+: ~/Dropbox/.org/
+
+** with creation
+#+begin_src emacs-lisp
 (setq org-id-link-to-org-use-id t)
 #+end_src
-
-*** bullet
+** Taking notes
+**** deft
 #+begin_src emacs-lisp
-(use-package org-bullets
+;; deft
+(use-package deft
   :after org
-  :hook (org-mode . org-bullets-mode))
-#+end_src
-*** quick-movement
-
-#+begin_src emacs-lisp
-;; org-outline quick movement
-(after! org
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading)
-  (add-hook 'org-capture-mode-hook #'org-id-get-create))
+  :bind ("<f9>" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/Dropbox/.org/"))
 #+end_src
 
-*** org-roam
-:PROPERTIES:
-:ID:       998f257b-ca50-4ca8-b709-12a7cffe674a
-:END:
+**** org-roam
 #+begin_src emacs-lisp
 ;; org-roam
 (use-package! org-roam
@@ -282,364 +816,57 @@ and related magit todo
   (org-roam-server-mode))
 #+end_src
 
-*** save all buffers
+** appearance
+**** headings modified
+#+begin_src emacs-lisp
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
+#+end_src
+**** ellipsis at the end of heading
+#+begin_src emacs-lisp
+(setq org-ellipsis " ▼ ")
+#+end_src
 
+**** org-adapt-indentation
+#+begin_src emacs-lisp
+(setq org-adapt-indentation t)
+#+end_src
+
+** Operatings
+**** quick-movement
+#+begin_src emacs-lisp
+;; org-outline quick movement
+(after! org
+  (map! :map org-mode-map
+        "M-n" #'outline-next-visible-heading
+        "M-p" #'outline-previous-visible-heading)
+  (add-hook 'org-capture-mode-hook #'org-id-get-create))
+#+end_src
+
+**** save all buffers
 #+begin_src emacs-lisp
 (map! :leader
       :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
 #+end_src
 
-*** deft
-
+* org-gtd-agenda
+** file-settings
+org-task-inbox, org-task-todolist, org-task-bin
 #+begin_src emacs-lisp
-;; deft
-(use-package deft
-  :after org
-  :bind ("<f9>" . deft)
-  :custom
-  (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory "~/Dropbox/.org/"))
+(setq org-task-inbox    (concat org-directory "inbox.org")
+      org-task-todolist (concat org-directory "todolist.org")
+      org-task-bin      (concat org-directory "bin.org")
+      org-task-future   (concat org-directory "future.org")
+      org-task-repeater (concat org-directory "repeater.org"))
 #+end_src
 
-** latex
-
-*** forward and inverse search
-
-#+begin_src emacs-lisp
-;; tex-live
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-(setq-default TeX-master nil)
-(setq TeX-view-program-selection '((output-pdf "Okular")))
-;; (setq TeX-view-program-selection
-;;    (quote
-;;     (((output-dvi has-no-display-manager)
-;;       "dvi2tty")
-;;      ((output-dvi style-pstricks)
-;;       "dvips and gv")
-;;      (output-dvi "xdvi")
-;;      (output-pdf "Okular")
-;;      (output-html "xdg-open"))))
-(setq TeX-source-correlate-mode t)
-(setq TeX-source-correlate-start-server t)
-(setq TeX-PDF-mode t)
-#+end_src
-
-*** set engine
-
-#+begin_src emacs-lisp
-(setq TeX-engine 'xetex)
-#+end_src
-
-*** org-download
-
-#+begin_src emacs-lisp
-(use-package! org-download
-  :commands
-  org-download-dnd
-  org-download-yank
-  org-download-screenshot
-  org-download-dnd-base64
-  :init
-  (map! :map org-mode-map
-        "s-Y" #'org-download-screenshot
-        "s-y" #'org-download-yank)
-  (pushnew! dnd-protocol-alist
-            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
-            '("^data:" . org-download-dnd-base64))
-  (advice-add #'org-download-enable :override #'ignore)
-  :config
-  (defun +org/org-download-method (link)
-    (let* ((filename
-            (file-name-nondirectory
-             (car (url-path-and-query
-                   (url-generic-parse-url link)))))
-           ;; Create folder name with current buffer name, and place in root dir
-           (dirname (concat "./images/"
-                            (replace-regexp-in-string " " "_"
-                                                      (downcase (file-name-base buffer-file-name)))))
-           (filename-with-timestamp (format "%s%s.%s"
-                                            (file-name-sans-extension filename)
-                                            (format-time-string org-download-timestamp)
-                                            (file-name-extension filename))))
-      (make-directory dirname t)
-      (expand-file-name filename-with-timestamp dirname)))
-  :config
-  (setq org-download-screenshot-method
-        (cond (IS-MAC "screencapture -i %s")
-              (IS-LINUX
-               (cond ((executable-find "maim")  "maim -u -s %s")
-                     ((executable-find "scrot") "scrot -s %s")))))
-  (setq org-download-method '+org/org-download-method))
-#+end_src
-
-*** mathpix.el
-
-#+begin_src emacs-lisp
-(add-to-list 'load-path "/home/py06/.doom.d/packages")
-(require 'mathpix)
-(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
-      mathpix-app-key "b667a7350e26f378b208"
-      mathpix-screenshot-method "scrot -s %s")
-#+end_src
-** pdf-noter
-
-#+begin_src emacs-lisp
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link))
-
-(use-package org-noter-pdftools
-  :after org-noter
-  :config
-  (with-eval-after-load 'pdf-annot
-    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
-#+end_src
-
-** ace-windows
-#+begin_src emacs-lisp
-;; window
-;; window swap - ace-window
-(use-package! ace-window
-  :config
-  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-  :init
-  (map! :leader
-        :prefix "w"
-        :desc "ace-window-select" "a" #'ace-window))
-#+end_src
-
-** eaf
-
-#+begin_src emacs-lisp
-(use-package! eaf
-  :config
-  ;; (setq eaf-enable-debug t) ; should only be used when eaf is wigging out
-  (eaf-setq eaf-browser-dark-mode "false")
-  (setq eaf-browser-default-search-engine "duckduckgo")
-  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com"))
-#+end_src
-
-** telega
-
-#+begin_src emacs-lisp
-;; telega
-(setq telega-proxies
-      (list
-       '(:server "127.0.0.1" :port 1080 :enable t
-                 :type (:@type "proxyTypeSocks5"
-                               :username "" :password ""))))
-#+end_src
-
-** poporg
-
-edit comment in org-mode
-#+begin_src emacs-lisp
-(use-package! poporg
-  :bind (("C-c '" . poporg-dwim)))
-#+end_src
-
-** easy-hugo
-
-#+begin_src emacs-lisp
-(use-package! easy-hugo
-  :config
-  (setq! easy-hugo-root "~/Blog/RandN/"
-         easy-hugo-basedir "~/Blog/RandN/"
-         easy-hugo-url "https://peiyanalysis.github.io"
-         easy-hugo-previewtime "300"
-         easy-hugo-default-ext ".md"
-         easy-hugo-server-flags "-D"
-         easy-hugo-postdir "content/post/")
-  (map! :leader :desc "hugo blog" "B" #'easy-hugo)
-  (map! :map easy-hugo-mode-map
-      :nivm "n" 'easy-hugo-newpost
-      :nivm "D" 'easy-hugo-article
-      :nivm "p" 'easy-hugo-preview
-      :nivm "P" 'easy-hugo-publish
-      :nivm "o" 'easy-hugo-open
-      :nivm "d" 'easy-hugo-delete
-      :nivm "e" 'easy-hugo-open
-      :nivm "c" 'easy-hugo-open-config
-      :nivm "f" 'easy-hugo-open
-      :nivm "N" 'easy-hugo-no-help
-      :nivm "v" 'easy-hugo-view
-      :nivm "r" 'easy-hugo-refresh
-      :nivm "g" 'easy-hugo-refresh
-      :nivm "s" 'easy-hugo-sort-time
-      :nivm "S" 'easy-hugo-sort-char
-      :nivm "G" 'easy-hugo-github-deploy
-      :nivm "A" 'easy-hugo-amazon-s3-deploy
-      :nivm "C" 'easy-hugo-google-cloud-storage-deploy
-      :nivm "q" 'evil-delete-buffer
-      :nivm "TAB" 'easy-hugo-open
-      :nivm "RET" 'easy-hugo-preview))
-#+end_src
-** ox-hugo
-
-#+begin_src emacs-lisp
-(use-package ox-hugo
-  :after ox)
-#+end_src
-
-** baidu-translate
-:PROPERTIES:
-:ID:       8d043185-f206-4d74-a0b6-2f1c34d450a9
-:END:
-
-#+begin_src emacs-lisp
-;; Baidu translate
-(use-package! baidu-translate
-  :init
-  (global-set-key (kbd "C-c m") 'baidu-translate-zh-mark)
-  (global-set-key (kbd "C-c M") 'baidu-translate-zh-whole-buffer)
-  ;;设置你的百度翻译 APPID
-  (setq baidu-translate-appid "20200510000447604")
-  ;;设置你的秘钥
-  (setq baidu-translate-security "Z5Ga8KOYLjto3H3VN8Pi")
-  (map! :leader
-        :desc "EN->ZH marks"            "a z" #'baidu-translate-zh-mark
-        :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
-        :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
-        :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
-#+end_src
-
-** company-poseframe
-
-#+begin_src emacs-lisp
-(use-package! company-posframe
-  :hook (company-mode . company-posframe-mode))
-#+end_src
-
-** buildin modes
-*** hide-show-mode
-
-#+begin_src emacs-lisp
-(map! :leader
-      :prefix "c"
-      (:prefix-map ("H" . "hide code")
-       :desc "hide block"               "b" #'hs-hide-block
-       :desc "hide level"               "l" #'hs-hide-level
-       :desc "hide all"                 "a" #'hs-hide-all)
-      (:prefix-map ("S" . "show code")
-       :desc "show block"               "b" #'hs-show-block
-       :desc "show level"               "l" #'hs-show-level
-       :desc "show all"                 "a" #'hs-show-all))
-#+end_src
-
-*** winner-mode
-
-#+begin_src emacs-lisp
-(use-package winner-mode
-  :hook (after-init . winner-mode))
-#+end_src
-
-*** COMMENT ediff
-
-#+begin_src emacs-lisp
-(use-package ediff
-  :hook (ediff-quit . winner-undo)
-#+end_src
-
-*** savespace
-
-#+begin_src emacs-lisp
-(use-package saveplace
-  :hook (after-init . save-place-mode))
-#+end_src
-
-*** whitespace
-
-#+begin_src emacs-lisp
-(use-package whitespace
-  :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
-  :config
-  (setq whitespace-style '(face trailing)))
-#+end_src
-
-*** so-long
-
-#+begin_src emacs-lisp
-(use-package so-long
-  :config (global-so-long-mode 1))
-#+end_src
-
-*** autorevert
-
-#+begin_src emacs-lisp
-(use-package autorevert
-  :hook (after-init . global-auto-revert-mode))
-#+end_src
-
-** functions
-
-*** time-insert
-
-#+begin_src emacs-lisp
-;; feature-functions
-(defun insert-time ()
-  "Insert a timestamp according to locale's date and time format."
-  (interactive)
-  (insert (format-time-string "%c" (current-time))))
-;; key-bindings
-(map! :leader
-      :desc "insert time"                "i t" #'insert-time)
-
-#+end_src
-
-** key maps
-*** scratch
-
-#+begin_src emacs-lisp
-(map! :leader :desc"doom/scratch"            "X" #'doom/open-scratch-buffer)
-#+end_src
-
-*** org-mode
-
-**** org-capture
-
-#+begin_src emacs-lisp
-(after! org
-  (map! :leader :desc "org-capture"           "x" #'org-capture))
-#+end_src
-
-*** comment lines
-
-#+begin_src emacs-lisp
-;; comment
-(global-set-key (kbd "C-c C-\\") (quote comment-line))
-#+end_src
-
-*** workspaces
-
-#+begin_src emacs-lisp
-;; keybindings
-(map! :leader
-      :desc "Left workspace"                    "TAB ," #'+workspace/switch-left
-      :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
-      :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
-#+end_src
-*** frame
-#+begin_src emacs-lisp
-(map! :leader
-      :desc "Other frame"                       "o o" #'other-frame)
-#+end_src
-
-*** applications
-
-#+begin_src emacs-lisp
-(map! :leader
-      :desc "Other frame"                       "o o" #'other-frame)
-#+end_src
-
-* gtd
-*** todo keyword
+** keyword settings
 #+begin_src emacs-lisp
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
-
+;; keyword faces
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "red" :weight bold)
               ("NEXT" :foreground "blue" :weight bold)
@@ -650,117 +877,4 @@ edit comment in org-mode
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold)
               ("BREAK" :foreground "forest green" :weight bold))))
-#+end_src
-
-#+begin_src emacs-lisp
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-#+end_src
-
-*** capture
-
-#+begin_src emacs-lisp
-(after! org
-  (setq org-capture-templates nil)
-  (add-to-list 'org-capture-templates
-             '("t" "todo" entry (file "~/Dropbox/.org/inbox.org") "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)))
-#+end_src
-
-*** agenda
-**** agenda-files
-#+begin_src emacs-lisp
-(setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
-                               "~/Dropbox/.org/todolist.org" )))
-(setq org-agenda-bin  '("~/Dropbox/.org/bin.org"))
-(setq org-agenda-future  '("~/Dropbox/.org/future.org"))
-#+end_src
-
-**** refile targets
-#+begin_src emacs-lisp
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                 (org-agenda-files :maxlevel . 9)
-                                 (org-agenda-bin :maxlevel . 1))))
-#+end_src
-**** use-package
-#+begin_src emacs-lisp
-(use-package! org-agenda
-  :init
-  ;; customize ort-agenda custom command
-  (map! "<f1>" #'jethro/switch-to-agenda)
-  ;; ?
-  (setq org-agenda-block-separator nil
-        org-agenda-start-with-log-mode t)
-  ;; useful switch direct
-  (defun jethro/switch-to-agenda ()
-    (interactive)
-    (org-agenda nil " "))
-  :config
-  ;; is project mode
-  (defun jethro/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-  ;; skip project
-  (defun jethro/skip-projects ()
-  "Skip trees that are projects"
-  (save-restriction
-    (widen)
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      (cond
-       ((org-is-habit-p)
-        next-headline)
-       ((jethro/is-project-p)
-        next-headline)
-       (t
-        nil)))))
-#+end_src
-**** apperance
-#+begin_src emacs-lisp
-(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-(setq org-agenda-custom-commands
-    `((" " "Agenda"
-       ((agenda ""
-               ((org-agenda-span 'week)
-                (org-deadline-warning-days 365)))
-       (todo "TODO"
-             ((org-agenda-overriding-header "Inbox")
-              (org-agenda-files '("~/Dropbox/.org/inbox.org"))))
-       (todo "NEXT"
-             ((org-agenda-overriding-header "In Progress")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org"))))
-       ;; (todo "TODO"
-       ;;       ((org-agenda-overriding-header "Active Projects")
-       ;;        (org-agenda-skip-function #'jethro/skip-projects)
-       ;;        (org-agenda-files '(,(expand-file-name "projects.org" jethro/org-agenda-directory)))))
-       (todo "TODO"
-             ((org-agenda-overriding-header "One-off Tasks")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org" "~/Dropbox/.org/inbox.org"))
-              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
-#+end_src
-
-**** functions
-***** skip project
-#+begin_src emacs-lisp
-(defun jethro/skip-projects ()
-"Skip trees that are projects"
-(save-restriction
-  (widen)
-  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-    (cond
-     ((org-is-habit-p)
-      next-headline)
-     ((jethro/is-project-p)
-      next-headline)
-     (t
-      nil)))))
 #+end_src

@@ -105,9 +105,20 @@
 (package! ox-hugo)
 (package! nano-emacs
   :recipe (:host github :repo "rougier/nano-emacs"))
-(when IS-LINUX
-  (package! eaf :recipe (:host github
-                            :repo "manateelazycat/emacs-application-framework"
-                            :files ("*")
-                            :no-byte-compile t))
-  )
+;; (when IS-LINUX
+;;   (package! eaf :recipe (:host github
+;;                             :repo "manateelazycat/emacs-application-framework"
+;;                             :files ("*")
+;;                             :no-byte-compile t)))
+(package! org-noter-pdftools)
+(package! elfeed-protocol)
+(package! nyan-mode)
+(package! elfeed)
+(package! elfeed-org)
+(package! elfeed-goodies)
+(package! elfeed-dashboard)
+(package! elfeed-protocol)
+(package! rime
+  :recipe (:host github
+           :repo "DogLooksGood/emacs-rime"
+           :files ("*.el" "Makefile" "lib.c")))

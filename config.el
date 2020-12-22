@@ -3,11 +3,6 @@
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 
-(setq doom-theme 'nil)
-(require 'nano-theme-dark)
-(require 'nano-modeline)
-(require 'nano-help)
-
 (setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
         doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
         doom-unicode-font (font-spec :family "Sarasa Mono SC")
@@ -16,6 +11,31 @@
 (set-fontset-font t 'unicode "Symbola" nil 'prepend)
 
 (setq display-line-numbers-type nil)
+
+(use-package doom-modeline
+  :hook
+  (window-setup . doom-modeline-mode)
+  :config
+  (use-package nyan-mode
+    :hook (doom-modeline-mode . nyan-mode)
+    :config
+    (nyan-mode 1)
+    (setq nyan-animate-nyancat t)
+    (setq nyan-wavy-trail t)
+    (setq mode-line-format
+          (list
+           '(:eval (list (nyan-create))))))
+  (display-time-mode t)
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-height 40)
+  (setq doom-modeline-bar-width 3)
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-buffer-state-icon t)
+  (setq doom-modeline-buffer-modification-icon t)
+  (setq doom-modeline-modal-icon t)
+  (setq doom-modeline-buffer-encoding nil))
+(use-package posframe)
 
 ;; smartparens
 (use-package! smartparens
@@ -34,7 +54,62 @@
         "C-M-)" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-barf-sexp))
 
+;; input method
+(use-package! pyim
+  :demand t
+  :config
+  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  ;; (use-package pyim-basedict
+  ;;   :config (pyim-basedict-enable))
+  ;; 设置 zh－wiki 词库和 zh－moegirl 词库
+  (setq pyim-dicts
+        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
+          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
+          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
+          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'quanpin)
+  ;; 开启拼音搜索功能
+  (pyim-isearch-mode 1)
+  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+  ;; 为'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;; 手动安装 posframe 包。
+  (setq pyim-page-tooltip 'posframe)
+  ;; 选词框显示 9 个候选词
+  (setq pyim-page-length 9)
+  ;; 半角标点
+  (setq pyim-punctuation-dict nil)
+  :bind
+  (("C-c M-c C-w" . pyim-forward-word)
+   ("C-c M-c C-b" . pyim-backward-word)))
+(define-key pyim-mode-map "." 'pyim-page-next-page)
+(define-key pyim-mode-map "," 'pyim-page-previous-page)
+(define-key pyim-mode-map ";"
+  (lambda ()
+    (interactive)
+    (pyim-page-select-word-by-number 2)))
 
+(use-package rime
+  :config
+  (setq rime-user-data-dir "~/.local/share/fcitx5/rime/")
+  (setq default-input-method "rime")
+  (setq rime-posframe-properties
+        (list :background-color "#333333"
+              :foreground-color "#dcdccc"
+              :internal-border-width 10))
+  (setq default-input-method "rime"
+        rime-show-candidate 'posframe))
+;;  http://ergoemacs.org/emacs/emacs_bind_number_pad_keys.html
+  (map! "<kp-1>" "1"
+        "<kp-2>" "2"
+        "<kp-3>" "3"
+        "<kp-4>" "4"
+        "<kp-5>" "5"
+        "<kp-6>" "6"
+        "<kp-7>" "7"
+        "<kp-8>" "8"
+        "<kp-9>" "9"
+        "<kp-0>" "0")
 
 ;; search
 (use-package! ace-pinyin
@@ -49,39 +124,6 @@
   :config
   (setq avy-all-windows t)
   (evil-find-char-pinyin-mode t))
-
-
-;; input method
-(use-package! pyim
-  :demand t
-  :config
-  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  ;; (use-package pyim-basedict
-  ;;   :config (pyim-basedict-enable))
-  ;; 设置zh－wiki词库和zh－moegirl词库
-  (setq pyim-dicts
-        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
-          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
-          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
-          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
-  (setq default-input-method "pyim")
-  ;; 我使用全拼
-  (setq pyim-default-scheme 'quanpin)
-  ;; 开启拼音搜索功能
-  (pyim-isearch-mode 1)
-  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;; 手动安装 posframe 包。
-  (setq pyim-page-tooltip 'posframe)
-  ;; 选词框显示 9 个候选词
-  (setq pyim-page-length 9)
-  ;; 半角标点
-  (setq pyim-punctuation-dict nil)
-  :bind
-  (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-   ("C-;" . pyim-delete-word-from-personal-buffer)
-   ("C-c M-c C-w" . pyim-forward-word)
-   ("C-c M-c C-b" . pyim-backward-word)))
 
 ;; hl-todo-mode
 (use-package! hl-todo
@@ -134,110 +176,6 @@
     (add-hook 'scheme-mode-hook #'parinfer-mode)
     (add-hook 'lisp-mode-hook #'parinfer-mode)))
 
-;; basic org settings
-(require 'find-lisp)
-(setq org-directory "~/Dropbox/.org"
-      org-ellipsis " ▼ "
-      org-adapt-indentation nil)
-(setq org-id-link-to-org-use-id t)
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode))
-
-;; org-outline quick movement
-(after! org
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading)
-  (add-hook 'org-capture-mode-hook #'org-id-get-create))
-
-;; org-roam
-(use-package! org-roam
-  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
-  :hook
-  (after-init . org-roam-mode)
-  :init
-  (map! :leader
-       (:prefix ("r" . "roam")
-                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-                :desc "Org Roam Capture"              "c" #'org-roam-capture
-                :desc "Find file"                     "f" #'org-roam-find-file
-                :desc "Show graph"                    "g" #'org-roam-graph
-                :desc "Insert"                        "i" #'org-roam-insert
-                :desc "Insert (skipping org-capture)" "I" #'org-roam-insert-immediate
-                :desc "Org Roam"                      "r" #'org-roam
-                (:prefix ("d" . "by date")
-                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
-                      :desc "Today"          "t" #'org-roam-dailies-today
-                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
-                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
-  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
-        org-roam-index-file "/home/py06/Dropbox/.org/roams/index.org"
-        org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-graph-exclude-matcher "private"
-        org-roam-tag-sources '(prop last-directory)
-        org-id-link-to-org-use-id t)
-  :config
-  ;; org-roam-capture
-  (setq org-roam-capture-templates
-               ;; literally
-        '(("l" "lit" plain (function org-roam--capture-get-point)
-             "%?"
-             :file-name "lit/${slug}"
-             :head "#+title: ${title}\n"
-             :unnarrowed t)
-          ("c" "concept" plain (function org-roam--capture-get-point)
-             "%?"
-             :file-name "concepts/${slug}"
-             :head "#+title: ${title}\n"
-             :unnarrowed t)
-          ("d" "default" plain (function org-roam--capture-get-point)
-             "%?"
-             :file-name "${slug}"
-             :head "#+title: ${title}\n"
-             :unnarrowed t)))
-  ;; org-roam-capture-immediate
-  (setq org-roam-capture-immediate-template
-               ;; default
-               '("d" "default" plain (function org-roam--capture-get-point)
-                 "%?"
-                 :file-name "${slug}"
-                 :head "#+title: ${title}\n"
-                 :unnarrowed t)))
-
-(use-package! org-roam-protocol
-  :after org-protocol)
-
-(use-package! org-roam-server
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 9090
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
-(unless (server-running-p)
-  (org-roam-server-mode))
-
-(map! :leader
-      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
-
-;; deft
-(use-package deft
-  :after org
-  :bind ("<f9>" . deft)
-  :custom
-  (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory "~/Dropbox/.org/"))
-
 ;; tex-live
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
@@ -255,6 +193,8 @@
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-start-server t)
 (setq TeX-PDF-mode t)
+
+(setq TeX-engine 'xetex)
 
 (setq TeX-engine 'xetex)
 
@@ -335,6 +275,48 @@
                  :type (:@type "proxyTypeSocks5"
                                :username "" :password ""))))
 
+(setq elfeed-use-curl nil)
+(setq elfeed-protocol-ttrss-maxsize 200) ;; bigger than 200 is invalid
+(setq elfeed-feeds
+      '(("ttrss+https://pei@rss.archpei.ink"
+         :password "fee8deb91c")))
+(elfeed-protocol-enable)
+
+(use-package elfeed
+  :config
+  (setq elfeed-use-curl t)
+  (setq elfeed-curl-max-connections 10)
+  (setq elfeed-db-directory "~/.doom.d/elfeed-db/")) ; customize this ofc
+
+(use-package elfeed-org
+  :init
+  (use-package elfeed)
+  :config
+  (setq rmh-elfeed-org-files (list "~/Dropbox/.org/feed/elfeed.org")))
+
+(defun elfeed-mark-all-as-read ()
+  "Mark the whole buffer as read."
+  (interactive)
+  (mark-whole-buffer)
+  (elfeed-search-untag-all-unread))
+
+(defun bjm/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
+
+(defun bjm/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
+(use-package elfeed-goodies
+  :config
+  (elfeed-goodies/setup))
+
 (use-package! poporg
   :bind (("C-c '" . poporg-dwim)))
 
@@ -370,9 +352,6 @@
       :nivm "q" 'evil-delete-buffer
       :nivm "TAB" 'easy-hugo-open
       :nivm "RET" 'easy-hugo-preview))
-
-(use-package ox-hugo
-  :after ox)
 
 ;; Baidu translate
 (use-package! baidu-translate
@@ -449,10 +428,129 @@
 (map! :leader
       :desc "Other frame"                       "o o" #'other-frame)
 
+;; basic org settings
+(require 'find-lisp)
+(setq org-directory "~/Dropbox/.org/")
+
+(setq org-id-link-to-org-use-id t)
+
+(setq org-id-link-to-org-use-id t)
+
+;; deft
+(use-package deft
+  :after org
+  :bind ("<f9>" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/Dropbox/.org/"))
+
+;; org-roam
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+  :hook
+  (after-init . org-roam-mode)
+  :init
+  (map! :leader
+       (:prefix ("r" . "roam")
+                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+                :desc "Org Roam Capture"              "c" #'org-roam-capture
+                :desc "Find file"                     "f" #'org-roam-find-file
+                :desc "Show graph"                    "g" #'org-roam-graph
+                :desc "Insert"                        "i" #'org-roam-insert
+                :desc "Insert (skipping org-capture)" "I" #'org-roam-insert-immediate
+                :desc "Org Roam"                      "r" #'org-roam
+                (:prefix ("d" . "by date")
+                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
+                      :desc "Today"          "t" #'org-roam-dailies-today
+                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
+                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
+  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
+        org-roam-index-file "/home/py06/Dropbox/.org/roams/index.org"
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-roam-graph-exclude-matcher "private"
+        org-roam-tag-sources '(prop last-directory)
+        org-id-link-to-org-use-id t)
+  :config
+  ;; org-roam-capture
+  (setq org-roam-capture-templates
+               ;; literally
+        '(("l" "lit" plain (function org-roam--capture-get-point)
+             "%?"
+             :file-name "lit/${slug}"
+             :head "#+title: ${title}\n"
+             :unnarrowed t)
+          ("c" "concept" plain (function org-roam--capture-get-point)
+             "%?"
+             :file-name "concepts/${slug}"
+             :head "#+title: ${title}\n"
+             :unnarrowed t)
+          ("d" "default" plain (function org-roam--capture-get-point)
+             "%?"
+             :file-name "${slug}"
+             :head "#+title: ${title}\n"
+             :unnarrowed t)))
+  ;; org-roam-capture-immediate
+  (setq org-roam-capture-immediate-template
+               ;; default
+               '("d" "default" plain (function org-roam--capture-get-point)
+                 "%?"
+                 :file-name "${slug}"
+                 :head "#+title: ${title}\n"
+                 :unnarrowed t)))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+(use-package! org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+(unless (server-running-p)
+  (org-roam-server-mode))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
+
+(setq org-ellipsis " ▼ ")
+
+(setq org-ellipsis " ▼ ")
+
+(setq org-adapt-indentation t)
+
+(setq org-adapt-indentation t)
+
+;; org-outline quick movement
+(after! org
+  (map! :map org-mode-map
+        "M-n" #'outline-next-visible-heading
+        "M-p" #'outline-previous-visible-heading)
+  (add-hook 'org-capture-mode-hook #'org-id-get-create))
+
+(map! :leader
+      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
+
+(setq org-task-inbox    (concat org-directory "inbox.org")
+      org-task-todolist (concat org-directory "todolist.org")
+      org-task-bin      (concat org-directory "bin.org")
+      org-task-future   (concat org-directory "future.org")
+      org-task-repeater (concat org-directory "repeater.org"))
+
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
-
+;; keyword faces
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "red" :weight bold)
               ("NEXT" :foreground "blue" :weight bold)
@@ -463,95 +561,3 @@
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold)
               ("BREAK" :foreground "forest green" :weight bold))))
-
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-
-(after! org
-  (setq org-capture-templates nil)
-  (add-to-list 'org-capture-templates
-             '("t" "todo" entry (file "~/Dropbox/.org/inbox.org") "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)))
-
-(setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
-                               "~/Dropbox/.org/todolist.org" )))
-(setq org-agenda-bin  '("~/Dropbox/.org/bin.org"))
-(setq org-agenda-future  '("~/Dropbox/.org/future.org"))
-
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                 (org-agenda-files :maxlevel . 9)
-                                 (org-agenda-bin :maxlevel . 1))))
-
-(use-package! org-agenda
-  :init
-  ;; customize ort-agenda custom command
-  (map! "<f1>" #'jethro/switch-to-agenda)
-  ;; ?
-  (setq org-agenda-block-separator nil
-        org-agenda-start-with-log-mode t)
-  ;; useful switch direct
-  (defun jethro/switch-to-agenda ()
-    (interactive)
-    (org-agenda nil " "))
-  :config
-  ;; is project mode
-  (defun jethro/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-  ;; skip project
-  (defun jethro/skip-projects ()
-  "Skip trees that are projects"
-  (save-restriction
-    (widen)
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      (cond
-       ((org-is-habit-p)
-        next-headline)
-       ((jethro/is-project-p)
-        next-headline)
-       (t
-        nil)))))
-
-(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-(setq org-agenda-custom-commands
-    `((" " "Agenda"
-       ((agenda ""
-               ((org-agenda-span 'week)
-                (org-deadline-warning-days 365)))
-       (todo "TODO"
-             ((org-agenda-overriding-header "Inbox")
-              (org-agenda-files '("~/Dropbox/.org/inbox.org"))))
-       (todo "NEXT"
-             ((org-agenda-overriding-header "In Progress")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org"))))
-       ;; (todo "TODO"
-       ;;       ((org-agenda-overriding-header "Active Projects")
-       ;;        (org-agenda-skip-function #'jethro/skip-projects)
-       ;;        (org-agenda-files '(,(expand-file-name "projects.org" jethro/org-agenda-directory)))))
-       (todo "TODO"
-             ((org-agenda-overriding-header "One-off Tasks")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org" "~/Dropbox/.org/inbox.org"))
-              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
-
-(defun jethro/skip-projects ()
-"Skip trees that are projects"
-(save-restriction
-  (widen)
-  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-    (cond
-     ((org-is-habit-p)
-      next-headline)
-     ((jethro/is-project-p)
-      next-headline)
-     (t
-      nil)))))
