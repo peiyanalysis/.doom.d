@@ -1,0 +1,8 @@
+<p>In this note, we prove scale-invariant Strichartz estimates
+$$\|e^{it\Delta}f\|_{L^p(I\times M)}\lesssim \|f\|_{H^{d/2-(d+2)/p}(M)}$$ on
+any compact globally symmetric space $M$ equipped with the canonical Killing
+metric, for all $p\geq 2+8/r$, $d,r$ being respectively the dimension and rank
+of $M$. This generalizes the previous results on compact Lie groups. The proof
+relies on an integral formula discovered by J.-L. Clerc for spherical functions
+on symmetric spaces of compact type.
+</p>

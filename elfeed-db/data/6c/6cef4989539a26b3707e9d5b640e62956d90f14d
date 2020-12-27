@@ -1,0 +1,16 @@
+<p>It is a prominent conjecture (relating Riemannian geometry and algebraic
+topology) that all simply-connected compact manifolds of special holonomy
+should be formal spaces, i.e., their rational homotopy type should be derivable
+from their rational cohomology algebra already -- an as prominent as particular
+property in rational homotopy theory. Special interest now lies on exceptional
+holonomy $G_2$ and $Spin(7)$. In this article we provide a method of how to
+confirm that the famous Joyce examples of holonomy $G_2$ indeed are formal
+spaces; we concretely exert this computation for one example which may serve as
+a blueprint for the remaining Joyce examples (potentially also of holonomy
+$Spin(7)$). These considerations are preceded by another result identifying the
+formality of manifolds admitting special structures: we prove the formality of
+nearly K\"ahler manifolds. A connection between these two results can be found
+in the fact that both "special holonomy" and "nearly K\"ahler" naturally
+generalize compact K\"ahler manifolds, whose formality is a classical and
+celebrated theorem by Deligne-Griffiths-Morgan-Sullivan.
+</p>

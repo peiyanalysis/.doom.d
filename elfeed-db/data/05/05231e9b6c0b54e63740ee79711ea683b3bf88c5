@@ -1,0 +1,308 @@
+<ol>
+<li><p>
+Show the following lists in box notation:
+</p>
+
+<pre>
+(a) (a b (c d))
+(b) (a (b (c (d))))
+(c) (((a b) c) d)
+(d) (a (b . c) . d)
+</pre>
+
+<p>
+My answer:
+</p>
+
+<p>
+(a) (a . (b . ((C . (D . NIL)) . NIL)))
+</p>
+
+<p>
+(b) (a . ((B . ((C . ((D . NIL) . NIL)) . NIL)) . NIL))
+</p>
+
+<p>
+(c) (((A . (B . NIL)) . (C . NIL)) . (D . NIL))
+</p></li>
+
+<li><p>
+Write a version of <b>union</b> that preserves the order of the elements in the original lists:
+</p>
+
+<pre>
+&gt; (new-union '(a b c) '(b a d))
+(A B C D)
+</pre>
+
+<p>
+My answer:
+</p>
+<div>
+
+<pre>(<span>defun</span> <span>new-union</span> (first second)
+  (<span>dolist</span> (obj second)
+    (<span>if</span> (not (member obj first))
+        (append first (list obj)))))
+</pre>
+</div></li>
+
+<li><p>
+Define a function that takes a list and returns a list indicating the number of times each (eql) element appears, sorted from most common element to least common:
+</p>
+
+<pre>
+&gt; (occurrences '(a b a d a c d c a))
+((A . 4) (C . 2) (D . 2) (B . 1))
+</pre>
+
+<p>
+My answer:
+</p>
+<div>
+
+<pre>(<span>defun</span> <span>occurrence</span> (lst)
+  (<span>let</span> ((result nil))
+    (<span>dolist</span> (obj lst)
+      (<span>if</span> (null (assoc obj result))
+      (push (cons obj 1) result)
+      (incf (cdr (assoc obj result)))
+    ))
+    (sort result #'(<span>lambda</span> (a b) (<span>if</span> (&gt; (cdr a) (cdr b)) t nil)))))
+</pre>
+</div></li>
+
+<li><p>
+Why does (member '(a) '((a) (b))) return nil?
+</p>
+
+<p>
+My answer:
+</p>
+
+<p>
+&#22240;&#20026;&#27599;&#27425;&#20135;&#29983;cons&#35843;&#29992;&#26102;&#31995;&#32479;&#37117;&#20250;&#20998;&#37197;&#26032;&#30340;&#23545;&#35937;&#65292;&#25152;&#20197;'(a)&#21644;'((a) (b))&#20013;&#30340;&#31532;&#19968;&#20010;&#20803;&#32032;&#34429;&#28982;&#20855;&#26377;&#21516;&#26679;&#30340;&#20540;&#65292;&#20294;&#21364;&#19981;&#26159;&#21516;&#19968;&#20010;&#23545;&#35937;&#65292;&#32780;member&#20989;&#25968;&#20351;&#29992;&#30340;&#21028;&#23450;&#20989;&#25968;&#26159;eql&#12290;
+</p></li>
+
+<li><p>
+Suppose the function <b>pos+</b> takes a list and returns a list of each element plus its position:
+</p>
+
+<pre>
+&gt; (pos+ '(7 5 1 4))
+</pre>
+<p>
+Define this function using (a) recursion, (b) iteration, (c) mapcar.
+</p>
+
+<p>
+My answer:
+</p>
+
+<p>
+(a) Recursive version
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>rec-pos-plus</span> (lst pos)<span> </span>
+  (<span>if</span> (not (null lst))
+      (<span>progn</span>
+    (incf (car lst) pos)
+    (rec-pos-plus (cdr lst) (1+ pos)))))
+
+(<span>defun</span> <span>rec-pos+</span> (lst)
+  (rec-pos-plus lst 0)
+  lst)
+</pre>
+</div>
+
+<p>
+(b) Iterative version
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>iter-pos+</span> (lst)
+  (<span>do</span> ((i 0 (+ i 1)))
+      ((= i (length lst)) lst)
+    (incf (nth i lst) i)
+    ))
+</pre>
+</div>
+
+<p>
+(c) Version using <b>mapcar</b>
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>pos+</span> (lst)
+  (mapcar #'(<span>lambda</span> (x) (incf x (position x lst)))
+      lst))
+</pre>
+</div></li>
+
+<li><p>
+After yeas of deliiberation, a government commission has decided that lists should be represented by using the cdr to point to the first element and the car to point to the rest of the list. Define the government versions of the following functions:
+</p>
+
+<pre>
+(a) cons
+(b) list
+(c) length (for lists)
+(d) member (for lists; no keywords)
+</pre>
+
+<p>
+My answer:
+</p>
+
+<p>
+(a) cons
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>cons</span> (x y)
+  (<span>let</span> ((result '(nil . nil)))
+    (setf (cdr result) x)
+    (setf (car result) y)))
+</pre>
+</div>
+
+<p>
+(b) list
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>list</span> (<span>&amp;rest</span> arg)
+  arg)
+</pre>
+</div>
+
+<p>
+(c) length (for lists)
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>length</span> (lst)
+  (<span>if</span> (null lst)
+      0
+      (+ 1 (length (car lst)))))
+</pre>
+</div>
+
+<p>
+(d) member (for lists; no keywords)
+</p>
+
+<div>
+
+<pre>(<span>defun</span> <span>member</span> (element list)
+  (<span>cond</span> ((null list) nil)
+        ((eql element (cdr list)) list)
+        (t (member element (car list)))))
+</pre>
+</div></li>
+
+<li><p>
+Modify the program in Figure 3.6 to use fewer cons cells. (Hing: Use dottedlists.)
+</p>
+
+<p>
+My answer:
+</p>
+<div>
+
+<pre>(<span>defun</span> <span>n-elts</span> (elt n)
+  (<span>if</span> (&gt; n 1)
+      (cons n elt)
+      elt))
+
+(<span>defun</span> <span>compr</span> (elt n lst)
+  (<span>if</span> (null lst)
+      (list (n-elts elt n))
+      (<span>let</span> ((next (car lst)))
+    (<span>if</span> (eql next elt)
+        (compr elt (+ n 1) (cdr lst))
+        (cons (n-elts elt n)
+          (compr next 1 (cdr lst)))))))
+
+(<span>defun</span> <span>compress</span> (x)
+  (<span>if</span> (consp x)
+      (compr (car x) 1 (cdr x))
+      x))
+</pre>
+</div></li>
+
+<li><p>
+Define a function that takes a list and prints it in dot natation:
+</p>
+
+<pre>
+&gt; (showdots '(a b c))
+(A . (B . (C . NIL)))
+NIL
+</pre>
+
+<p>
+My answer:
+</p>
+<div>
+
+<pre>(<span>defun</span> <span>showdots</span> (list)
+(<span>cond</span> ((null list) nil)
+  ((consp list) (<span>progn</span>
+         (format t <span>"("</span>)
+         (showdots (car list))
+         (format t <span>" . "</span>)
+         (<span>if</span> (null (cdr list))
+             (format t <span>"NIL"</span>)
+             (showdots (cdr list)))
+         (format t <span>")"</span>)
+         ))
+  (t (format t <span>"~a"</span> list))))
+</pre>
+</div></li>
+
+<li><p>
+Write a program to find the <i>longest</i> finite path through a network represented as in Section 3.15. The network may contain cycles.
+</p>
+
+<p>
+My answer(&#23545;shortest-path&#30340;&#25913;&#20889;):
+</p>
+<div>
+
+<pre>(<span>defun</span> <span>new-paths</span> (path node net)
+  (mapcar #'(<span>lambda</span> (n)<span> </span>
+               (<span>if</span> (not (member n path)) <span>;&#21028;&#26029;&#19979;&#19968;&#23618;&#33410;&#28857;&#26159;&#21542;&#21253;&#21547;&#22312;&#36335;&#24452;&#20013;&#20197;&#21066;&#38500;&#29615;&#30340;&#24433;&#21709;</span>
+                   (cons n path)))
+          (cdr (assoc node net))))
+
+(<span>defun</span> <span>bfs</span> (end quene net)
+  (<span>if</span> (null quene)
+      nil
+      (<span>let</span> ((path (car quene)))
+        (<span>let</span> ((node (car path)))
+          (<span>if</span> (eql node end)
+              (reverse path)
+              (bfs end
+                   (sort (append (cdr quene) <span>;&#25490;&#24207;&#20197;&#20445;&#35777;&#26368;&#38271;&#30340;&#36335;&#24452;&#22312;&#38431;&#21015;&#26368;&#21069;&#26041;</span>
+                                 (new-paths path node net))
+                         #'&gt;
+                         <span>:key</span> #'length)
+                   net))))))
+
+(<span>defun</span> <span>longest-path</span> (start end net)
+  (bfs end (list (list start)) net))
+</pre>
+</div></li>
+</ol>
+
+<p>
+= =&#20889;&#20010;&#39064;&#27604;&#25343;&#21322;&#29983;&#19981;&#29087;&#30340;&#33521;&#25991;&#26469;&#35760;&#31508;&#35760;&#36824;&#32047;&hellip;&hellip;
+</p>

@@ -1,0 +1,12 @@
+<p>In an attempt to understand the soliton resolution conjecture, we consider
+the Sine-Gordon equation on a spherically symmetric wormhole spacetime. We show
+that within each topological sector (indexed by a positive integer degree $n$)
+there exists a unique linearly stable soliton, which we call the $n$-kink. We
+give numerical evidence that the $n$-kink is a global attractor in the
+evolution of any smooth, finite energy solutions of degree $n$. When the radius
+of the wormhole throat $a$ is large enough, the convergence to the $n$-kink is
+shown to be governed by internal modes that slowly decay due to the resonant
+transfer of energy to radiation. We compute the exact asymptotics of this
+relaxation process for the $1$-kink using the Soffer-Weinstein weakly nonlinear
+perturbation theory.
+</p>

@@ -1,0 +1,9 @@
+<p>We show propagation of moments in velocity for the 3-dimensional
+Vlasov-Poisson system with a uniform magnetic field $B = (0, 0, {\omega})$ by
+adapting the work of Lions, Perthame. The added magnetic field also produces
+singularities at times which are the multiples of the cyclotron period $t =
+\dfrac{2\pi k}{\omega}, k \in \mathbb{N}$ . This result also allows to show
+propagation of regularity for the solution. For uniqueness, we extend Loeper's
+result by showing that the set of solutions with bounded macroscopic density is
+a uniqueness class.
+</p>

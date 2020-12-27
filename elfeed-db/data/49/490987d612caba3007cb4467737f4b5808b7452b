@@ -1,0 +1,8 @@
+<p>In an optimal visiting problem, we want to control a trajectory that has to
+pass as close as possible to a collection of target points or regions. We
+introduce a hybrid control-based approach for the classic problem where the
+trajectory can switch between a group of discrete states related to the targets
+of the problem. The model is subsequently adapted to a mean-field framework to
+study viability and crowd fluxes to model a multitude of indistinguishable
+players.
+</p>

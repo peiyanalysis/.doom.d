@@ -1,0 +1,13 @@
+<p>We prove continuity and Harnack's inequality for bounded solutions to
+elliptic equations of the type $$ \begin{aligned} {\rm div}\big(|\nabla
+u|^{p-2}\,\nabla u+a(x)|\nabla u|^{q-2}\,\nabla u\big)=0,&amp; \quad
+a(x)\geqslant0, \\ |a(x)-a(y)|\leqslant A|x-y|^{\alpha}\mu(|x-y|),&amp; \quad x\neq
+y, \\ {\rm div}\Big(|\nabla u|^{p-2}\,\nabla u \big[1+\ln(1+b(x)\, |\nabla u|)
+\big] \Big)=0,&amp; \quad b(x)\geqslant0, \\ |b(x)-b(y)|\leqslant
+B|x-y|\,\mu(|x-y|),&amp; \quad x\neq y, \end{aligned} $$ $$ \begin{aligned} {\rm
+div}\Big(|\nabla u|^{p-2}\,\nabla u+ c(x)|\nabla u|^{q-2}\,\nabla u
+\big[1+\ln(1+|\nabla u|) \big]^{\beta} \Big)=0,&amp; \quad c(x)\geqslant0, \,
+\beta\geqslant0,\phantom{=0=0} \\ |c(x)-c(y)|\leqslant
+C|x-y|^{q-p}\,\mu(|x-y|),&amp; \quad x\neq y, \end{aligned} $$ under the precise
+choice of $\mu$.
+</p>

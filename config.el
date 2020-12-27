@@ -1,7 +1,9 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
+
+(setq doom-theme 'doom-manegarm)
 
 (setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
         doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
@@ -54,6 +56,14 @@
         "C-M-)" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-barf-sexp))
 
+(use-package yasnippet
+  :config
+  (add-to-list 'yas-snippet-dirs "~/.doom.d/snippets"))
+
+(use-package yasnippet-snippets)
+
+(use-package ivy-yasnippet)
+
 ;; input method
 (use-package! pyim
   :demand t
@@ -92,11 +102,11 @@
 (use-package rime
   :config
   (setq rime-user-data-dir "~/.local/share/fcitx5/rime/")
-  (setq default-input-method "rime")
   (setq rime-posframe-properties
         (list :background-color "#333333"
               :foreground-color "#dcdccc"
               :internal-border-width 10))
+  (setq rime-posframe-style 'vertical)
   (setq default-input-method "rime"
         rime-show-candidate 'posframe))
 ;;  http://ergoemacs.org/emacs/emacs_bind_number_pad_keys.html
@@ -196,51 +206,25 @@
 
 (setq TeX-engine 'xetex)
 
-(setq TeX-engine 'xetex)
-
-(use-package! org-download
-  :commands
-  org-download-dnd
-  org-download-yank
-  org-download-screenshot
-  org-download-dnd-base64
-  :init
-  (map! :map org-mode-map
-        "s-Y" #'org-download-screenshot
-        "s-y" #'org-download-yank)
-  (pushnew! dnd-protocol-alist
-            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
-            '("^data:" . org-download-dnd-base64))
-  (advice-add #'org-download-enable :override #'ignore)
-  :config
-  (defun +org/org-download-method (link)
-    (let* ((filename
-            (file-name-nondirectory
-             (car (url-path-and-query
-                   (url-generic-parse-url link)))))
-           ;; Create folder name with current buffer name, and place in root dir
-           (dirname (concat "./images/"
-                            (replace-regexp-in-string " " "_"
-                                                      (downcase (file-name-base buffer-file-name)))))
-           (filename-with-timestamp (format "%s%s.%s"
-                                            (file-name-sans-extension filename)
-                                            (format-time-string org-download-timestamp)
-                                            (file-name-extension filename))))
-      (make-directory dirname t)
-      (expand-file-name filename-with-timestamp dirname)))
-  :config
-  (setq org-download-screenshot-method
-        (cond (IS-MAC "screencapture -i %s")
-              (IS-LINUX
-               (cond ((executable-find "maim")  "maim -u -s %s")
-                     ((executable-find "scrot") "scrot -s %s")))))
-  (setq org-download-method '+org/org-download-method))
-
 (add-to-list 'load-path "/home/py06/.doom.d/packages")
 (require 'mathpix)
 (setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
       mathpix-app-key "b667a7350e26f378b208"
       mathpix-screenshot-method "scrot -s %s")
+
+(use-package auto-activating-snippets
+  :hook (latex-mode . latex-auto-activating-snippets-mode))
+
+(use-package! latex-auto-activating-snippets)
+
+(use-package cdlatex
+  :hook ((LaTeX-mode . turn-on-cdlatex)
+         (org-mode . turn-on-org-cdlatex))
+  :config
+  (setq cdlatex-math-modify-alist
+        '(( ?s  "\\mathscr" nil t nil nil )
+          ( ?b  nil         nil t nil nil )
+          ( ?/  "\\slashed" nil t nil nil ))))
 
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link))
@@ -287,12 +271,6 @@
   (setq elfeed-use-curl t)
   (setq elfeed-curl-max-connections 10)
   (setq elfeed-db-directory "~/.doom.d/elfeed-db/")) ; customize this ofc
-
-(use-package elfeed-org
-  :init
-  (use-package elfeed)
-  :config
-  (setq rmh-elfeed-org-files (list "~/Dropbox/.org/feed/elfeed.org")))
 
 (defun elfeed-mark-all-as-read ()
   "Mark the whole buffer as read."
@@ -408,6 +386,14 @@
 (map! :leader
       :desc "insert time"                "i t" #'insert-time)
 
+(use-package ebib
+  :config
+  (setq ebib-file-search-dirs  '("~/Dropbox/bibliography/"))
+  (setq ebib-preload-bib-files '("~/Dropbox/bibliography/references.bib" )))
+  (setq ebib-file-associations '(("pdf" . "PDF tools") ("djvu" . "PDF tools")))
+;; map the keys
+(global-set-key (kbd "<f5>") 'ebib)
+
 (map! :leader :desc"doom/scratch"            "X" #'doom/open-scratch-buffer)
 
 (after! org
@@ -428,129 +414,10 @@
 (map! :leader
       :desc "Other frame"                       "o o" #'other-frame)
 
-;; basic org settings
-(require 'find-lisp)
-(setq org-directory "~/Dropbox/.org/")
-
-(setq org-id-link-to-org-use-id t)
-
-(setq org-id-link-to-org-use-id t)
-
-;; deft
-(use-package deft
-  :after org
-  :bind ("<f9>" . deft)
-  :custom
-  (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory "~/Dropbox/.org/"))
-
-;; org-roam
-(use-package! org-roam
-  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
-  :hook
-  (after-init . org-roam-mode)
-  :init
-  (map! :leader
-       (:prefix ("r" . "roam")
-                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-                :desc "Org Roam Capture"              "c" #'org-roam-capture
-                :desc "Find file"                     "f" #'org-roam-find-file
-                :desc "Show graph"                    "g" #'org-roam-graph
-                :desc "Insert"                        "i" #'org-roam-insert
-                :desc "Insert (skipping org-capture)" "I" #'org-roam-insert-immediate
-                :desc "Org Roam"                      "r" #'org-roam
-                (:prefix ("d" . "by date")
-                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
-                      :desc "Today"          "t" #'org-roam-dailies-today
-                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
-                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
-  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
-        org-roam-index-file "/home/py06/Dropbox/.org/roams/index.org"
-        org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-graph-exclude-matcher "private"
-        org-roam-tag-sources '(prop last-directory)
-        org-id-link-to-org-use-id t)
-  :config
-  ;; org-roam-capture
-  (setq org-roam-capture-templates
-               ;; literally
-        '(("l" "lit" plain (function org-roam--capture-get-point)
-             "%?"
-             :file-name "lit/${slug}"
-             :head "#+title: ${title}\n"
-             :unnarrowed t)
-          ("c" "concept" plain (function org-roam--capture-get-point)
-             "%?"
-             :file-name "concepts/${slug}"
-             :head "#+title: ${title}\n"
-             :unnarrowed t)
-          ("d" "default" plain (function org-roam--capture-get-point)
-             "%?"
-             :file-name "${slug}"
-             :head "#+title: ${title}\n"
-             :unnarrowed t)))
-  ;; org-roam-capture-immediate
-  (setq org-roam-capture-immediate-template
-               ;; default
-               '("d" "default" plain (function org-roam--capture-get-point)
-                 "%?"
-                 :file-name "${slug}"
-                 :head "#+title: ${title}\n"
-                 :unnarrowed t)))
-
-(use-package! org-roam-protocol
-  :after org-protocol)
-
-(use-package! org-roam-server
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 9090
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
-(unless (server-running-p)
-  (org-roam-server-mode))
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode))
-
-(setq org-ellipsis " ▼ ")
-
-(setq org-ellipsis " ▼ ")
-
-(setq org-adapt-indentation t)
-
-(setq org-adapt-indentation t)
-
-;; org-outline quick movement
-(after! org
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading)
-  (add-hook 'org-capture-mode-hook #'org-id-get-create))
-
-(map! :leader
-      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
-
-(setq org-task-inbox    (concat org-directory "inbox.org")
-      org-task-todolist (concat org-directory "todolist.org")
-      org-task-bin      (concat org-directory "bin.org")
-      org-task-future   (concat org-directory "future.org")
-      org-task-repeater (concat org-directory "repeater.org"))
-
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
-;; keyword faces
+
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "red" :weight bold)
               ("NEXT" :foreground "blue" :weight bold)
@@ -561,3 +428,165 @@
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold)
               ("BREAK" :foreground "forest green" :weight bold))))
+
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+
+(after! org
+  (add-hook 'org-capture-mode-hook #'org-id-get-create)
+  (setq org-capture-templates
+          `(("i" "Inbox" entry (file "~/Dropbox/.org/inbox.org")
+             ,(concat "* TODO %?\n"
+                      "/Entered on/ %u"))
+            ;; metacognition (元认知) in current org-file
+            ("m" "Metacognition")
+            ;; meta question: 思考疑问？
+            ("mq" "Questions" entry (function ,(lambda ()
+                                                 (jethro/olp-current-buffer "Metacog" "Questions")))
+             ,(concat "* TODO Q: %?\n"
+                      "/Entered on/ %u"))
+            ;; meta note: 记录思考
+            ("mn" "Notes" entry (function ,(lambda ()
+                                             (jethro/olp-current-buffer "Metacog" "Notes")))
+             "* %?\n"))))
+
+(defun jethro/olp-current-buffer (&rest outline-path)
+  "Find the OUTLINE-PATH of the current buffer."
+  (let ((m (jethro/find-or-create-olp (cons (buffer-file-name) outline-path))))
+    (set-buffer (marker-buffer m))
+    (org-capture-put-target-region-and-position)
+    (widen)
+    (goto-char m)
+    (set-marker m nil)))
+
+(defun jethro/find-or-create-olp (path &optional this-buffer)
+  "Return a marker pointing to the entry at outline path OLP.
+If anything goes wrong, throw an error, and if you need to do
+something based on this error, you can catch it with
+`condition-case'.
+If THIS-BUFFER is set, the outline path does not contain a file,
+only headings."
+  (let* ((file (pop path))
+         (level 1)
+         (lmin 1)
+         (lmax 1)
+         (start (point-min))
+         (end (point-max))
+         found flevel)
+    (unless (derived-mode-p 'org-mode)
+      (error "Buffer %s needs to be in Org mode" buffer))
+    (org-with-wide-buffer
+     (goto-char start)
+     (dolist (heading path)
+       (let ((re (format org-complex-heading-regexp-format
+                         (regexp-quote heading)))
+             (cnt 0))
+         (while (re-search-forward re end t)
+           (setq level (- (match-end 1) (match-beginning 1)))
+           (when (and (>= level lmin) (<= level lmax))
+             (setq found (match-beginning 0) flevel level cnt (1+ cnt))))
+         (when (> cnt 1)
+           (error "Heading not unique on level %d: %s" lmax heading))
+         (when (= cnt 0)
+           ;; Create heading if it doesn't exist
+           (goto-char end)
+           (unless (bolp) (newline))
+           (org-insert-heading nil nil t)
+           (unless (= lmax 1) (org-do-demote))
+           (insert heading)
+           (setq end (point))
+           (goto-char start)
+           (while (re-search-forward re end t)
+             (setq level (- (match-end 1) (match-beginning 1)))
+             (when (and (>= level lmin) (<= level lmax))
+               (setq found (match-beginning 0) flevel level cnt (1+ cnt))))))
+       (goto-char found)
+       (setq lmin (1+ flevel) lmax (+ lmin (if org-odd-levels-only 1 0)))
+       (setq start found
+             end (save-excursion (org-end-of-subtree t t))))
+     (point-marker))))
+
+(setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
+                               "~/Dropbox/.org/repeater.org"
+                               "~/Dropbox/.org/todolist.org" )))
+(setq org-agenda-bin  '("~/Dropbox/.org/bin.org"))
+(setq org-agenda-future  '("~/Dropbox/.org/future.org"))
+
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                 (org-agenda-files :maxlevel . 9)
+                                 (org-agenda-bin :maxlevel . 1))))
+
+(use-package! org-agenda
+  :init
+  ;; customize ort-agenda custom command
+  (map! "<f1>" #'jethro/switch-to-agenda)
+  ;; ?
+  (setq org-agenda-block-separator nil
+        org-agenda-start-with-log-mode t)
+  ;; useful switch direct
+  (defun jethro/switch-to-agenda ()
+    (interactive)
+    (org-agenda nil " "))
+  :config
+  ;; is project mode
+  (defun jethro/is-project-p ()
+  "Any task with a todo keyword subtask"
+  (save-restriction
+    (widen)
+    (let ((has-subtask)
+          (subtree-end (save-excursion (org-end-of-subtree t)))
+          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+      (save-excursion
+        (forward-line 1)
+        (while (and (not has-subtask)
+                    (< (point) subtree-end)
+                    (re-search-forward "^\*+ " subtree-end t))
+          (when (member (org-get-todo-state) org-todo-keywords-1)
+            (setq has-subtask t))))
+      (and is-a-task has-subtask))))
+  ;; skip project
+  (defun jethro/skip-projects ()
+  "Skip trees that are projects"
+  (save-restriction
+    (widen)
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      (cond
+       ((org-is-habit-p)
+        next-headline)
+       ((jethro/is-project-p)
+        next-headline)
+       (t
+        nil)))))
+
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+(setq org-agenda-custom-commands
+    `((" " "Agenda"
+       ((agenda ""
+               ((org-agenda-span 'week)
+                (org-deadline-warning-days 365)))
+       (todo "TODO"
+             ((org-agenda-overriding-header "Inbox")
+              (org-agenda-files '("~/Dropbox/.org/inbox.org"))))
+       (todo "NEXT"
+             ((org-agenda-overriding-header "In Progress")
+              (org-agenda-files '("~/Dropbox/.org/todolist.org"))))
+       ;; (todo "TODO"
+       ;;       ((org-agenda-overriding-header "Active Projects")
+       ;;        (org-agenda-skip-function #'jethro/skip-projects)
+       ;;        (org-agenda-files '(,(expand-file-name "projects.org" jethro/org-agenda-directory)))))
+       (todo "TODO"
+             ((org-agenda-overriding-header "One-off Tasks")
+              (org-agenda-files '("~/Dropbox/.org/todolist.org" "~/Dropbox/.org/inbox.org"))
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
+
+(defun jethro/skip-projects ()
+"Skip trees that are projects"
+(save-restriction
+  (widen)
+  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+    (cond
+     ((org-is-habit-p)
+      next-headline)
+     ((jethro/is-project-p)
+      next-headline)
+     (t
+      nil)))))

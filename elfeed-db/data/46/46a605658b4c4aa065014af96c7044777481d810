@@ -1,0 +1,497 @@
+<div>
+<h2>&#30446;&#24405;</h2>
+<div>
+<ul>
+<li><a href="http://www.zmonster.me#org41c2012" rel="noopener noreferrer" target="_blank">NLTK &#19982; Stanford NLP</a></li>
+<li><a href="http://www.zmonster.me#orgfd01eb6" rel="noopener noreferrer" target="_blank">&#23433;&#35013;&#21644;&#37197;&#32622;</a>
+<ul>
+<li><a href="http://www.zmonster.me#org7b691ca" rel="noopener noreferrer" target="_blank">&#27880;&#24847;&#20107;&#39033;</a></li>
+<li><a href="http://www.zmonster.me#org2ef10c1" rel="noopener noreferrer" target="_blank">StanfordSegmenter</a></li>
+<li><a href="http://www.zmonster.me#org739e6d8" rel="noopener noreferrer" target="_blank">StanfordTokenizer</a></li>
+<li><a href="http://www.zmonster.me#org60ef4fc" rel="noopener noreferrer" target="_blank">StanfordNERTagger &#21644; StanfordPOSTagger</a></li>
+<li><a href="http://www.zmonster.me#org4d4e736" rel="noopener noreferrer" target="_blank">StanfordParser, StanfordDependencyParser</a></li>
+<li><a href="http://www.zmonster.me#org26cbf24" rel="noopener noreferrer" target="_blank">StanfordNeuralDependencyParser</a></li>
+</ul>
+</li>
+<li><a href="http://www.zmonster.me#orge518db9" rel="noopener noreferrer" target="_blank">&#22522;&#26412;&#20351;&#29992;</a>
+<ul>
+<li><a href="http://www.zmonster.me#org054e3c8" rel="noopener noreferrer" target="_blank">&#20351;&#29992; StanfordSegmenter &#21644; StanfordTokenizer &#36827;&#34892;&#20998;&#35789;</a></li>
+<li><a href="http://www.zmonster.me#org964bac5" rel="noopener noreferrer" target="_blank">&#20351;&#29992; StanfordNERTagger &#36827;&#34892;&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;</a></li>
+<li><a href="http://www.zmonster.me#org18aa32e" rel="noopener noreferrer" target="_blank">&#20351;&#29992; StanfordPOSTagger &#36827;&#34892;&#35789;&#24615;&#26631;&#27880;</a></li>
+<li><a href="http://www.zmonster.me#org52fb103" rel="noopener noreferrer" target="_blank">&#20351;&#29992; StanfordParser &#36827;&#34892;&#21477;&#27861;&#20998;&#26512;</a></li>
+<li><a href="http://www.zmonster.me#org20dbdb8" rel="noopener noreferrer" target="_blank">&#20351;&#29992; StanfordDependencyParser &#36827;&#34892;&#20381;&#23384;&#21477;&#27861;&#20998;&#26512;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<hr>
+
+<p>
+<b>&#27880;&#24847;&#65306;&#26412;&#25991;&#20165;&#36866;&#29992;&#20110; nltk&lt;3.2.5 &#21450; 2016-10-31 &#20043;&#21069;&#30340; Stanford &#24037;&#20855;&#21253;&#65292;&#22312; nltk 3.2.5 &#21450;&#20043;&#21518;&#30340;&#29256;&#26412;&#20013;&#65292;StanfordSegmenter &#31561;&#25509;&#21475;&#30456;&#24403;&#20110;&#24050;&#32463;&#34987;&#24223;&#24323;&#65292;&#25353;&#29031;&#23448;&#26041;&#24314;&#35758;&#65292;&#24212;&#24403;&#36716;&#20026;&#20351;&#29992; nltk.parse.CoreNLPParser &#36825;&#20010;&#25509;&#21475;&#65292;&#35814;&#24773;&#35265; <a href="https://github.com/nltk/nltk/wiki/Stanford-CoreNLP-API-in-NLTK" rel="noopener noreferrer" target="_blank">wiki</a>&#65292;&#24863;&#35874;&#32593;&#21451; <a href="https://disqus.com/by/vickyding/" rel="noopener noreferrer" target="_blank">Vicky Ding</a> &#25351;&#20986;&#38382;&#39064;&#25152;&#22312;&#12290;</b>
+</p>
+
+<div>
+<h2>NLTK &#19982; Stanford NLP</h2>
+<div>
+<p>
+NLTK &#26159;&#19968;&#27454;&#33879;&#21517;&#30340; Python &#33258;&#28982;&#35821;&#35328;&#22788;&#29702;(Natural Language Processing, NLP)&#24037;&#20855;&#21253;&#65292;&#22312;&#20854;&#25910;&#38598;&#30340;&#22823;&#37327;&#20844;&#24320;&#25968;&#25454;&#38598;&#12289;&#27169;&#22411;&#19978;&#25552;&#20379;&#20102;&#20840;&#38754;&#12289;&#26131;&#29992;&#30340;&#25509;&#21475;&#65292;&#28085;&#30422;&#20102;&#20998;&#35789;&#12289;&#35789;&#24615;&#26631;&#27880;(Part-Of-Speech tag, POS-tag)&#12289;&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;(Named Entity Recognition, NER)&#12289;&#21477;&#27861;&#20998;&#26512;(Syntactic Parse)&#31561;&#21508;&#39033; NLP &#39046;&#22495;&#30340;&#21151;&#33021;&#12290;
+</p>
+
+<p>
+Stanford NLP &#26159;&#30001;&#26031;&#22374;&#31119;&#22823;&#23398;&#30340; NLP &#23567;&#32452;&#24320;&#28304;&#30340; Java &#23454;&#29616;&#30340; NLP &#24037;&#20855;&#21253;&#65292;&#21516;&#26679;&#23545; NLP &#39046;&#22495;&#30340;&#21508;&#20010;&#38382;&#39064;&#25552;&#20379;&#20102;&#35299;&#20915;&#21150;&#27861;&#12290;
+</p>
+
+<p>
+&#26031;&#22374;&#31119;&#22823;&#23398;&#30340; NLP &#23567;&#32452;&#26159;&#19990;&#30028;&#30693;&#21517;&#30340;&#30740;&#31350;&#23567;&#32452;&#65292;&#22914;&#26524;&#33021;&#23558; NLTK &#21644; Stanford NLP &#36825;&#20004;&#20010;&#24037;&#20855;&#21253;&#32467;&#21512;&#36215;&#26469;&#20351;&#29992;&#65292;&#37027;&#33258;&#28982;&#26159;&#26497;&#22909;&#30340;&#65281;&#22312; 2004 &#24180; Steve Bird &#22312; NLTK &#20013;&#21152;&#19978;&#20102;&#23545; Stanford NLP &#24037;&#20855;&#21253;&#30340;&#25903;&#25345;&#65292;&#36890;&#36807;&#35843;&#29992;&#22806;&#37096;&#30340; jar &#25991;&#20214;&#26469;&#20351;&#29992; Stanford NLP &#24037;&#20855;&#21253;&#30340;&#21151;&#33021;&#12290;
+</p>
+
+<p>
+&#20174; NLTK &#30340; commit &#21382;&#21490;&#20013;&#21487;&#20197;&#25214;&#21040;&#30456;&#24212;&#30340;&#25552;&#20132;&#35760;&#24405;:
+</p>
+<pre>
+commit e1372fef56bfb88d02fdb6c0ea88474d5f414a38
+Author: Steven Bird &lt;stevenbird1@gmail.com&gt;
+Date:   Tue Aug 3 12:20:20 2004 +0000
+
+    added Stanford
+
+    svn/trunk@2088
+</pre>
+
+<p>
+&#29616;&#22312;&#30340; NLTK &#20013;&#65292;&#36890;&#36807;&#23553;&#35013;&#25552;&#20379;&#20102; Stanford NLP &#20013;&#30340;&#20197;&#19979;&#20960;&#20010;&#21151;&#33021;:
+</p>
+<ol>
+<li>&#20998;&#35789;</li>
+<li>&#35789;&#24615;&#26631;&#27880;</li>
+<li>&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;</li>
+<li>&#21477;&#27861;&#20998;&#26512;&#65292;&#20381;&#23384;&#21477;&#27861;&#20998;&#26512;</li>
+</ol>
+</div>
+</div>
+
+<div>
+<h2>&#23433;&#35013;&#21644;&#37197;&#32622;</h2>
+<div>
+<p>
+NLTK 3.2 &#20043;&#21518;&#21152;&#20837;&#20102;&#29992;&#20110;&#20013;&#25991;&#20998;&#35789;&#30340; StanfordSegmenter &#36825;&#20010;&#31867;&#65292;&#20316;&#32773;&#26159;&#30693;&#21517; NLP &#21338;&#20027; 52nlp&#65292;&#35265; <a href="http://www.52nlp.cn/python%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%AE%9E%E8%B7%B5-%E5%9C%A8nltk%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%96%AF%E5%9D%A6%E7%A6%8F%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D%E5%99%A8" rel="noopener noreferrer" target="_blank">&#30456;&#20851;&#25991;&#31456;</a>&#12290;&#32780; NLTK 3.1 &#21450;&#20043;&#21069;&#21017;&#21482;&#26377;&#20197;&#19979;&#20960;&#20010;&#31867;:
+</p>
+<ol>
+<li>&#20998;&#35789;: StanfordTokenizer</li>
+<li>&#35789;&#24615;&#26631;&#27880;: StanfordPOSTagger</li>
+<li>&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;: StanfordNERTagger</li>
+<li>&#21477;&#27861;&#20998;&#26512;: StanfordParser</li>
+<li>&#20381;&#23384;&#21477;&#27861;&#20998;&#26512;: StanfordDependencyParser, StanfordNeuralDependencyParser</li>
+</ol>
+
+<p>
+&#26041;&#20415;&#36215;&#35265;&#65292;&#26412;&#25991;&#20197; NLTK 3.2 &#36825;&#20010;&#29256;&#26412;&#26469;&#35828;&#26126;&#22914;&#20309;&#36827;&#34892;&#30456;&#20851;&#30340;&#23433;&#35013;&#21644;&#37197;&#32622;&#65292;3.1 &#21450;&#20043;&#21069;&#30340;&#29256;&#26412;&#22522;&#26412;&#30456;&#21516;&#12290;
+</p>
+</div>
+
+<div>
+<h3>&#27880;&#24847;&#20107;&#39033;</h3>
+<div>
+<p>
+&#38656;&#35201;&#27880;&#24847;&#36825;&#20040;&#20960;&#28857;:
+</p>
+<ol>
+<li>Stanford NLP &#24037;&#20855;&#21253;&#33258; 2014 &#24180; 10 &#26376;&#21518;(&#22823;&#27010;&#26159; version 3.5.0)&#38656;&#35201; Java 8 &#21450;&#20043;&#21518;&#30340;&#29256;&#26412;&#65292;&#22914;&#26524;&#20986;&#38169;&#35831;&#26816;&#26597; Java &#29256;&#26412;</li>
+<li>&#19979;&#38754;&#30340;&#37197;&#32622;&#36807;&#31243;&#37117;&#20197; Stanford NLP 3.6.0 &#20026;&#20363;&#65292;&#22914;&#26524;&#20351;&#29992;&#30340;&#26159;&#20854;&#20182;&#29256;&#26412;&#65292;&#35831;&#27880;&#24847;&#26367;&#25442;&#30456;&#24212;&#30340;&#25991;&#20214;&#21517;</li>
+<li>&#19979;&#38754;&#30340;&#37197;&#32622;&#36807;&#31243;&#20197; NLTK 3.2 &#20026;&#20363;&#65292;&#22914;&#26524;&#20351;&#29992; NLTK 3.1&#65292;&#38656;&#35201;&#27880;&#24847;&#35813;&#26087;&#29256;&#26412;&#20013; StanfordSegmenter &#26410;&#23454;&#29616;&#65292;&#20854;&#20313;&#22823;&#33268;&#30456;&#21516;</li>
+<li><p>
+&#19979;&#38754;&#30340;&#37197;&#32622;&#36807;&#31243;&#26159;&#38024;&#23545;&#19981;&#21516;&#30340;&#25509;&#21475;&#20998;&#21035;&#35762;&#36848;&#21508;&#33258;&#22914;&#20309;&#37197;&#32622;&#65292;&#26681;&#25454;&#26469;&#33258; NLTK &#30340;&#28304;&#20195;&#30721;&#65292;&#20998;&#21035;&#26159;
+</p>
+
+<ul>
+<li>nltk/tokenize/stanford.py</li>
+<li>nltk/tag/stanford.py</li>
+<li>nltk/parse/stanford.py</li>
+</ul>
+
+<p>
+&#22914;&#26524;&#19981;&#24819;&#20102;&#35299;&#36825;&#20123;&#32454;&#33410;&#65292;&#21487;&#20197;&#21442;&#32771; NLTK &#23448;&#26041; <a href="https://github.com/nltk/nltk/wiki/Installing-Third-Party-Software#stanford-tagger-ner-tokenizer-and-parser" rel="noopener noreferrer" target="_blank">wiki &#39029;&#38754;</a>&#19978;&#30340;&#20869;&#23481;&#65292;&#20294;&#38656;&#35201;&#27880;&#24847;&#30340;&#26159;&#65292;StanfordSegmenter &#21644; StanfordNeuralDependencyParser &#36825;&#20004;&#32773;&#30340;&#37197;&#32622;&#21644;&#20854;&#20182;&#30340;&#37117;&#19981;&#19968;&#26679;&#65292;&#32780; wiki &#39029;&#38754;&#19978;&#24182;&#26410;&#35206;&#30422;&#21040;&#36825;&#37096;&#20998;&#20869;&#23481;&#12290;
+</p></li>
+<li>&#20107;&#23454;&#19978;&#65292;&#20063;&#21487;&#20197;&#23436;&#20840;&#19981;&#36827;&#34892;&#29615;&#22659;&#21464;&#37327;&#35774;&#32622;&#65292;&#20294;&#36825;&#23601;&#38656;&#35201;&#22312;&#27599;&#27425;&#35843;&#29992;&#30340;&#26102;&#20505;&#25163;&#21160;&#25351;&#23450;&#21442;&#25968;</li>
+</ol>
+</div>
+</div>
+
+<div>
+<h3>StanfordSegmenter</h3>
+<div>
+<ol>
+<li>&#20174; <a href="http://nlp.stanford.edu/software/segmenter.html" rel="noopener noreferrer" target="_blank">http://nlp.stanford.edu/software/segmenter.html</a> &#22788;&#19979;&#36733; <i>stanford-segmenter-2015-12-09.zip</i> (version 3.6.0)</li>
+<li>&#23558; stanford-segmenter-2015-12-09.zip &#35299;&#21387;, &#24182;&#23558;&#35299;&#21387;&#30446;&#24405;&#20013;&#30340; <i>stanford-segmenter-3.6.0.jar</i> &#25335;&#36125;&#20026; <i>stanford-segmenter.jar</i></li>
+<li><p>
+&#23558; <i>stanford-segmenter.jar</i> &#21644; <i>slf4j-api.jar</i> &#21152;&#20837;&#21040; CLASSPATH &#20013;&#21435;
+</p>
+
+<p>
+&#20363;:
+</p>
+<div>
+<pre><span>export</span> <span>STANFORD_SEGMENTER_PATH</span>=<span>"$HOME/stanford/segmenter"</span>
+<span>export</span> <span>CLASSPATH</span>=<span>"$CLASSPATH:$STANFORD_SEGMENTER_PATH/stanford-segmenter.jar:$STANFORD_SEGMENTER_PATH/slf4j-api.jar"</span>
+</pre>
+</div></li>
+</ol>
+
+<p>
+&#20043;&#25152;&#20197;&#35201;&#23558; <i>stanford-segmenter.jar</i> &#21644; <i>slf4j-api.jar</i> &#21152;&#20837;&#21040; CLASSPATH &#20013;&#65292;&#26159;&#22240;&#20026;&#22312; StanfordSegmenter &#30340;&#23454;&#29616;&#20013;&#26174;&#24335;&#20381;&#36182;&#20102;&#36825;&#20004;&#20010;&#25991;&#20214;&#65292;&#24182;&#19988;&#20248;&#20808;&#22312; CLASSPATH &#20013;&#23547;&#25214;&#36825;&#20004;&#20010;&#25991;&#20214;&#12290;&#22914;&#26524;&#22312; CLASSPATH &#20013;&#25214;&#19981;&#21040; <i>stanford-segmenter.jar</i> &#65292;&#21017;&#20250;&#22312;&#29615;&#22659;&#21464;&#37327; STANFORD_SEGMENTER &#25351;&#23450;&#30340;&#36335;&#24452;&#20013;&#23547;&#25214;&#65307;&#21516;&#26679;&#30340;&#65292;&#22914;&#26524;&#25214;&#19981;&#21040; <i>slf4j-api.jar</i> &#65292;&#21017;&#20250;&#22312;&#29615;&#22659;&#21464;&#37327; SLF4J &#25351;&#23450;&#30340;&#36335;&#24452;&#20013;&#23547;&#25214;&#12290;&#20854;&#20182;&#20960;&#20010;&#31867;&#20063;&#26377;&#21516;&#26679;&#30340;&#20381;&#36182;&#35774;&#32622;&#65292;&#20026;&#20102;&#32479;&#19968;&#31649;&#29702;&#65292;&#21487;&#20197;&#23558;&#25152;&#26377;&#20381;&#36182;&#30340; jar &#25991;&#20214;&#37117;&#21152;&#20837;&#21040; CLASSPATH &#20013;&#21435;&#65292;&#24403;&#28982;&#20998;&#21035;&#20026;&#19981;&#21516;&#30340; jar &#25991;&#20214;&#35774;&#32622;&#19981;&#21516;&#30340;&#29615;&#22659;&#21464;&#37327;&#20063;&#26159;&#21487;&#20197;&#30340;&#12290;
+</p>
+
+<p>
+&#38500;&#20102;&#35774;&#32622;&#29615;&#22659;&#21464;&#37327;&#65292;&#20063;&#21487;&#20197;&#36890;&#36807;&#20989;&#25968;&#21442;&#25968;&#26469;&#20256;&#20837;&#20381;&#36182;&#30340; jar &#25991;&#20214;&#30340;&#20934;&#30830;&#36335;&#24452;&#65292;&#27492;&#26102;&#23558;&#20250;&#24573;&#30053;&#29615;&#22659;&#21464;&#37327;&#35774;&#32622;&#12290;
+</p>
+</div>
+</div>
+
+<div>
+<h3>StanfordTokenizer</h3>
+<div>
+<ol>
+<li>&#20174; <a href="http://nlp.stanford.edu/software/tagger.html" rel="noopener noreferrer" target="_blank">http://nlp.stanford.edu/software/tagger.html</a> &#20013;&#19979;&#36733; <i>stanford-postagger-full-2015-12-09.zip</i> (version 3.6.0)</li>
+<li>&#23558; <i>stanford-postagger-full-2015-12-09.zip</i> &#35299;&#21387;</li>
+<li><p>
+&#23558;&#35299;&#21387;&#30446;&#24405;&#20013;&#30340; <i>stanford-postagger.jar</i> &#21152;&#20837;&#21040; CLASSPATH &#20013;&#65292;&#25110;&#32773;&#35774;&#32622;&#21040;&#29615;&#22659;&#21464;&#37327; STANFORD_POSTAGGER &#20013;
+</p>
+
+<div>
+<pre><span>export</span> <span>STANFORD_POSTAGGER_PATH</span>=<span>"$HOME/stanford/postagger"</span>
+<span>export</span> <span>CLASSPATH</span>=<span>"$CLASSPATH:$STANFORD_POSTAGGER_PATH/stanford-postagger.jar"</span>
+</pre>
+</div>
+
+<p>
+&#25110;
+</p>
+<div>
+<pre><span>export</span> <span>STANFORD_POSTAGGER</span>=<span>"$HOME/stanford/postagger/stanford-postagger.jar"</span>
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+
+<div>
+<h3>StanfordNERTagger &#21644; StanfordPOSTagger</h3>
+<div>
+<p>
+&#22312; NLTK &#37324;&#65292;StanfordNERTagger &#21644; StanfordPOSTagger &#37117;&#32487;&#25215;&#33258; StanfordTagger &#65292;&#22312;&#35774;&#32622;&#19978;&#26377;&#20849;&#21516;&#20043;&#22788;&#65292;&#22240;&#27492;&#25918;&#21040;&#19968;&#36215;&#26469;&#35762;&#19968;&#19979;&#12290;
+</p>
+
+<ol>
+<li>&#20174; <a href="http://nlp.stanford.edu/software/CRF-NER.html" rel="noopener noreferrer" target="_blank">http://nlp.stanford.edu/software/CRF-NER.html</a> &#22788;&#19979;&#36733; <i>stanford-ner-2015-12-09.zip</i> (version 3.6.0)</li>
+<li>&#20174; <a href="http://nlp.stanford.edu/software/tagger.html" rel="noopener noreferrer" target="_blank">http://nlp.stanford.edu/software/tagger.html</a> &#20013;&#19979;&#36733; <i>stanford-postagger-full-2015-12-09.zip</i> (version 3.6.0)</li>
+<li>&#23558; <i>stanford-ner-2015-12-09.zip</i> &#21644; <i>stanford-postagger-full-2015-12-09.zip</i> &#37117;&#35299;&#21387;</li>
+<li><p>
+&#23558;&#35299;&#21387;&#21518;&#30446;&#24405;&#20013;&#30340; <i>stanford-ner.jar</i> &#21644; <i>stanford-postagger.jar</i> &#21152;&#20837;&#21040; CLASSPATH &#20013;&#21435;&#65292;&#21644; StanfordTokenizer &#19981;&#19968;&#26679;&#65292;&#36825;&#20004;&#20010;&#31867;&#37117;&#21482;&#20174; CLASSPATH &#20013;&#23547;&#25214;&#23545;&#24212;&#30340; jar &#25991;&#20214;(&#25152;&#20197;&#20026;&#20102;&#32479;&#19968;&#25105;&#24314;&#35758;&#37117;&#28155;&#21152;&#21040; CLASSPATH &#20013;&#21435;)
+</p>
+
+<div>
+<pre><span>export</span> <span>STANFORD_NER_PATH</span>=<span>"$HOME/stanford/ner"</span>
+<span>export</span> <span>STANFORD_POSTAGGER_PATH</span>=<span>"$HOME/stanford/postagger"</span>
+<span>export</span> <span>CLASSPATH</span>=<span>"$CLASSPATH:$STANFORD_NER_PATH/stanford-ner.jar:$STANFORD_POSTAGGER_PATH/stanford-postagger.jar"</span>
+</pre>
+</div>
+
+<p>
+&#21516;&#26102;&#23558; <i>stanford-ner-2015-12-09.zip</i> &#35299;&#21387;&#21518;&#30446;&#24405;&#20013;&#30340; <i>classifiers</i> &#30446;&#24405;&#21644; <i>stanford-postagger-full-2015-12-09.zip</i> &#35299;&#21387;&#21518;&#30446;&#24405;&#20013;&#30340; <i>models</i> &#30446;&#24405;&#21152;&#20837;&#21040;&#29615;&#22659;&#21464;&#37327; STANFORD_MODELS &#20013;&#21435;
+</p>
+<div>
+<pre><span>export</span> <span>STANFORD_MODELS</span>=<span>"$STANFORD_NER_PATH/classifiers:$STANFORD_POSTAGGER_PATH/models"</span>
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+
+<div>
+<h3>StanfordParser, StanfordDependencyParser</h3>
+<div>
+<p>
+StanfordParser &#21644; StanfordDependencyParser &#37117;&#32487;&#25215;&#33258; GenericStanfordParser &#65292;&#20351;&#29992; stanford-parser.jar &#26469;&#25552;&#20379;&#21477;&#27861;&#20998;&#26512;&#21151;&#33021;&#12290;
+</p>
+
+<ol>
+<li>&#20174; <a href="http://nlp.stanford.edu/software/lex-parser.html" rel="noopener noreferrer" target="_blank">http://nlp.stanford.edu/software/lex-parser.html</a> &#22788;&#19979;&#36733; <i>stanford-parser-full-2015-12-09.zip</i> (version 3.6.0)</li>
+<li><p>
+&#23558;&#19979;&#36733;&#30340;&#21387;&#32553;&#21253;&#35299;&#21387;&#65292;&#24182;&#23558;&#20854;&#20013;&#30340; <i>stanford-parser.jar</i> &#21644; <i>stanford-parser-3.6.0-models.jar</i> (&#36825;&#20010;&#22312;&#19981;&#21516;&#29256;&#26412;&#20013;&#21517;&#31216;&#20250;&#19981;&#19968;&#26679;) &#37117;&#21152;&#20837;&#21040; CLASSPATH &#20013;
+</p>
+
+<div>
+<pre><span>export</span> <span>STANFORD_PARSER_PATH</span>=<span>"$HOME/stanford/parser"</span>
+<span>export</span> <span>CLASSPATH</span>=<span>"$CLASSPATH:$STANFORD_PARSER_PATH/stanford-parser.jar:$STANFORD_PARSER_PATH/stanford-parser-3.6.0-models.jar"</span>
+</pre>
+</div>
+
+<p>
+&#25110;&#32773;&#23558; <i>stanford-parser.jar</i> &#21152;&#20837;&#21040;&#29615;&#22659;&#21464;&#37327; STANFORD_PARSER &#20013;&#65292;&#23558; <i>stanford-parser-3.6.0-models.jar</i> &#21152;&#20837;&#21040;&#29615;&#22659;&#21464;&#37327; STANFORD_MODELS &#20013;
+</p>
+<div>
+<pre><span>export</span> <span>STANFORD_PARSER</span>=<span>"$STANFORD_PARSER_PATH/stanford-parser.jar"</span>
+<span>export</span> <span>STANFORD_MODELS</span>=<span>"$STANFORD_MODELS:$STANFORD_PARSER_PATH/stanford-parser-3.6.0.models.jar"</span>
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+
+<div>
+<h3>StanfordNeuralDependencyParser</h3>
+<div>
+<p>
+StanfordNeuralDependencyParser &#34429;&#28982;&#20063;&#32487;&#25215;&#33258; GenericStanfordParser&#65292;&#24182;&#19988;&#29992;&#26469;&#36827;&#34892;&#21477;&#27861;&#20998;&#26512;&#65292;&#20294;&#23427;&#20351;&#29992;&#30340; Stanford CoreNLP &#20013;&#30340;&#21151;&#33021;&#21644;&#27169;&#22411;&#65292;&#19981;&#20381;&#36182; Stanford Parser &#36825;&#20010;(&#23376;)&#24037;&#20855;&#21253;&#12290;
+</p>
+
+<ol>
+<li>&#20174; <a href="http://stanfordnlp.github.io/CoreNLP/" rel="noopener noreferrer" target="_blank">http://stanfordnlp.github.io/CoreNLP/</a> &#22788;&#19979;&#36733; <i>stanford-corenlp-full-2015-12-09.zip</i></li>
+<li><p>
+&#23558;&#19979;&#36733;&#30340;&#21387;&#32553;&#21253;&#35299;&#21387;&#65292;&#24182;&#23558;&#20854;&#20013;&#30340; <i>stanford-corenlp-3.6.0.jar</i> &#21644; <i>stanford-corenlp-3.6.0-models.jar</i> &#21152;&#20837;&#21040; CLASSPATH &#20013;&#21435;
+</p>
+
+<div>
+<pre><span>export</span> <span>STANFORD_CORENLP_PATH</span>=<span>"$HOME/stanford-corenlp-full-2015-12-09"</span>
+<span>export</span> <span>CLASSPATH</span>=<span>"$CLASSPATH:$STANFORD_CORENLP_PATH/stanford-corenlp-3.6.0.jar:$STANFORD_CORENLP_PATH/stanford-corenlp-3.6.0-models.jar"</span>
+</pre>
+</div>
+
+<p>
+&#25110;&#32773;&#21487;&#20197;&#26356;&#31616;&#21333;&#22320;&#23558;&#35299;&#21387;&#30446;&#24405;&#35774;&#32622;&#20026;&#29615;&#22659;&#21464;&#37327; STANFORD_CORENLP &#30340;&#20540;
+</p>
+<div>
+<pre><span>export</span> <span>STANFORD_CORENLP</span>=$<span>STANFORD_CORENLP_PATH</span>
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+</div>
+
+<div>
+<h2>&#22522;&#26412;&#20351;&#29992;</h2>
+<div>
+</div>
+<div>
+<h3>&#20351;&#29992; StanfordSegmenter &#21644; StanfordTokenizer &#36827;&#34892;&#20998;&#35789;</h3>
+<div>
+<p>
+StanfordSegmenter &#26159; 52nlp &#23454;&#29616;&#30340;&#23545; Stanford Segmenter &#30340;&#23553;&#35013;&#65292;&#29992;&#26469;&#36827;&#34892;&#20013;&#25991;&#20998;&#35789;&#12290;
+</p>
+
+<div>
+<pre><span># </span><span>coding: utf-8</span>
+<span>from</span> nltk.tokenize <span>import</span> StanfordSegmenter
+
+<span>segmenter</span> = StanfordSegmenter(
+    path_to_sihan_corpora_dict=<span>"/home/linusp/stanford/segmenter/data/"</span>,
+    path_to_model=<span>"/home/linusp/stanford/segmenter/data/pku.gz"</span>,
+    path_to_dict=<span>"/home/linusp/stanford/segmenter/data/dict-chris6.ser.gz"</span>
+)
+<span>res</span> = segmenter.segment(u<span>"&#21271;&#28023;&#24050;&#25104;&#20026;&#20013;&#22269;&#23545;&#22806;&#24320;&#25918;&#20013;&#21319;&#36215;&#30340;&#19968;&#39063;&#26126;&#26143;"</span>)
+<span>print</span> <span>type</span>(res)
+<span>print</span> res.encode(<span>'utf-8'</span>)
+</pre>
+</div>
+
+<p>
+StanfordSegmenter &#30340;&#21021;&#22987;&#21270;&#21442;&#25968;&#35828;&#26126;:
+</p>
+<ul>
+<li><p>
+<i>path_to_jar</i>: &#29992;&#26469;&#23450;&#20301; <i>stanford-segmenter.jar</i> &#65292;&#22312;&#35774;&#32622;&#20102; CLASSPATH &#30340;&#24773;&#20917;&#19979;&#65292;&#35813;&#21442;&#25968;&#21487;&#30041;&#31354;
+</p>
+
+<p>
+&#27880;: &#20854;&#20182;&#25152;&#26377; Stanford NLP &#25509;&#21475;&#37117;&#26377; <i>path_to_jar</i> &#36825;&#20010;&#21442;&#25968;&#65292;&#21516;&#26679;&#22312;&#35774;&#32622;&#20102;&#29615;&#22659;&#21464;&#37327;&#30340;&#24773;&#20917;&#19979;&#21487;&#20197;&#30041;&#31354;&#65292;&#21518;&#38754;&#19981;&#20877;&#21478;&#21152;&#35828;&#26126;&#12290;
+</p></li>
+
+<li><i>path_to_slf4j</i>: &#29992;&#26469;&#23450;&#20301; <i>slf4j-api.jar</i> &#65292;&#22312;&#35774;&#32622;&#20102; CLASSPATH &#25110;&#32773; SLF4J &#36825;&#20010;&#29615;&#22659;&#21464;&#37327;&#30340;&#24773;&#20917;&#19979;&#65292;&#35813;&#21442;&#25968;&#21487;&#30041;&#31354;</li>
+<li><i>path_to_sihan_corpora_dict</i>: &#35774;&#23450;&#20026; <i>stanford-segmenter-2015-12-09.zip</i> &#35299;&#21387;&#21518;&#30446;&#24405;&#20013;&#30340; data &#30446;&#24405;&#65292;&#35805;&#35828;&#36825;&#20010;&#21442;&#25968;&#21517;&#30495;&#26159;&#35753;&#20154;&#25720;&#19981;&#30528;&#22836;&#33041;</li>
+<li><i>path_to_model</i>: &#29992;&#26469;&#25351;&#23450;&#29992;&#20110;&#20013;&#25991;&#20998;&#35789;&#30340;&#27169;&#22411;&#65292;&#22312; <i>stanford-segmenter-2015-12-09</i> &#30340; data &#30446;&#24405;&#19979;&#65292;&#26377;&#20004;&#20010;&#21487;&#29992;&#27169;&#22411; <i>pkg.gz</i> &#21644; <i>ctb.gz</i></li>
+</ul>
+
+<p>
+&#38656;&#35201;&#27880;&#24847;&#30340;&#26159;&#65292;&#20351;&#29992; StanfordSegmenter &#36827;&#34892;&#20013;&#25991;&#20998;&#35789;&#21518;&#65292;&#20854;&#36820;&#22238;&#32467;&#26524;&#24182;&#19981;&#26159; list &#65292;&#32780;&#26159;&#19968;&#20010;&#23383;&#31526;&#20018;&#65292;&#21508;&#20010;&#27721;&#35821;&#35789;&#27719;&#22312;&#20854;&#20013;&#34987;&#31354;&#26684;&#20998;&#38548;&#24320;&#12290;
+</p>
+
+<p>
+StanfordTokenizer &#21487;&#20197;&#29992;&#26469;&#36827;&#34892;&#33521;&#25991;&#30340;&#20998;&#35789;&#65292;&#20351;&#29992;&#36215;&#26469;&#27604;&#36739;&#31616;&#21333;
+</p>
+<div>
+<pre><span># </span><span>coding: utf-8</span>
+<span>from</span> nltk.tokenize <span>import</span> StanfordTokenizer
+
+<span>tokenizer</span> = StanfordTokenizer()
+<span>sent</span> = <span>"Good muffins cost $3.88\nin New York.  Please buy me\ntwo of them.\nThanks."</span>
+<span>print</span> tokenizer.tokenize(sent)
+</pre>
+</div>
+</div>
+</div>
+
+<div>
+<h3>&#20351;&#29992; StanfordNERTagger &#36827;&#34892;&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;</h3>
+<div>
+<p>
+&#25152;&#35859;&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;&#65292;&#26159;&#29992;&#26469;&#35782;&#21035;&#24182;&#26631;&#27880;&#25991;&#26412;&#20013;&#30340;&#20154;&#21517;&#12289;&#22320;&#21517;&#12289;&#32452;&#32455;&#26426;&#26500;&#21517;&#31561;&#21333;&#20803;&#65292;&#36825;&#20123;&#21333;&#20803;&#26082;&#26159; "&#21629;&#21517;&#23454;&#20307;"&#12290;
+</p>
+
+<div>
+<pre><span># </span><span>coding: utf-8</span>
+<span>from</span> nltk.tag <span>import</span> StanfordNERTagger
+
+<span>eng_tagger</span> = StanfordNERTagger(<span>'english.all.3class.distsim.crf.ser.gz'</span>)
+<span>print</span> eng_tagger.tag(<span>'Rami Eid is studying at Stony Brook University in NY'</span>.split())
+</pre>
+</div>
+
+<p>
+StanfordNERTagger &#22312;&#21021;&#22987;&#21270;&#26102;&#38656;&#35201;&#25351;&#23450;&#25152;&#20351;&#29992;&#30340;&#27169;&#22411;&#65292;&#22312; <i>stanford-ner-2015-12-09.zip</i> &#35299;&#21387;&#21518;&#30340; <i>classifiers</i> &#30446;&#24405;&#20013;&#65292;&#26377;&#20960;&#20010;&#21487;&#29992;&#30340;&#33521;&#35821; NER &#27169;&#22411;:
+</p>
+<pre>
+/home/linusp/stanford/ner/classifiers/
+&#9500;&#9472;&#9472; english.all.3class.distsim.crf.ser.gz
+&#9500;&#9472;&#9472; english.all.3class.distsim.prop
+&#9500;&#9472;&#9472; english.conll.4class.distsim.crf.ser.gz
+&#9500;&#9472;&#9472; english.conll.4class.distsim.prop
+&#9500;&#9472;&#9472; english.muc.7class.distsim.crf.ser.gz
+&#9500;&#9472;&#9472; english.muc.7class.distsim.prop
+&#9500;&#9472;&#9472; example.serialized.ncc.ncc.ser.gz
+&#9492;&#9472;&#9472; example.serialized.ncc.prop
+</pre>
+
+<p>
+&#22914;&#26524;&#38656;&#35201;&#36827;&#34892;&#20013;&#25991;&#30340;&#21629;&#21517;&#23454;&#20307;&#35782;&#21035;&#65292;&#21017;&#21487;&#20197;&#22312; <a href="http://nlp.stanford.edu/software/CRF-NER.shtml" rel="noopener noreferrer" target="_blank">Stanford Named Entity Recognizer</a> &#39029;&#38754;&#30340; Models &#19968;&#33410;&#25214;&#21040;&#20013;&#25991;&#27169;&#22411;&#30340;&#19979;&#36733;&#38142;&#25509;&#65292;&#19979;&#36733;&#24471;&#21040; <i>stanford-chinese-corenlp-2015-12-08-models.jar</i> &#65292;&#35299;&#21387;&#21518;&#23558; edu/stanford/nlp/models/ner/ &#30446;&#24405;&#19979;&#30340; chinese.misc.distsim.crf.ser.gz &#21644; chinese.misc.distsim.prop &#22797;&#21046;&#21040;&#27169;&#22411;&#30446;&#24405;&#19979;(<i>stanford-ner-2015-12-09/classifiers</i>)&#21363;&#21487;&#12290;
+</p>
+
+<div>
+<pre><span># </span><span>coding: utf-8</span>
+<span>from</span> nltk.tag <span>import</span> StanfordNERTagger
+
+<span>chi_tagger</span> = StanfordNERTagger(<span>'chinese.misc.distsim.crf.ser.gz'</span>)
+<span>sent</span> = u<span>'&#21271;&#28023; &#24050; &#25104;&#20026; &#20013;&#22269; &#23545;&#22806;&#24320;&#25918; &#20013; &#21319;&#36215; &#30340; &#19968; &#39063; &#26126;&#26143;'</span>
+<span>for</span> word, tag <span>in</span>  chi_tagger.tag(sent.split()):
+    <span>print</span> word.encode(<span>'utf-8'</span>), tag
+</pre>
+</div>
+</div>
+</div>
+
+<div>
+<h3>&#20351;&#29992; StanfordPOSTagger &#36827;&#34892;&#35789;&#24615;&#26631;&#27880;</h3>
+<div>
+<p>
+&#25152;&#35859;&#35789;&#24615;&#26631;&#27880;&#65292;&#26159;&#26681;&#25454;&#21477;&#23376;&#20013;&#30340;&#19978;&#19979;&#25991;&#20449;&#24687;&#65292;&#32473;&#21477;&#20013;&#27599;&#20010;&#35789;&#30830;&#23450;&#19968;&#20010;&#26368;&#20026;&#21512;&#36866;&#30340;&#35789;&#24615;&#26631;&#35760;&#65292;&#27604;&#22914;&#21160;&#35789;&#12289;&#21517;&#35789;&#12289;&#20154;&#31216;&#20195;&#35789;&#31561;&#12290;
+</p>
+
+<p>
+&#21644; StanfordNERTagger &#19968;&#26679;&#65292;StanfordPOSTagger &#38656;&#35201;&#30340;&#36755;&#20837;&#20063;&#26159;&#19968;&#20010;&#24050;&#32463;&#20998;&#22909;&#35789;&#30340;&#21477;&#23376;&#65292;&#19979;&#38754;&#26159;&#19968;&#20010;&#33521;&#25991;&#30340;&#35789;&#24615;&#26631;&#27880;&#23454;&#20363;:
+</p>
+<div>
+<pre><span>from</span> nltk.tag <span>import</span> StanfordPOSTagger
+
+<span>eng_tagger</span> = StanfordPOSTagger(<span>'english-bidirectional-distsim.tagger'</span>)
+<span>print</span> eng_tagger.tag(<span>'What is the airspeed of an unladen swallow ?'</span>.split())
+</pre>
+</div>
+
+<p>
+&#22914;&#26524;&#20043;&#21069;&#37197;&#32622;&#26102;&#19979;&#36733;&#30340;&#26159; <i>stanford-postagger-full-xxxx-xx-xx.zip</i> &#65292;&#22312;&#35299;&#21387;&#21518;&#65292;&#20854;&#20013;&#30340; models &#30446;&#24405;&#26159;&#21253;&#21547;&#26377;&#20004;&#20010;&#20013;&#25991;&#27169;&#22411;&#30340;&#65292;&#20998;&#21035;&#26159; <i>chinese-distsim.tagger</i> &#21644; <i>chinese-nodistsim.tagger</i> &#65292;&#21487;&#20197;&#30452;&#25509;&#20351;&#29992;&#12290;
+</p>
+
+<div>
+<pre><span># </span><span>coding: utf-8</span>
+<span>from</span> nltk.tag <span>import</span> StanfordPOSTagger
+
+<span>chi_tagger</span> = StanfordPOSTagger(<span>'chinese-distsim.tagger'</span>)
+<span>sent</span> = u<span>'&#21271;&#28023; &#24050; &#25104;&#20026; &#20013;&#22269; &#23545;&#22806;&#24320;&#25918; &#20013; &#21319;&#36215; &#30340; &#19968; &#39063; &#26126;&#26143;'</span>
+<span>for</span> _, word_and_tag <span>in</span>  chi_tagger.tag(sent.split()):
+    <span>word</span>, <span>tag</span> = word_and_tag.split(<span>'#'</span>)
+    <span>print</span> word.encode(<span>'utf-8'</span>), tag
+</pre>
+</div>
+
+<p>
+&#36825;&#20010;&#20013;&#25991;&#30340;&#35789;&#24615;&#26631;&#27880;&#36755;&#20986;&#30340;&#32467;&#26524;&#26377;&#28857;&#22855;&#24618;&hellip;&hellip;
+</p>
+</div>
+</div>
+
+<div>
+<h3>&#20351;&#29992; StanfordParser &#36827;&#34892;&#21477;&#27861;&#20998;&#26512;</h3>
+<div>
+<p>
+&#21477;&#27861;&#20998;&#26512;&#22312;&#20998;&#26512;&#21333;&#20010;&#35789;&#30340;&#35789;&#24615;&#30340;&#22522;&#30784;&#19978;&#65292;&#23581;&#35797;&#20998;&#26512;&#35789;&#19982;&#35789;&#20043;&#38388;&#30340;&#20851;&#31995;&#65292;&#24182;&#29992;&#36825;&#31181;&#20851;&#31995;&#26469;&#34920;&#31034;&#21477;&#23376;&#30340;&#32467;&#26500;&#12290;&#23454;&#38469;&#19978;&#65292;&#21477;&#27861;&#32467;&#26500;&#21487;&#20197;&#20998;&#20026;&#20004;&#31181;&#65292;&#19968;&#31181;&#26159;&#30701;&#35821;&#32467;&#26500;&#65292;&#21478;&#19968;&#31181;&#26159;&#20381;&#23384;&#32467;&#26500;&#12290;&#21069;&#32773;&#25353;&#21477;&#23376;&#39034;&#24207;&#26469;&#25552;&#21462;&#21477;&#27861;&#32467;&#26500;&#65292;&#21518;&#32773;&#21017;&#25353;&#35789;&#19982;&#35789;&#20043;&#38388;&#30340;&#21477;&#27861;&#20851;&#31995;&#26469;&#25552;&#21462;&#21477;&#23376;&#32467;&#26500;&#12290;&#36825;&#37324;&#35828;&#30340;&#21477;&#27861;&#20998;&#26512;&#24471;&#21040;&#30340;&#26159;&#30701;&#35821;&#32467;&#26500;&#12290;
+</p>
+
+<div>
+<pre><span>from</span> nltk.parse.stanford <span>import</span> StanfordParser
+
+<span>eng_parser</span> = StanfordParser(model_path=u<span>'edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz'</span>)
+<span>print</span> <span>list</span>(eng_parser.parse(<span>"the quick brown fox jumps over the lazy dog"</span>.split()))
+</pre>
+</div>
+
+<p>
+&#24471;&#21040;&#30340;&#32467;&#26524;&#26159;&#19968;&#20010; list, &#20854;&#20013;&#30340;&#20803;&#32032;&#26159; Tree &#31867;&#22411;&#30340;&#65292;&#22312;&#19978;&#38754;&#36825;&#20010;&#20363;&#23376;&#20013;&#65292;&#36825;&#20010; list &#30340;&#38271;&#24230;&#26159; 1 &#65292;&#35843;&#29992; Tree &#30340; draw &#26041;&#27861;&#21487;&#20197;&#23558;&#21477;&#27861;&#26641;&#32472;&#21046;&#20986;&#26469;&#12290;
+</p>
+
+
+<div>
+<p><img src="http://www.zmonster.me/assets/img/eng_parse_tree.png" alt="eng_parse_tree.png" referrerpolicy="no-referrer" loading="lazy">
+</p>
+</div>
+
+<p>
+&#35201;&#36827;&#34892;&#20013;&#25991;&#30340;&#21477;&#27861;&#20998;&#26512;&#65292;&#21482;&#35201;&#25351;&#23450;&#22909;&#20013;&#25991;&#30340;&#27169;&#22411;&#23601;&#22909;&#65292;&#21487;&#29992;&#30340;&#20013;&#25991;&#27169;&#22411;&#26377;&#20004;&#20010;&#65292;&#20998;&#21035;&#26159; 'edu/stanford/nlp/models/lexparser/chinesePCFG.ser.gz' &#21644; 'edu/stanford/nlp/models/lexparser/chineseFactored.ser.gz'&#65292;&#20381;&#28982;&#25343; "_&#21271;&#28023; &#24050; &#25104;&#20026; &#20013;&#22269; &#23545;&#22806;&#24320;&#25918; &#20013; &#21319;&#36215; &#30340; &#19968; &#39063; &#26126;&#26143;_" &#36825;&#21477;&#35805;&#20316;&#20026;&#20363;&#23376;&#65292;&#24471;&#21040;&#30340;&#21477;&#27861;&#26641;&#22914;&#19979;&#25152;&#31034;&#12290;
+</p>
+
+
+<div>
+<p><img src="http://www.zmonster.me/assets/img/chi_parse_tree.png" alt="chi_parse_tree.png" referrerpolicy="no-referrer" loading="lazy">
+</p>
+</div>
+</div>
+</div>
+
+<div>
+<h3>&#20351;&#29992; StanfordDependencyParser &#36827;&#34892;&#20381;&#23384;&#21477;&#27861;&#20998;&#26512;</h3>
+<div>
+<p>
+&#35265;&#19978;&#19968;&#33410;&#65292;&#20381;&#23384;&#21477;&#27861;&#20998;&#26512;&#24471;&#21040;&#30340;&#26159;&#21477;&#23376;&#30340;&#20381;&#23384;&#32467;&#26500;&#12290;
+</p>
+
+<div>
+<pre><span>from</span> nltk.parse.stanford <span>import</span> StanfordDependencyParser
+
+<span>eng_parser</span> = StanfordDependencyParser(model_path=u<span>'edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz'</span>)
+<span>res</span> = <span>list</span>(eng_parser.parse(<span>"the quick brown fox jumps over the lazy dog"</span>.split()))
+<span>for</span> row <span>in</span> res[0].triples():
+    <span>print</span> row
+</pre>
+</div>
+
+<p>
+&#32472;&#21046;&#20986;&#26469;&#30340;&#20381;&#23384;&#21477;&#27861;&#32467;&#26500;&#22914;&#19979;&#22270;&#25152;&#31034;&#12290;
+</p>
+
+
+<div>
+<p><img src="http://www.zmonster.me/assets/img/dep_parse_tree.png" alt="dep_parse_tree.png" referrerpolicy="no-referrer" loading="lazy">
+</p>
+</div>
+
+<p>
+&#20013;&#25991;&#30340;&#20381;&#23384;&#21477;&#27861;&#20998;&#26512;&#21516;&#29702;&#65292;&#22312;&#21021;&#22987;&#21270;&#26102;&#20351;&#29992;&#20013;&#25991;&#27169;&#22411;&#21363;&#21487;&#65292;&#19981;&#20877;&#36184;&#36848;&#12290;
+</p>
+
+<p>
+StanfordNeuralDependencyParser &#30340;&#20351;&#29992;&#19982; StanfordDependencyParser &#19968;&#26679;&#65292;&#20294;&#26159;&#22312;&#26412;&#20154;&#30340;&#26426;&#22120;&#19978;&#25191;&#34892;&#38750;&#24120;&#32791;&#26102;&#65292;&#21363;&#20351;&#26159;&#23545;&#19968;&#20123;&#31616;&#21333;&#21477;&#23376;&#65292;&#25152;&#20197;&#36825;&#37324;&#23601;&#19981;&#30053;&#36807;&#19981;&#35762;&#20102;&#12290;
+</p>
+</div>
+</div>
+</div>

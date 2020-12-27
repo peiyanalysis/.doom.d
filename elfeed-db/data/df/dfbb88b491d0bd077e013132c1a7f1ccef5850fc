@@ -1,0 +1,17 @@
+<p>The Arnold-Beltrami-Childress (ABC) flow and the Kolmogorov flow are three
+dimensional periodic divergence free velocity fields that exhibit chaotic
+streamlines. We are interested in front speed enhancement in G-equation of
+turbulent combustion by large intensity ABC and Kolmogorov flows. First, we
+give a quantitative construction of the ballistic orbits of ABC and Kolmogorov
+flows, namely those with maximal large time asymptotic speeds in a coordinate
+direction. Thanks to the optimal control theory of G-equation (a convex but
+non-coercive Hamilton-Jacobi equation), the ballistic orbits serve as
+admissible trajectories for front speed estimates. To study the tightness of
+the estimates, we compute front speeds of G-equation based on a semi-Lagrangian
+(SL) scheme with Strang splitting and weighted essentially non-oscillatory
+(WENO) interpolation. The SL scheme is stable when the ratio of time step and
+spatial grid size (in the propagation direction) is smaller than a positive
+constant independent of the flow intensity. Numerical results show that the
+front speed growth rate in terms of the flow intensity may approach the
+analytical bounds from the ballistic orbits.
+</p>

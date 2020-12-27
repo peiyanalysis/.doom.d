@@ -1,0 +1,716 @@
+<div>
+<h2>&#30446;&#24405;</h2>
+<div>
+<ul>
+<li><a href="http://www.zmonster.me#orgheadline1" rel="noopener noreferrer" target="_blank">Numpy &#21450; ndarray &#31616;&#20171;</a></li>
+<li><a href="http://www.zmonster.me#orgheadline2" rel="noopener noreferrer" target="_blank">ndarray &#30340;&#21019;&#24314;</a>
+<ul>
+<li><a href="http://www.zmonster.me#orgheadline3" rel="noopener noreferrer" target="_blank">&#20174;&#24050;&#26377;&#25968;&#25454;&#20013;&#21019;&#24314;</a></li>
+<li><a href="http://www.zmonster.me#orgheadline4" rel="noopener noreferrer" target="_blank">&#21019;&#24314;&#29305;&#23450;&#24418;&#29366;&#30340;&#22810;&#32500;&#25968;&#32452;&#24182;&#36827;&#34892;&#22635;&#20805;</a></li>
+<li><a href="http://www.zmonster.me#orgheadline5" rel="noopener noreferrer" target="_blank">&#20174; numerical range &#21019;&#24314;&#22810;&#32500;&#25968;&#32452;</a></li>
+<li><a href="http://www.zmonster.me#orgheadline6" rel="noopener noreferrer" target="_blank">&#21019;&#24314;&#30697;&#38453;(&#20108;&#32500;&#25968;&#32452;)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div>
+<h2>Numpy &#21450; ndarray &#31616;&#20171;</h2>
+<div>
+
+<div>
+<p><img src="http://www.zmonster.me/assets/img/numpy_logo.png" alt="numpy_logo.png" align="right" referrerpolicy="no-referrer" loading="lazy">
+</p>
+</div>
+
+<p>
+<a href="http://www.numpy.org/" rel="noopener noreferrer" target="_blank">Numpy</a> &#26159;&#19968;&#20010; Python &#30340;&#31185;&#23398;&#35745;&#31639;&#21253;&#65292;&#25552;&#20379;&#20102;&#20197;&#19979;&#21151;&#33021;:
+</p>
+<ol>
+<li>&#24378;&#22823;&#12289;&#28789;&#27963;&#30340;&#22810;&#32500;&#25968;&#32452;&#23545;&#35937;&#21450;&#20016;&#23500;&#30340;&#25805;&#20316;</li>
+<li>C &#23454;&#29616;&#65292;&#25191;&#34892;&#25928;&#29575;&#39640;</li>
+<li>&#32447;&#24615;&#20195;&#25968;&#12289;&#20016;&#23500;&#30340;&#38543;&#26426;&#25968;&#21151;&#33021;</li>
+</ol>
+
+
+<p>
+ndarray &#23601;&#26159; Numpy &#20013;&#34920;&#31034;&#22810;&#32500;&#25968;&#32452;&#30340;&#31867;&#12290;&#26412;&#31687;&#31508;&#35760;&#23558;&#23545; ndarray &#30340;&#21019;&#24314;&#26041;&#27861;&#36827;&#34892;&#25972;&#29702;&#12289;&#24635;&#32467;&#12290;
+</p>
+</div>
+</div>
+
+<div>
+<h2>ndarray &#30340;&#21019;&#24314;</h2>
+<div>
+</div><div>
+<h3>&#20174;&#24050;&#26377;&#25968;&#25454;&#20013;&#21019;&#24314;</h3>
+<div>
+<ol>
+<li><p>
+&#20174; list, tuple &#23545;&#35937;&#20013;&#21019;&#24314;:
+</p>
+
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>a</span> = np.array([1, 2, 3, 4])
+<span>print</span> <span>'a is:'</span>, a
+
+<span>b</span> = np.array((1, 2, 3, 4))
+<span>print</span> <span>'b is:'</span>, b
+</pre>
+</div>
+
+<pre>
+a is: [1 2 3 4]
+b is: [1 2 3 4]
+</pre></li>
+
+<li><p>
+&#20174;&#25991;&#20214;&#20013;&#35835;&#21462;
+</p>
+
+<p>
+&#20174;&#25991;&#20214;&#20013;&#35835;&#21462;&#30340;&#26041;&#27861;&#26377;: <b>fromfile</b>, <b>load</b>, *loadtxt*&#12290;&#20854;&#20013; fromfile &#26041;&#27861;&#19981;&#24314;&#35758;&#20351;&#29992;&#65292;&#22240;&#20026; fromfile &#35835;&#21462;&#30340;&#25991;&#20214;&#35201;&#27714;&#26159;&#29992; tofile &#20445;&#23384;&#30340;&#65292;&#32780; tofile &#26041;&#27861;&#20445;&#23384;&#25968;&#25454;&#21040;&#25991;&#20214;&#26102;&#30340;&#20855;&#20307;&#34892;&#20026;&#26159;&#21644;&#20855;&#20307;&#24179;&#21488;&#26377;&#20851;&#30340;&#12290;
+</p>
+
+<p>
+load &#26041;&#27861;&#35835;&#21462; save &#26041;&#27861;&#20445;&#23384;&#19979;&#26469;&#30340;&#20108;&#36827;&#21046;&#25991;&#20214;:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+<span>from</span> tempfile <span>import</span> TemporaryFile
+
+<span>origin_array</span> = np.array([1, 2, 3, 4])
+np.save(<span>'/tmp/array'</span>, origin_array)
+
+<span>array_from_file</span> = np.load(<span>'/tmp/array.npy'</span>)
+<span>print</span> array_from_file
+</pre>
+</div>
+
+<pre>
+[1 2 3 4]
+</pre>
+
+<p>
+&#21487;&#20197;&#30475;&#19968;&#19979; /tmp/array.npy &#36825;&#20010;&#25991;&#20214;:
+</p>
+<div>
+
+<pre>file /tmp/array.npy
+</pre>
+</div>
+
+<pre>
+/tmp/array.npy: data
+</pre>
+
+<p>
+&#22914;&#26524;&#24076;&#26395;&#20445;&#23384;&#30340;&#25991;&#20214;&#26159;&#21487;&#35835;&#30340;&#65292;&#37027;&#20040;&#21487;&#20197;&#29992; savetxt &#36825;&#20010;&#26041;&#27861;&#65292;&#29992;&#36825;&#20010;&#26041;&#27861;&#20445;&#23384;&#30340;&#25968;&#25454;&#21017;&#29992; loadtxt &#26469;&#35835;&#21462;:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>origin_array</span> = np.array([1, 2, 3, 4])
+np.savetxt(<span>'/tmp/array.txt'</span>, origin_array)
+
+<span>array_from_file</span> = np.loadtxt(<span>'/tmp/array.txt'</span>)
+<span>print</span> array_from_file
+</pre>
+</div>
+
+<pre>
+[ 1.  2.  3.  4.]
+</pre>
+
+<p>
+&#20877;&#26469;&#30475;&#19968;&#19979; /tmp/array.txt &#37324;&#38754;&#30340;&#20869;&#23481;:
+</p>
+<div>
+
+<pre>cat /tmp/array.txt
+</pre>
+</div>
+
+<pre>
+1.000000000000000000e+00
+2.000000000000000000e+00
+3.000000000000000000e+00
+4.000000000000000000e+00
+</pre></li>
+
+<li><p>
+&#20174;&#23383;&#31526;&#20018;&#20013;&#35835;&#21462;
+</p>
+
+<p>
+&#29992; <b>fromstring</b> &#26041;&#27861;&#21487;&#20197;&#20174;&#23383;&#31526;&#20018;&#20013;&#35835;&#21462;&#25968;&#25454;&#24182;&#36716;&#25442;&#20026; <b>&#19968;&#32500;&#25968;&#32452;</b>:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>array</span> = np.fromstring(<span>'1 2 3 4'</span>, dtype=<span>float</span>, sep=<span>' '</span>)
+<span>print</span> array
+</pre>
+</div>
+
+<pre>
+[ 1.  2.  3.  4.]
+</pre>
+
+<p>
+&#22914;&#26524;&#26159;&#29992; <b>tostring</b> &#23558;&#19968;&#20010;&#22810;&#32500;&#21521;&#37327;&#36716;&#25442;&#20026;&#23383;&#31526;&#20018;&#65292;&#28982;&#21518;&#20877;&#29992; fromstring &#35835;&#21462;&#65292;&#20063;&#21482;&#33021;&#24471;&#21040;&#19968;&#20010;&#19968;&#32500;&#25968;&#32452;&#12290;&#21478;&#22806;&#22914;&#26524;&#26159;&#35835;&#29992; tostring &#36716;&#25442;&#25104;&#30340;&#23383;&#31526;&#20018;&#65292; <b>&#24314;&#35758;&#20351;&#29992; fromstring &#30340;&#26102;&#20505;&#26174;&#24335;&#25351;&#23450;&#25968;&#32452;&#20013;&#20803;&#32032;&#30340;&#25968;&#25454;&#31867;&#22411;</b> &#65292;&#19981;&#28982;&#23601; <b>&#26377;&#21487;&#33021;</b> &#21457;&#29983;&#19979;&#38754;&#36825;&#26679;&#30340;&#24754;&#21095;:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>array</span> = np.array([1, 2, 3, 4], dtype=<span>int</span>)
+<span>print</span> np.fromstring(array.tostring())
+</pre>
+</div>
+
+<pre>
+[  4.94065646e-324   9.88131292e-324   1.48219694e-323   1.97626258e-323]
+</pre></li>
+
+<li><p>
+<b>fromiter</b>: &#20174;&#21487;&#36845;&#20195;&#23545;&#35937;&#20013;&#29983;&#25104;&#19968;&#32500;&#25968;&#32452;
+</p>
+
+<p>
+&#21644;&#31532;&#19968;&#31181;&#26041;&#27861;&#30340;&#19981;&#21516;&#20043;&#22788;&#22312;&#20110;:
+</p>
+<ul>
+<li>&#21482;&#33021;&#36820;&#22238;&#19968;&#32500;&#25968;&#32452;</li>
+<li>&#24517;&#39035;&#26174;&#24335;&#25351;&#23450;&#25968;&#32452;&#20013;&#20803;&#32032;&#30340;&#25968;&#25454;&#31867;&#22411;</li>
+<li>&#36755;&#20837;&#21487;&#20197;&#26159; <b>&#25152;&#26377;&#21487;&#36845;&#20195;&#23545;&#35937;</b> &#65292;&#21253;&#25324; list&#12289;tuple&#12289;string&#12289;unicode, generator&#65292;&#20294;&#38656;&#35201;&#27880;&#24847;&#30340;&#26159;&#65292;&#36825;&#37324;&#30340; list &#21644; tuple &#19981;&#33021;&#26377;&#23884;&#22871;&#12290;</li>
+</ul>
+<div>
+
+<pre><span># </span><span>coding: utf-8</span>
+<span>import</span> numpy <span>as</span> np
+
+
+<span>def</span> <span>count_generator</span>():
+    <span>for</span> i <span>in</span> <span>range</span>(4):
+        <span>yield</span> i
+
+
+<span>print</span> <span>'from list:'</span>, np.fromiter([1, 2, 3, 4], <span>int</span>)
+<span>print</span> <span>'from tuple:'</span>, np.fromiter([1, 2, 3, 4], <span>int</span>)
+<span>print</span> <span>'from string:'</span>, np.fromiter(<span>'1234'</span>, <span>int</span>)
+<span>print</span> <span>'from unicode:'</span>, np.fromiter(u<span>'&#30333;&#26085;&#20381;&#23665;&#23613;'</span>, <span>'U1'</span>)
+<span>print</span> <span>'from generator:'</span>, np.fromiter(count_generator(), <span>int</span>)
+
+
+<span>try</span>:
+    <span>print</span> <span>'from nested list:'</span>, np.fromiter([[1, 2], [3, 4]], <span>int</span>)
+<span>except</span> <span>ValueError</span>:
+    <span>print</span> <span>'bad list'</span>
+</pre>
+</div>
+
+<pre>
+from list: [1 2 3 4]
+from tuple: [1 2 3 4]
+from string: [1 2 3 4]
+from unicode: [u'\u767d' u'\u65e5' u'\u4f9d' u'\u5c71' u'\u5c3d']
+from generator: [0 1 2 3]
+from nested list: bad list
+</pre></li>
+</ol>
+</div>
+</div>
+
+<div>
+<h3>&#21019;&#24314;&#29305;&#23450;&#24418;&#29366;&#30340;&#22810;&#32500;&#25968;&#32452;&#24182;&#36827;&#34892;&#22635;&#20805;</h3>
+<div>
+<ul>
+<li><p>
+ones
+</p>
+
+<p>
+&#21019;&#24314;&#32473;&#23450;&#24418;&#29366;&#30340;&#22810;&#32500;&#25968;&#32452;&#24182;&#23558;&#25968;&#32452;&#20013;&#25152;&#26377;&#20803;&#32032;&#22635;&#20805;&#20026; 1:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.ones((3, 4))
+</pre>
+</div>
+
+<pre>
+[[ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]]
+</pre></li>
+
+<li><p>
+zeros
+</p>
+
+<p>
+&#31867;&#20284; ones &#65292;&#20294;&#29992; 0 &#36827;&#34892;&#22635;&#20805;:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.zeros((3, 4))
+</pre>
+</div>
+
+<pre>
+[[ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]]
+</pre></li>
+
+<li><p>
+empty
+</p>
+
+<p>
+&#31867;&#20284; ones, &#20294;&#19981;&#36827;&#34892;&#21021;&#22987;&#21270;&#65292;&#24471;&#21040;&#30340;&#22810;&#32500;&#25968;&#32452;&#20013;&#30340;&#20803;&#32032;&#20540;&#26159;&#19981;&#30830;&#23450;&#30340;&#12290;
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.empty((3, 4))
+</pre>
+</div>
+
+<pre>
+[[  6.93164023e-310   1.66900197e-316   4.64956088e-317   4.00193173e-322]
+ [  1.77481898e-316   6.93164023e-310   9.30845863e-039   2.42092166e-322]
+ [  6.93164023e-310   6.93164023e-310   4.68423639e-320   0.00000000e+000]]
+</pre></li>
+
+<li><p>
+full
+</p>
+
+<p>
+&#31867;&#20284; ones, &#20294;&#38656;&#35201;&#33258;&#24049;&#25163;&#21160;&#25351;&#23450;&#38656;&#20026;&#22810;&#32500;&#25968;&#32452;&#22635;&#20805;&#30340;&#20540;&#12290;
+</p>
+
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.full((3, 4), 17)
+</pre>
+</div>
+
+<pre>
+[[ 17.  17.  17.  17.]
+ [ 17.  17.  17.  17.]
+ [ 17.  17.  17.  17.]]
+</pre></li>
+</ul>
+</div>
+</div>
+
+<div>
+<h3>&#20174; numerical range &#21019;&#24314;&#22810;&#32500;&#25968;&#32452;</h3>
+<div>
+<ul>
+<li><p>
+arange
+</p>
+
+<p>
+&#21019;&#24314;&#19968;&#20010;&#19968;&#32500;&#30340;&#25968;&#32452;&#65292;&#29992;&#27861;&#21516; Python &#20869;&#24314;&#26041;&#27861; <b>range</b>:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.arange(10)
+<span>print</span> np.arange(0, 10)
+<span>print</span> np.arange(9, -1, -1)
+</pre>
+</div>
+
+<pre>
+[0 1 2 3 4 5 6 7 8 9]
+[0 1 2 3 4 5 6 7 8 9]
+[9 8 7 6 5 4 3 2 1 0]
+</pre></li>
+
+<li><p>
+linspace
+</p>
+
+<p>
+&#32473;&#23450;&#19968;&#20010;&#21306;&#38388;&#65292;&#21462;&#20854; N &#31561;&#20998;&#28857;&#32452;&#25104;&#19968;&#20010;&#19968;&#32500;&#25968;&#32452;:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.linspace(1, 10, num=10)
+</pre>
+</div>
+
+<pre>
+[  1.   2.   3.   4.   5.   6.   7.   8.   9.  10.]
+</pre></li>
+
+<li><p>
+logspace
+</p>
+
+<p>
+&#32473;&#23450;&#19968;&#20010; <b>&#23545;&#25968;&#23610;&#24230;(log scale)&#21306;&#38388;</b> &#65292;&#21462;&#20854; N &#31561;&#20998;&#28857;&#23545;&#24212;&#30340; <b>&#32447;&#24615;&#23610;&#24230;(linear scale)&#19978;&#30340;&#25968;&#20540;</b>:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.logspace(1, 3, num=3)
+<span>print</span> np.log10(np.logspace(1, 3, num=3))
+</pre>
+</div>
+
+<pre>
+[   10.   100.  1000.]
+[ 1.  2.  3.]
+</pre></li>
+
+<li><p>
+meshgrid
+</p>
+
+<p>
+&#26681;&#25454;&#32473;&#23450;&#30340;&#22352;&#26631;&#21521;&#37327;&#21019;&#24314;&#22352;&#26631;&#30697;&#38453;&#12290;
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+
+<span>print</span> np.meshgrid(np.arange(0, 6))
+<span>print</span>
+
+<span>x</span>, <span>y</span> = np.meshgrid(np.arange(-1, 2), np.arange(0, 2))
+<span>print</span> <span>'x is:'</span>, x
+<span>print</span> <span>'y is:'</span>, y
+<span>print</span>
+
+<span>print</span> <span>'points built by (x, y):'</span>
+<span>print</span> np.rec.fromarrays([x, y])
+</pre>
+</div>
+
+<pre>
+[array([0, 1, 2, 3, 4, 5])]
+
+x is: [[-1  0  1]
+ [-1  0  1]]
+y is: [[0 0 0]
+ [1 1 1]]
+
+points built by (x, y):
+[[(-1, 0) (0, 0) (1, 0)]
+ [(-1, 1) (0, 1) (1, 1)]]
+</pre>
+
+<p>
+&#22312;&#19978;&#38754;&#30340;&#20363;&#23376;&#20013;&#65292;&#25152;&#24471;&#21040;&#30340;&#26159; X &#36724;&#19978; [-1, 0, 1] &#21644; X &#36724;&#19978; [0, 1] &#26500;&#25104;&#30340;&#19968;&#20010; 3x2 &#30340;&#32593;&#26684;&#65292;&#20849;&#26377; 6 &#20010;&#28857;&#12290;&#36820;&#22238;&#30340;&#20004;&#20010;&#20540;&#20013;&#30340; x &#26159;&#36825; 6 &#20010;&#28857; &#22312; X &#36724;&#19978;&#30340;&#25237;&#24433;&#65292; y &#21017;&#26159;&#36825; 6 &#20010;&#28857;&#22312; y &#36724;&#19978;&#30340;&#25237;&#24433;&#12290;
+</p>
+
+<p>
+meshgrid &#26041;&#27861;&#30340;&#21442;&#25968;&#25968;&#37327;&#19981;&#21463;&#38480;&#65292;&#21487;&#20197;&#24471;&#21040;&#20219;&#24847; N &#32500;&#31354;&#38388;&#20013;&#30340;&#22352;&#26631;&#30697;&#38453;&#12290;
+</p>
+
+<p>
+&#20102;&#35299; meshgrid &#26041;&#27861;&#30340;&#21151;&#33021;&#21518;&#65292;&#21487;&#20197;&#26469;&#20570;&#19968;&#20123;&#26377;&#36259;&#30340;&#20107;&#24773;&#65292;&#27604;&#22914;:
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+<span>import</span> matplotlib.pyplot <span>as</span> plt
+
+<span>x</span>, <span>y</span> = np.meshgrid(np.arange(-1, 1, 0.01), np.arange(-1, 1, 0.01))
+
+<span>contor</span> = np.sqrt(x ** 2 + y ** 2)
+plt.imshow(contor)
+plt.colorbar()
+
+plt.savefig(<span>'contor.png'</span>)
+<span>'/assets/img/contor.png'</span>
+</pre>
+</div>
+
+
+<div>
+<p><img src="http://www.zmonster.me/assets/img/contor.png" alt="contor.png" referrerpolicy="no-referrer" loading="lazy">
+</p>
+</div></li>
+
+<li><p>
+mgrid
+</p>
+
+<p>
+mgrid &#30340;&#21151;&#33021;&#19982; meshgrid &#31867;&#20284;&#65292;&#20294;&#26377;&#20960;&#28857;&#19981;&#21516;:
+</p>
+<ol>
+<li>mgrid &#19981;&#26159;&#20989;&#25968;&#65292;&#32780;&#26159;&#19968;&#20010;&#31867;&#30340;&#23545;&#35937;</li>
+<li><p>
+mgrid &#21644; meshgrid &#30340;&#20351;&#29992;&#26041;&#24335;&#19981;&#19968;&#26679;&#65292;meshgrid &#38656;&#35201;&#20256;&#20837;&#19968;&#32500;&#25968;&#32452;&#20316;&#20026;&#23545;&#35937;&#65292;&#32780; mgrid &#21017;&#30452;&#25509;&#20351;&#29992; '[]' &#36816;&#31639;&#31526;
+</p>
+
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+np.meshgrid(np.arange(-1, 2), np.arange(-1, 2))
+np.mgrid[-1:2, -1:2]
+</pre>
+</div></li>
+
+<li><p>
+&#36820;&#22238;&#20540;&#30340;&#21069;&#20004;&#20010;&#39034;&#24207;&#30456;&#21453;
+</p>
+
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>x</span>, <span>y</span> = np.meshgrid(np.arange(-1, 1), np.arange(-1, 1))
+<span>xx</span>, <span>yy</span> = np.mgrid[-1:1, -1:1]
+<span>print</span> (x - yy).<span>sum</span>(), (y - xx).<span>sum</span>()
+
+<span>x</span>, <span>y</span>, <span>z</span> = np.meshgrid(np.arange(-1, 1), np.arange(-1, 1), np.arange(-1, 1))
+<span>xx</span>, <span>yy</span>, <span>zz</span> = np.mgrid[-1:1, -1:1, -1:1]
+<span>print</span> (x - yy).<span>sum</span>(), (y - xx).<span>sum</span>(), (z - zz).<span>sum</span>()
+
+<span>x</span>, <span>y</span>, <span>z</span>, <span>w</span> = np.meshgrid(np.arange(-1, 1), np.arange(-1, 1), np.arange(-1, 1), np.arange(-1, 1))
+<span>xx</span>, <span>yy</span>, <span>zz</span>, <span>ww</span> = np.mgrid[-1:1, -1:1, -1:1, -1:1]
+<span>print</span> (x - yy).<span>sum</span>(), (y - xx).<span>sum</span>(), (z - zz).<span>sum</span>(), (w - ww).<span>sum</span>()
+</pre>
+</div>
+
+<pre>
+0 0
+0 0 0
+0 0 0 0
+</pre></li>
+</ol></li>
+
+<li><p>
+ogrid
+</p>
+
+<p>
+ogrid &#19982; mgrid &#31867;&#20284;&#65292;&#20063;&#26159;&#31867;&#30340;&#23545;&#35937;&#32780;&#38750;&#20989;&#25968;&#65292;&#20294;&#21644; mgrid &#30340;&#19981;&#21516;&#20043;&#22788;&#22312;&#20110;&#65292;&#23427;&#36820;&#22238;&#30340;&#32467;&#26524;&#26159; <b>&#31232;&#30095;</b> &#30340;&#12290;
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>x</span>, <span>y</span> = np.mgrid[-1:2, 3:6]
+<span>print</span> <span>'x from mgrid:'</span>
+<span>print</span> x
+<span>print</span> <span>'y from mgrid:'</span>
+<span>print</span> y
+
+<span>x</span>, <span>y</span> = np.ogrid[-1:2, 3:6]
+<span>print</span> <span>'x from ogrid:'</span>
+<span>print</span> x
+<span>print</span> <span>'y from ogrid:'</span>
+<span>print</span> y
+</pre>
+</div>
+
+<pre>
+x from mgrid:
+[[-1 -1 -1]
+ [ 0  0  0]
+ [ 1  1  1]]
+y from mgrid:
+[[3 4 5]
+ [3 4 5]
+ [3 4 5]]
+x from ogrid:
+[[-1]
+ [ 0]
+ [ 1]]
+y from ogrid:
+[[3 4 5]]
+</pre></li>
+
+<li><p>
+fromfunction
+</p>
+
+<p>
+fromfunction &#30340;&#34892;&#20026;&#31245;&#24494;&#26377;&#28857;&#19981;&#19968;&#26679;&#65292;&#23427;&#26377;&#19977;&#20010;&#21442;&#25968;:
+</p>
+<ol>
+<li>function</li>
+<li>shape</li>
+<li>dtype(optional)</li>
+</ol>
+<p>
+&#20854;&#20013; function &#30340;&#21442;&#25968;&#20010;&#25968;&#35201;&#21644; shape &#30340;&#38271;&#24230;&#19968;&#33268;&#65292;fromfunction &#20250;&#23545; shape &#23545;&#24212;&#30340;&#22810;&#32500;&#25968;&#32452;&#20013;&#27599;&#20010;&#20803;&#32032;&#30340;&#22352;&#26631;&#20256;&#32473; function &#65292;&#28982;&#21518;&#23558;&#36820;&#22238;&#20540;&#32452;&#21512;&#36215;&#26469;&#12290;
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>def</span> <span>f</span>(x, y):
+    <span>return</span> (x, y)
+
+
+<span>def</span> <span>g</span>(x, y):
+    <span>return</span> x + y
+
+
+<span>x</span>, <span>y</span> = np.fromfunction(f, (3, 3))
+<span>print</span> <span>'x generated by f is:\n'</span>, x
+<span>print</span> <span>'y generated by f is:\n'</span>, y
+<span>print</span> <span>'array generated by g is:\n'</span>, np.fromfunction(g, (3, 3))
+</pre>
+</div>
+
+<pre>
+x generated by f is:
+[[ 0.  0.  0.]
+ [ 1.  1.  1.]
+ [ 2.  2.  2.]]
+y generated by f is:
+[[ 0.  1.  2.]
+ [ 0.  1.  2.]
+ [ 0.  1.  2.]]
+array generated by g is:
+[[ 0.  1.  2.]
+ [ 1.  2.  3.]
+ [ 2.  3.  4.]]
+</pre></li>
+</ul>
+</div>
+</div>
+
+<div>
+<h3>&#21019;&#24314;&#30697;&#38453;(&#20108;&#32500;&#25968;&#32452;)</h3>
+<div>
+<ul>
+<li><p>
+eye:
+</p>
+
+<p>
+&#21019;&#24314;&#19968;&#20010;&#23545;&#35282;&#30697;&#38453;&#25110;&#32773; super/sub diagional square matrix&#65292;&#19988;&#25152;&#25351;&#23450;&#30340;&#23545;&#35282;&#32447;&#19978;&#30340;&#20803;&#32032;&#20540;&#20026; 1.
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.eye(2)
+<span>print</span> np.eye(2, 3, k=1)
+<span>print</span> np.eye(2, 3, k=-1)
+</pre>
+</div>
+
+<pre>
+[[ 1.  0.]
+ [ 0.  1.]]
+[[ 0.  1.  0.]
+ [ 0.  0.  1.]]
+[[ 0.  0.  0.]
+ [ 1.  0.  0.]]
+</pre></li>
+
+<li><p>
+identity
+</p>
+
+<p>
+&#21019;&#24314;&#21333;&#20301;&#30697;&#38453;
+</p>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.identity(2)
+<span>print</span> np.identity(3)
+</pre>
+</div>
+
+<pre>
+[[ 1.  0.]
+ [ 0.  1.]]
+[[ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0.  0.  1.]]
+</pre></li>
+
+<li><p>
+diag
+</p>
+
+<p>
+&#21019;&#24314;&#23545;&#35282;&#30697;&#38453;&#25110; super/sub diagional matrix&#12290;&#19982; eye &#30340;&#19981;&#21516;&#20043;&#22788;&#22312;&#20110;:
+</p>
+<ol>
+<li>&#23545;&#35282;&#32447;&#19978;&#30340;&#20803;&#32032;&#20540;&#19981;&#26159;&#37117;&#20026; 1 &#65292;&#32780;&#26159;&#25163;&#21160;&#25351;&#23450;</li>
+<li>&#19981;&#38656;&#35201;&#21046;&#23450;&#30697;&#38453;&#30340;&#24418;&#29366;&#65292;&#32780;&#26159;&#38752;&#25351;&#23450;&#23545;&#35282;&#32447;&#19978;&#20803;&#32032;&#20540;&#26469;&#30830;&#23450;&#30697;&#38453;&#30340;&#24418;&#29366;</li>
+</ol>
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.diag([1, 1, 1])
+<span>print</span> np.diag([3, 4], 1)
+</pre>
+</div>
+
+<pre>
+[[1 0 0]
+ [0 1 0]
+ [0 0 1]]
+[[0 3 0]
+ [0 0 4]
+ [0 0 0]]
+</pre></li>
+
+<li><p>
+diaglat
+</p>
+
+<p>
+&#23545;&#36755;&#20837;&#36827;&#34892; flatten &#28982;&#21518;&#29992;&#20043;&#21019;&#24314;&#23545;&#35282;&#30697;&#38453;
+</p>
+
+<div>
+
+<pre><span>import</span> numpy <span>as</span> np
+
+<span>print</span> np.diagflat([[1, 1], [1, 1]])
+</pre>
+</div>
+
+<pre>
+[[1 0 0 0]
+ [0 1 0 0]
+ [0 0 1 0]
+ [0 0 0 1]]
+</pre></li>
+</ul>
+</div>
+</div>
+</div>

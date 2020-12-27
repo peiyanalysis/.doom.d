@@ -1,0 +1,13 @@
+<p>Filtration of quantifiable objects by smoothing kernels on Riemannian
+manifolds for visualisation is an ongoing research. However, using common
+filters created for linear domains on manifolds with non-Euclidean topologies
+can yield misleading results. While there is a lot of ongoing research on
+convolution of quantifiable functions with smoothing kernels on the lower
+dimensional manifolds, higher-dimensional problems particularly pose a
+challenge. One important generalization of lower dimensional compact Riemannian
+manifolds is the unit hypersphere. In this paper, we derive explicit forms of
+convolution formulae for Gegenbauer kernel filtration on the surface of unit
+hypersphere. We prove that the Gegebauer filtration is the limit of a sequence
+of finite linear combinations of the hyperspherical Legendre harmonics, among
+other results.
+</p>

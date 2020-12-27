@@ -1,0 +1,10 @@
+<p>We study hyperbolic systems of one-dimensional partial differential equations
+under general, possibly non-local boundary conditions. A large class of
+evolution equations, either on individual 1-dimensional intervals or on general
+networks, can be reformulated in our rather flexible formalism, which
+generalizes the classical technique of first-order reduction. We study forward
+and backward well-posedness; furthermore, we provide necessary and sufficient
+conditions on both the boundary conditions and the coefficients arising in the
+first-order reduction for a given subset of the relevant ambient space to be
+invariant under the flow that governs the system. Several examples are studied.
+</p>

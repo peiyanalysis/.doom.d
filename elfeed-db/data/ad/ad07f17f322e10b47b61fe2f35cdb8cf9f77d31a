@@ -1,0 +1,16 @@
+<p>In this paper we propose a computationally efficient multiple hypothesis
+testing procedure for persistence homology. Most current approaches to
+hypothesis testing using persistence homology is based on resampling or
+permutation procedures, this is because there exists little distribution theory
+that provides a natural null model for persistence diagrams. In this paper we
+propose a null model based based approach to testing for acyclicity, coupled
+with a Family-Wise Error Rate (FWER) control method that does not suffer from
+the computational costs associated to resampling and permutation based
+approaches. We adapt standard False Discovery Rate (FDR) control procedures to
+the topological setting, and use our null model for hypothesis testing using
+persistent homology. A key idea in our paper is that one can compute an
+empirical distribution under a null hypothesis model that can be used for
+hypothesis testing in the same way that a normal or t-distribution is used in
+classical statistics. A argument for the use of this empirical null is based on
+simulations and limit theorems for persistent homology for point processes.
+</p>

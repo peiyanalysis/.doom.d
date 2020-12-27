@@ -122,3 +122,20 @@
   :recipe (:host github
            :repo "DogLooksGood/emacs-rime"
            :files ("*.el" "Makefile" "lib.c")))
+(package! org-drill)
+(package! org-roam-bibtex)
+(package! org-ref)
+(package! ebib)
+(package! doct
+  :recipe (:host github :repo "progfolio/doct"))
+(package! org-journal)
+(package! auto-activating-snippets
+  :recipe (:host github :repo "ymarco/auto-activating-snippets"))
+(package! LaTeX-auto-activating-snippets
+  :recipe (:host github :repo "tecosaur/LaTeX-auto-activating-snippets"))
+(package! cdlatex)
+(package! yasnippet)
+(package! yasnippet-snippets)
+(package! ivy-yasnippet)
+(package! helm-bibtex)
+(package! hungry-delete)

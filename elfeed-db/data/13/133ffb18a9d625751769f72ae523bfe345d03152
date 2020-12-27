@@ -1,0 +1,12 @@
+<p>In this paper, we study a reaction-diffusion-advection system which
+characterizes the interactions between the predator and prey in advective
+environments, such as streams or rivers. We extend some results in \cite{NWW}
+to the corresponding system with a heterogeneous intrinsic growth rate or a
+heterogeneous carrying capacity of the prey. More precisely, it turns out that
+there exist four critical mortality rates of the predator and two critical
+advection rates, which classify the dynamic behavior of this system into some
+scenarios, such as, (i) both populations go extinct; (ii) the predator can not
+invade and the prey survives in the long run. We point out that compared to
+homogeneous intrinsic growth rate and carrying capacity, the case in this paper
+is more complicated.
+</p>

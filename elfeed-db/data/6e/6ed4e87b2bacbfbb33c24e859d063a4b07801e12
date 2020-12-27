@@ -1,0 +1,21 @@
+<p>We connect boundary conditions for one-sided pseudo-differential operators
+with the generators of modified one-sided L\'evy processes. On one hand this
+allows modellers to use appropriate boundary conditions with confidence when
+restricting the modelling domain. On the other hand it allows for numerical
+techniques based on differential equation solvers to obtain fast approximations
+of densities or other statistical properties of restricted one-sided L\'evy
+processes encountered, for example, in finance. In particular we identify a new
+nonlocal mass conserving boundary condition by showing it corresponds to
+fast-forwarding, i.e. removing the time the process spends outside the domain.
+We treat all combinations of killing, reflecting and fast-forwarding boundary
+conditions.
+</p>
+<p>In Part I we show wellposedness of the backward and forward Cauchy problems
+with a one-sided pseudo-differential operator with boundary conditions as
+generator. We do so by showing convergence of Feller semigroups based on grid
+point approximations of the modified L\'evy process.
+</p>
+<p>In Part II we show that the limiting Feller semigroup is indeed the semigroup
+associated with the modified L\'evy process by showing continuity of the
+modifications with respect to the Skorokhod topology.
+</p>

@@ -1,0 +1,8 @@
+<p>In this paper, we investigate properties of entropy-penalized Wasserstein
+barycenters introduced by Bigot, Cazelles and Papadakis (2019) as a
+regularization of Wasserstein barycenters first presented by Agueh and Carlier
+(2011). After characterizing these barycenters in terms of a system of
+Monge-Amp\`ere equations, we prove some global moment and Sobolev bounds as
+well as higher regularity properties. We finally establish a central limit
+theorem for entropic-Wasserstein barycenters.
+</p>

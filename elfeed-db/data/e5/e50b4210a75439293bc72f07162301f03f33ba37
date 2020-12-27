@@ -1,0 +1,4 @@
+<pre><code>$tag_lo = str_replace('*', 0x00, $tag_hi);
+$tag_hi = str_replace('*', 0xff, $tag_hi);
+</code></pre>
+<p>this is the kind of hacks i&rsquo;d rather not have in trunk.</p>
