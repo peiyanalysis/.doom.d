@@ -414,6 +414,216 @@
 (map! :leader
       :desc "Other frame"                       "o o" #'other-frame)
 
+;; basic org settings
+(require 'find-lisp)
+(setq org-directory "~/Dropbox/.org/")
+
+(setq org-id-link-to-org-use-id t)
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
+
+(setq org-ellipsis " ▼ ")
+
+(setq org-adapt-indentation t)
+
+;; org-outline quick movement
+(after! org
+  (map! :map org-mode-map
+        "M-n" #'outline-next-visible-heading
+        "M-p" #'outline-previous-visible-heading))
+
+(map! :leader
+      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
+
+(use-package! org-download
+  :commands
+  org-download-dnd
+  org-download-yank
+  org-download-screenshot
+  org-download-dnd-base64
+  :init
+  (map! :map org-mode-map
+        "s-Y" #'org-download-screenshot
+        "s-y" #'org-download-yank)
+  (pushnew! dnd-protocol-alist
+            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
+            '("^data:" . org-download-dnd-base64))
+  (advice-add #'org-download-enable :override #'ignore)
+  :config
+  (defun +org/org-download-method (link)
+    (let* ((filename
+            (file-name-nondirectory
+             (car (url-path-and-query
+                   (url-generic-parse-url link)))))
+           ;; Create folder name with current buffer name, and place in root dir
+           (dirname (concat "./images/"
+                            (replace-regexp-in-string " " "_"
+                                                      (downcase (file-name-base buffer-file-name)))))
+           (filename-with-timestamp (format "%s%s.%s"
+                                            (file-name-sans-extension filename)
+                                            (format-time-string org-download-timestamp)
+                                            (file-name-extension filename))))
+      (make-directory dirname t)
+      (expand-file-name filename-with-timestamp dirname)))
+  :config
+  (setq org-download-screenshot-method
+        (cond (IS-MAC "screencapture -i %s")
+              (IS-LINUX
+               (cond ((executable-find "maim")  "maim -u -s %s")
+                     ((executable-find "scrot") "scrot -s %s")))))
+  (setq org-download-method '+org/org-download-method))
+
+;; deft
+(use-package deft
+  :after org
+  :bind ("<f9>" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/Dropbox/.org/"))
+
+;; org-roam
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+  :hook
+  (after-init . org-roam-mode)
+  :init
+  (map! :leader
+       (:prefix ("r" . "roam")
+                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+                (:prefix ("d" . "by date")
+                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
+                      :desc "Today"          "t" #'org-roam-dailies-today
+                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
+                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)
+                :desc "Find file"                     "f" #'org-roam-find-file
+                :desc "Show graph"                    "g" #'org-roam-graph
+                :desc "Insert new text"               "i" #'org-roam-insert
+                :desc "Insert selected text"          "I" #'org-roam-insert-immediate
+                :desc "Jump to index"                 "j" #'org-roam-jump-to-index
+                :desc "Roam buffer"                   "r" #'org-roam
+                :desc "Org Roam Capture"              "x" #'org-roam-capture))
+  :config
+  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
+        org-roam-index-file (concat org-roam-directory "index.org")
+        org-roam-dailies-directory "scratch/"
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-roam-graph-exclude-matcher "private"
+        org-roam-tag-sources '(prop last-directory)
+        org-id-link-to-org-use-id t))
+
+(setq org-roam-capture-templates
+             ;; literally
+      '(("d" "default" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)))
+;; org-roam-capture-immediate
+(setq org-roam-capture-immediate-template
+             ;; default
+             '("d" "default" plain (function org-roam--capture-get-point)
+               "%?"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n"
+               :unnarrowed t))
+
+(setq org-roam-capture-ref-templates
+      '(("w" "web" plain (function org-roam-capture--get-point)
+         ""
+         :file-name "${slug}"
+         :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+         :unnarrowed t)))
+(add-to-list 'org-roam-capture-ref-templates
+             '("a" "Annotation" plain (function org-roam-capture--get-point)
+               "%U ${body}\n"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+               :immediate-finish t
+               :unnarrowed t))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+(use-package! org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+;; kept server running
+(unless (server-running-p)
+  (org-roam-server-mode))
+
+(use-package helm-bibtex :ensure t
+  :bind ("<f11>" . helm-bibtex)
+  :commands (helm-bibtex)
+  :init
+  (add-hook 'bibtex-completion-edit-notes 'org-ref-open-bibtex-notes)
+  (setq bibtex-completion-open-any 'org-ref-open-bibtex-pdf)
+  :config
+  (setq bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
+        bibtex-completion-library-path "~/Dropbox/bibliography/bibtex-pdfs"
+        bibtex-completion-notes-path   "~/Dropbox/bibliography/helm-bibtex-notes/")
+  ;(setq bibtex-completion-display-formats
+  ;  '((t . "${=type=:7} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${author:30} ${title:72} ")))
+  (setq bibtex-completion-additional-search-fields '(keywords))
+  (setq bibtex-completion-notes-template-one-file
+	(format "\n** TODO ${=key=} - ${title}\n  :PROPERTIES:\n    :Author: ${author-or-editor}\n    :Journal: ${journal}\n  :END:\n\n"))
+  (setq bibtex-completion-display-formats
+	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
+  (setq bibtex-completion-pdf-field "file")
+  (setq bibtex-completion-pdf-symbol "PDF")
+  (setq bibtex-completion-notes-symbol "N")
+ )
+
+(use-package org-ref :ensure t
+  ;;:defer 1
+  :after (org)
+  :config
+  ;;(setq reftex-default-bibliography '("~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"))
+  ;; see org-ref for use of these variables
+  (setq bibtex-completion-pdf-field "file")
+  (setq org-ref-bibliography-notes  "~/Dropbox/bibliography/notes.org"
+      org-ref-default-bibliography  '("~/Dropbox/bibliography/references.bib")
+      org-ref-pdf-directory         "~/Dropbox/bibliography/bibtex-pdfs/")
+  ;;(setq bibtex-completion-bibliography "~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"
+  ;;    bibtex-completion-library-path "~/OneDrive/2020.03.28_PunchingShearReferences/PDFs"
+  ;;    bibtex-completion-notes-path "~/OneDrive/2020.03.28_PunchingShearReferences/Literature-manuscript.org")
+  (setq org-ref-show-broken-links nil)
+  (setq bibtex-completion-pdf-open-function 'org-open-file)
+  (setq org-ref-note-title-format
+   "** TODO %k - %t
+ :PROPERTIES:
+  :CUSTOM_ID: %k
+  :AUTHOR: %9a
+  :JOURNAL: %j
+  :DOI: %D
+  :URL: %U
+ :END:
+")
+
+  (setq bibtex-completion-display-formats
+	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
+  (defun my/org-ref-notes-function (candidates)
+    (let ((key (helm-marked-candidates)))
+      (funcall org-ref-notes-function (car key))))
+
+  (helm-delete-action-from-source "Edit notes" helm-source-bibtex)
+;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
+  (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
+)
+
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))

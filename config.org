@@ -571,7 +571,7 @@
       :desc "Other frame"                       "o o" #'other-frame)
 #+end_src
 
-* COMMENT org-settings
+* org-settings
 ** org-directory
 #+begin_src emacs-lisp
 ;; basic org settings
@@ -689,7 +689,7 @@ org-task-inbox, org-task-todolist, org-task-bin
               ("BREAK" :foreground "forest green" :weight bold))))
 #+end_src
 
-* COMMENT note system
+* note system
 ** deft
 #+begin_src emacs-lisp
 ;; deft
@@ -797,7 +797,7 @@ org-task-inbox, org-task-todolist, org-task-bin
 (unless (server-running-p)
   (org-roam-server-mode))
 #+end_src
-* COMMENT bibliography
+* bibliography
 ** COMMENT org-ref
 #+begin_src emacs-lisp
 (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
