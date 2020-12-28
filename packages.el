@@ -139,3 +139,5 @@
 (package! ivy-yasnippet)
 (package! helm-bibtex)
 (package! hungry-delete)
+(package! org-noter-plus)
+(package! org-journal)

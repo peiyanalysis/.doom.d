@@ -1,9 +1,9 @@
 #+TITLE: Config
-
-* basic
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-#+END_SRC
+#+end_src
+
+* Appearance
 #+begin_src emacs-lisp
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
@@ -573,6 +573,9 @@
 
 * org-settings
 ** org-directory
+   :PROPERTIES:
+   :ID:       d90eaf23-39b6-47f2-8b95-f350ef919f69
+   :END:
 #+begin_src emacs-lisp
 ;; basic org settings
 (require 'find-lisp)
@@ -796,6 +799,20 @@ org-task-inbox, org-task-todolist, org-task-bin
 ;; kept server running
 (unless (server-running-p)
   (org-roam-server-mode))
+#+end_src
+** COMMENT org-journal
+#+begin_src emacs-lisp
+(use-package org-journal
+  :config
+  (map! :leader
+        (:prefix "n"
+         :desc "add journal" #'org-journal-new-entry))
+  :custom
+  (org-journal-dir (concat org-directory "journal/"))
+  (org-journal-date-prefix "#+TITLE: ")
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-dir org-directory)
+  (org-journal-date-format "%Y-%m-%d"))
 #+end_src
 * bibliography
 ** COMMENT org-ref
@@ -1096,3 +1113,5 @@ only headings."
      (t
       nil)))))
 #+end_src
+* Metacog
+** Questions

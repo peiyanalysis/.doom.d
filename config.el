@@ -5,6 +5,8 @@
 
 (setq doom-theme 'doom-manegarm)
 
+(setq doom-theme 'doom-manegarm)
+
 (setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
         doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
         doom-unicode-font (font-spec :family "Sarasa Mono SC")
@@ -206,6 +208,8 @@
 
 (setq TeX-engine 'xetex)
 
+(setq TeX-engine 'xetex)
+
 (add-to-list 'load-path "/home/py06/.doom.d/packages")
 (require 'mathpix)
 (setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
@@ -214,6 +218,8 @@
 
 (use-package auto-activating-snippets
   :hook (latex-mode . latex-auto-activating-snippets-mode))
+
+(use-package! latex-auto-activating-snippets)
 
 (use-package! latex-auto-activating-snippets)
 
@@ -420,11 +426,17 @@
 
 (setq org-id-link-to-org-use-id t)
 
+(setq org-id-link-to-org-use-id t)
+
 (use-package org-bullets
   :after org
   :hook (org-mode . org-bullets-mode))
 
 (setq org-ellipsis " ▼ ")
+
+(setq org-ellipsis " ▼ ")
+
+(setq org-adapt-indentation t)
 
 (setq org-adapt-indentation t)
 
