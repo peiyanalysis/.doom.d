@@ -1,5 +1,10 @@
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+(map! :leader
+      :desc "Other frame"                       "o o" #'other-frame)
+
+(map! :leader :desc"doom/scratch"            "X" #'doom/open-scratch-buffer)
+
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 
@@ -41,30 +46,27 @@
   (setq doom-modeline-buffer-encoding nil))
 (use-package posframe)
 
-;; smartparens
-(use-package! smartparens
-  :init
-  (map! :map smartparens-mode-map
-        "C-M-f" #'sp-forward-sexp
-        "C-M-b" #'sp-backward-sexp
-        "C-M-u" #'sp-backward-up-sexp
-        "C-M-d" #'sp-down-sexp
-        "C-M-p" #'sp-backward-down-sexp
-        "C-M-n" #'sp-up-sexp
-         "C-M-s" #'sp-splice-sexp
-        "C-)" #'sp-forward-slurp-sexp
-        "C-}" #'sp-forward-barf-sexp
-        "C-(" #'sp-backward-slurp-sexp
-        "C-M-)" #'sp-backward-slurp-sexp
-        "C-M-)" #'sp-backward-barf-sexp))
-
-(use-package yasnippet
+;; window
+;; window swap - ace-window
+(use-package! ace-window
   :config
-  (add-to-list 'yas-snippet-dirs "~/.doom.d/snippets"))
+  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+  :init
+  (map! :leader
+        :prefix "w"
+        :desc "ace-window-select" "a" #'ace-window))
 
-(use-package yasnippet-snippets)
+(use-package winner-mode
+  :hook (after-init . winner-mode))
 
-(use-package ivy-yasnippet)
+(use-package saveplace
+  :hook (after-init . save-place-mode))
+
+;; keybindings
+(map! :leader
+      :desc "Left workspace"                    "TAB ," #'+workspace/switch-left
+      :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
+      :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
 
 ;; input method
 (use-package! pyim
@@ -137,38 +139,6 @@
   (setq avy-all-windows t)
   (evil-find-char-pinyin-mode t))
 
-;; hl-todo-mode
-(use-package! hl-todo
-  :init
-  (setq hl-todo-keyword-faces
-        '(("TODO"    . 'hl-todo-TODO)
-          ("ADDCONT" . 'hl-todo-ADDCONT)
-          ("REF"     . 'hl-todo-REF)
-          ("MODCONT" . 'hl-todo-MODCONT)
-          ("FIXME"   . 'hl-todo-FIXME)
-          ("XXX"     . 'hl-todo-XXX)
-          ("DONE"    . 'hl-todo-DONE)))
-  (defface hl-todo-TODO    '((t :background "#00FF00"  :foreground "#FF0000" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (defface hl-todo-ADDCONT '((t :background "#00FF00"  :foreground "#FF0000" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (defface hl-todo-REF      '((t :background "#00FF00" :foreground "#ff0000" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (defface hl-todo-FIXME   '((t :background "#0000FF"  :foreground "#FF0000" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (defface hl-todo-MODCONT  '((t :background "#0000FF" :foreground "#FF0000" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (defface hl-todo-XXX      '((t :background "#000000" :foreground "#FFFFFF" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (defface hl-todo-DONE    '((t :background "#00FF00"  :foreground "#00FF00" :inherit (hl-todo)))
-    "Face for highlighting the HOLD keyword.")
-  (map! :leader
-        :prefix "c"
-        :desc "show comment tags" "g" #'hl-todo-mode))
-
-(map! :leader
-      :desc "ivy magit todo"             "g i" #'ivy-magit-todos)
-
 (use-package parinfer
   :bind
   (("C-," . parinfer-toggle-mode))
@@ -210,12 +180,6 @@
 
 (setq TeX-engine 'xetex)
 
-(add-to-list 'load-path "/home/py06/.doom.d/packages")
-(require 'mathpix)
-(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
-      mathpix-app-key "b667a7350e26f378b208"
-      mathpix-screenshot-method "scrot -s %s")
-
 (use-package auto-activating-snippets
   :hook (latex-mode . latex-auto-activating-snippets-mode))
 
@@ -232,6 +196,121 @@
           ( ?b  nil         nil t nil nil )
           ( ?/  "\\slashed" nil t nil nil ))))
 
+(add-to-list 'load-path "/home/py06/.doom.d/packages")
+(require 'mathpix)
+(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
+      mathpix-app-key "b667a7350e26f378b208"
+      mathpix-screenshot-method "scrot -s %s")
+
+(use-package! gif-screencast
+  :bind
+  ("<f12>" . gif-screencast-start-or-stop))
+
+;; smartparens
+(use-package! smartparens
+  :init
+  (map! :map smartparens-mode-map
+        "C-M-f" #'sp-forward-sexp
+        "C-M-b" #'sp-backward-sexp
+        "C-M-u" #'sp-backward-up-sexp
+        "C-M-d" #'sp-down-sexp
+        "C-M-p" #'sp-backward-down-sexp
+        "C-M-n" #'sp-up-sexp
+         "C-M-s" #'sp-splice-sexp
+        "C-)" #'sp-forward-slurp-sexp
+        "C-}" #'sp-forward-barf-sexp
+        "C-(" #'sp-backward-slurp-sexp
+        "C-M-)" #'sp-backward-slurp-sexp
+        "C-M-)" #'sp-backward-barf-sexp))
+
+(use-package! poporg
+  :bind (("C-c '" . poporg-dwim)))
+
+;; hl-todo-mode
+(use-package! hl-todo
+  :init
+  (setq hl-todo-keyword-faces
+        '(("TODO"    . 'hl-todo-TODO)
+          ("ADDCONT" . 'hl-todo-ADDCONT)
+          ("REF"     . 'hl-todo-REF)
+          ("MODCONT" . 'hl-todo-MODCONT)
+          ("FIXME"   . 'hl-todo-FIXME)
+          ("XXX"     . 'hl-todo-XXX)
+          ("DONE"    . 'hl-todo-DONE)))
+  (defface hl-todo-TODO    '((t :background "#00FF00"  :foreground "#FF0000" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (defface hl-todo-ADDCONT '((t :background "#00FF00"  :foreground "#FF0000" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (defface hl-todo-REF      '((t :background "#00FF00" :foreground "#ff0000" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (defface hl-todo-FIXME   '((t :background "#0000FF"  :foreground "#FF0000" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (defface hl-todo-MODCONT  '((t :background "#0000FF" :foreground "#FF0000" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (defface hl-todo-XXX      '((t :background "#000000" :foreground "#FFFFFF" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (defface hl-todo-DONE    '((t :background "#00FF00"  :foreground "#00FF00" :inherit (hl-todo)))
+    "Face for highlighting the HOLD keyword.")
+  (map! :leader
+        :prefix "c"
+        :desc "show comment tags" "g" #'hl-todo-mode))
+
+(map! :leader
+      :desc "ivy magit todo"             "g i" #'ivy-magit-todos)
+
+(use-package yasnippet
+  :config
+  (add-to-list 'yas-snippet-dirs "~/.doom.d/snippets"))
+
+(use-package yasnippet-snippets)
+
+(use-package ivy-yasnippet)
+
+(setq hungry-delete-mode t)
+(map! :leader
+      (:prefix ("e" . "edit")
+               :desc "hungry delete" "d" #'hungry-delete-forward))
+
+(use-package! company-posframe
+  :hook (company-mode . company-posframe-mode))
+
+(use-package so-long
+  :config (global-so-long-mode 1))
+
+(map! :leader
+      :prefix "c"
+      (:prefix-map ("H" . "hide code")
+       :desc "hide block"               "b" #'hs-hide-block
+       :desc "hide level"               "l" #'hs-hide-level
+       :desc "hide all"                 "a" #'hs-hide-all)
+      (:prefix-map ("S" . "show code")
+       :desc "show block"               "b" #'hs-show-block
+       :desc "show level"               "l" #'hs-show-level
+       :desc "show all"                 "a" #'hs-show-all))
+
+(use-package whitespace
+  :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
+  :config
+  (setq whitespace-style '(face trailing)))
+
+(use-package autorevert
+  :hook (after-init . global-auto-revert-mode))
+
+;; feature-functions
+(defun insert-time ()
+  "Insert a timestamp according to locale's date and time format."
+  (interactive)
+  (insert (format-time-string "%c" (current-time))))
+;; key-bindings
+(map! :leader
+      :desc "insert time"                "i t" #'insert-time)
+
+(global-set-key (kbd "C-c C-\\") (quote comment-line))
+
+(use-package! nov)
+
+(use-package! nov)
+
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link))
 
@@ -241,29 +320,59 @@
   (with-eval-after-load 'pdf-annot
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
-;; window
-;; window swap - ace-window
-(use-package! ace-window
+(use-package! easy-hugo
   :config
-  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+  (setq! easy-hugo-root "~/Blog/RandN/"
+         easy-hugo-basedir "~/Blog/RandN/"
+         easy-hugo-url "https://peiyanalysis.github.io"
+         easy-hugo-previewtime "300"
+         easy-hugo-default-ext ".md"
+         easy-hugo-server-flags "-D"
+         easy-hugo-postdir "content/post/")
+  (map! :leader :desc "hugo blog" "B" #'easy-hugo)
+  (map! :map easy-hugo-mode-map
+      :nivm "n" 'easy-hugo-newpost
+      :nivm "D" 'easy-hugo-article
+      :nivm "p" 'easy-hugo-preview
+      :nivm "P" 'easy-hugo-publish
+      :nivm "o" 'easy-hugo-open
+      :nivm "d" 'easy-hugo-delete
+      :nivm "e" 'easy-hugo-open
+      :nivm "c" 'easy-hugo-open-config
+      :nivm "f" 'easy-hugo-open
+      :nivm "N" 'easy-hugo-no-help
+      :nivm "v" 'easy-hugo-view
+      :nivm "r" 'easy-hugo-refresh
+      :nivm "g" 'easy-hugo-refresh
+      :nivm "s" 'easy-hugo-sort-time
+      :nivm "S" 'easy-hugo-sort-char
+      :nivm "G" 'easy-hugo-github-deploy
+      :nivm "A" 'easy-hugo-amazon-s3-deploy
+      :nivm "C" 'easy-hugo-google-cloud-storage-deploy
+      :nivm "q" 'evil-delete-buffer
+      :nivm "TAB" 'easy-hugo-open
+      :nivm "RET" 'easy-hugo-preview))
+
+(use-package ox-hugo
+  :after ox)
+
+(use-package ox-hugo
+  :after ox)
+
+;; Baidu translate
+(use-package! baidu-translate
   :init
+  (global-set-key (kbd "C-c m") 'baidu-translate-zh-mark)
+  (global-set-key (kbd "C-c M") 'baidu-translate-zh-whole-buffer)
+  ;;设置你的百度翻译 APPID
+  (setq baidu-translate-appid "20200510000447604")
+  ;;设置你的秘钥
+  (setq baidu-translate-security "Z5Ga8KOYLjto3H3VN8Pi")
   (map! :leader
-        :prefix "w"
-        :desc "ace-window-select" "a" #'ace-window))
-
-(use-package! eaf
-  :config
-  ;; (setq eaf-enable-debug t) ; should only be used when eaf is wigging out
-  (eaf-setq eaf-browser-dark-mode "false")
-  (setq eaf-browser-default-search-engine "duckduckgo")
-  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com"))
-
-;; telega
-(setq telega-proxies
-      (list
-       '(:server "127.0.0.1" :port 1080 :enable t
-                 :type (:@type "proxyTypeSocks5"
-                               :username "" :password ""))))
+        :desc "EN->ZH marks"            "a z" #'baidu-translate-zh-mark
+        :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
+        :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
+        :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
 
 (setq elfeed-use-curl nil)
 (setq elfeed-protocol-ttrss-maxsize 200) ;; bigger than 200 is invalid
@@ -301,96 +410,40 @@
   :config
   (elfeed-goodies/setup))
 
-(use-package! poporg
-  :bind (("C-c '" . poporg-dwim)))
-
-(use-package! easy-hugo
+(use-package! eaf
   :config
-  (setq! easy-hugo-root "~/Blog/RandN/"
-         easy-hugo-basedir "~/Blog/RandN/"
-         easy-hugo-url "https://peiyanalysis.github.io"
-         easy-hugo-previewtime "300"
-         easy-hugo-default-ext ".md"
-         easy-hugo-server-flags "-D"
-         easy-hugo-postdir "content/post/")
-  (map! :leader :desc "hugo blog" "B" #'easy-hugo)
-  (map! :map easy-hugo-mode-map
-      :nivm "n" 'easy-hugo-newpost
-      :nivm "D" 'easy-hugo-article
-      :nivm "p" 'easy-hugo-preview
-      :nivm "P" 'easy-hugo-publish
-      :nivm "o" 'easy-hugo-open
-      :nivm "d" 'easy-hugo-delete
-      :nivm "e" 'easy-hugo-open
-      :nivm "c" 'easy-hugo-open-config
-      :nivm "f" 'easy-hugo-open
-      :nivm "N" 'easy-hugo-no-help
-      :nivm "v" 'easy-hugo-view
-      :nivm "r" 'easy-hugo-refresh
-      :nivm "g" 'easy-hugo-refresh
-      :nivm "s" 'easy-hugo-sort-time
-      :nivm "S" 'easy-hugo-sort-char
-      :nivm "G" 'easy-hugo-github-deploy
-      :nivm "A" 'easy-hugo-amazon-s3-deploy
-      :nivm "C" 'easy-hugo-google-cloud-storage-deploy
-      :nivm "q" 'evil-delete-buffer
-      :nivm "TAB" 'easy-hugo-open
-      :nivm "RET" 'easy-hugo-preview))
+  ;; (setq eaf-enable-debug t) ; should only be used when eaf is wigging out
+  (eaf-setq eaf-browser-dark-mode "false")
+  (setq eaf-browser-default-search-engine "duckduckgo")
+  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com"))
 
-;; Baidu translate
-(use-package! baidu-translate
-  :init
-  (global-set-key (kbd "C-c m") 'baidu-translate-zh-mark)
-  (global-set-key (kbd "C-c M") 'baidu-translate-zh-whole-buffer)
-  ;;设置你的百度翻译 APPID
-  (setq baidu-translate-appid "20200510000447604")
-  ;;设置你的秘钥
-  (setq baidu-translate-security "Z5Ga8KOYLjto3H3VN8Pi")
-  (map! :leader
-        :desc "EN->ZH marks"            "a z" #'baidu-translate-zh-mark
-        :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
-        :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
-        :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
-
-(use-package! company-posframe
-  :hook (company-mode . company-posframe-mode))
-
+;; telega
+(setq telega-proxies
+      (list
+       '(:server "127.0.0.1" :port 1080 :enable t
+                 :type (:@type "proxyTypeSocks5"
+                               :username "" :password ""))))
 (map! :leader
-      :prefix "c"
-      (:prefix-map ("H" . "hide code")
-       :desc "hide block"               "b" #'hs-hide-block
-       :desc "hide level"               "l" #'hs-hide-level
-       :desc "hide all"                 "a" #'hs-hide-all)
-      (:prefix-map ("S" . "show code")
-       :desc "show block"               "b" #'hs-show-block
-       :desc "show level"               "l" #'hs-show-level
-       :desc "show all"                 "a" #'hs-show-all))
+      (:prefix "a"
+       :desc "Telega" "t" #'telega))
 
-(use-package winner-mode
-  :hook (after-init . winner-mode))
+(require 'telega)
+(map! :after telega
+      :map telega-root-mode-map
+      :leader
+      (:prefix ("l" . "Telega")
+       :desc "Open chat with" "w" #'telega-chat-with
+       :desc "View folders" "f" #'telega-view-folders
+       :desc "Kill telega" "K" #'telega-kill
+       :desc "Browse url" "u" #'telega-browse-url))
 
-(use-package saveplace
-  :hook (after-init . save-place-mode))
-
-(use-package whitespace
-  :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
-  :config
-  (setq whitespace-style '(face trailing)))
-
-(use-package so-long
-  :config (global-so-long-mode 1))
-
-(use-package autorevert
-  :hook (after-init . global-auto-revert-mode))
-
-;; feature-functions
-(defun insert-time ()
-  "Insert a timestamp according to locale's date and time format."
-  (interactive)
-  (insert (format-time-string "%c" (current-time))))
-;; key-bindings
-(map! :leader
-      :desc "insert time"                "i t" #'insert-time)
+(require 'telega)
+(map! :after telega
+      :map telega-chat-mode-map
+      :leader
+      (:prefix "l"
+       :desc "Attach" "a" #'telega-chatbuf-attach
+       :desc "Cancel aux" "x" #'telega-chatbuf-cancel-aux))
 
 (use-package ebib
   :config
@@ -400,25 +453,63 @@
 ;; map the keys
 (global-set-key (kbd "<f5>") 'ebib)
 
-(map! :leader :desc"doom/scratch"            "X" #'doom/open-scratch-buffer)
+(use-package helm-bibtex
+  :bind ("<f11>" . helm-bibtex)
+  :commands (helm-bibtex)
+  :init
+  (add-hook 'bibtex-completion-edit-notes 'org-ref-open-bibtex-notes)
+  (setq bibtex-completion-open-any 'org-ref-open-bibtex-pdf)
+  :config
+  (setq bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
+        bibtex-completion-library-path "~/Dropbox/bibliography/bibtex-pdfs"
+        bibtex-completion-notes-path   "~/Dropbox/bibliography/helm-bibtex-notes/")
+  ;(setq bibtex-completion-display-formats
+  ;  '((t . "${=type=:7} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${author:30} ${title:72} ")))
+  (setq bibtex-completion-additional-search-fields '(keywords))
+  (setq bibtex-completion-notes-template-one-file
+	(format "\n** TODO ${=key=} - ${title}\n  :PROPERTIES:\n    :Author: ${author-or-editor}\n    :Journal: ${journal}\n  :END:\n\n"))
+  (setq bibtex-completion-display-formats
+	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
+  (setq bibtex-completion-pdf-field "file")
+  (setq bibtex-completion-pdf-symbol "PDF")
+  (setq bibtex-completion-notes-symbol "N")
+ )
 
-(after! org
-  (map! :leader :desc "org-capture"           "x" #'org-capture))
+(use-package org-ref
+  :after (org)
+  :config
+  ;;(setq reftex-default-bibliography '("~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"))
+  ;; see org-ref for use of these variables
+  (setq bibtex-completion-pdf-field "file")
+  (setq org-ref-bibliography-notes  "~/Dropbox/bibliography/notes.org"
+      org-ref-default-bibliography  '("~/Dropbox/bibliography/references.bib")
+      org-ref-pdf-directory         "~/Dropbox/bibliography/bibtex-pdfs/")
+  ;;(setq bibtex-completion-bibliography "~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"
+  ;;    bibtex-completion-library-path "~/OneDrive/2020.03.28_PunchingShearReferences/PDFs"
+  ;;    bibtex-completion-notes-path "~/OneDrive/2020.03.28_PunchingShearReferences/Literature-manuscript.org")
+  (setq org-ref-show-broken-links nil)
+  (setq bibtex-completion-pdf-open-function 'org-open-file)
+  (setq org-ref-note-title-format
+   "** TODO %k - %t
+ :PROPERTIES:
+  :CUSTOM_ID: %k
+  :AUTHOR: %9a
+  :JOURNAL: %j
+  :DOI: %D
+  :URL: %U
+ :END:
+")
 
-;; comment
-(global-set-key (kbd "C-c C-\\") (quote comment-line))
+  (setq bibtex-completion-display-formats
+	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
+  (defun my/org-ref-notes-function (candidates)
+    (let ((key (helm-marked-candidates)))
+      (funcall org-ref-notes-function (car key))))
 
-;; keybindings
-(map! :leader
-      :desc "Left workspace"                    "TAB ," #'+workspace/switch-left
-      :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
-      :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
-
-(map! :leader
-      :desc "Other frame"                       "o o" #'other-frame)
-
-(map! :leader
-      :desc "Other frame"                       "o o" #'other-frame)
+  (helm-delete-action-from-source "Edit notes" helm-source-bibtex)
+;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
+  (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
+)
 
 ;; basic org settings
 (require 'find-lisp)
@@ -427,10 +518,6 @@
 (setq org-id-link-to-org-use-id t)
 
 (setq org-id-link-to-org-use-id t)
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode))
 
 (setq org-ellipsis " ▼ ")
 
@@ -487,15 +574,14 @@
                      ((executable-find "scrot") "scrot -s %s")))))
   (setq org-download-method '+org/org-download-method))
 
-;; deft
-(use-package deft
-  :after org
-  :bind ("<f9>" . deft)
-  :custom
-  (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory "~/Dropbox/.org/"))
+(use-package org-noter-pdftools
+  :after org-noter
+  :config
+  (with-eval-after-load 'pdf-annot
+    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+
+(use-package org-pdftools
+  :hook (org-mode . org-pdftools-setup-link))
 
 ;; org-roam
 (use-package! org-roam
@@ -543,15 +629,16 @@
                :head "#+title: ${title}\n"
                :unnarrowed t))
 
-(setq org-roam-capture-ref-templates
-      '(("w" "web" plain (function org-roam-capture--get-point)
-         ""
-         :file-name "${slug}"
-         :head "#+title: ${title}\n#+roam_key: ${ref}\n"
-         :unnarrowed t)))
+(setq org-roam-capture-ref-templates nil)
+(add-to-list 'org-roam-capture-ref-templates
+             '("r" "ref" plain (function org-roam-capture--get-point)
+               ""
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+               :unnarrowed t))
 (add-to-list 'org-roam-capture-ref-templates
              '("a" "Annotation" plain (function org-roam-capture--get-point)
-               "%U ${body}\n"
+               "%U \n${body}\n"
                :file-name "${slug}"
                :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
                :immediate-finish t
@@ -577,65 +664,6 @@
 (unless (server-running-p)
   (org-roam-server-mode))
 
-(use-package helm-bibtex :ensure t
-  :bind ("<f11>" . helm-bibtex)
-  :commands (helm-bibtex)
-  :init
-  (add-hook 'bibtex-completion-edit-notes 'org-ref-open-bibtex-notes)
-  (setq bibtex-completion-open-any 'org-ref-open-bibtex-pdf)
-  :config
-  (setq bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
-        bibtex-completion-library-path "~/Dropbox/bibliography/bibtex-pdfs"
-        bibtex-completion-notes-path   "~/Dropbox/bibliography/helm-bibtex-notes/")
-  ;(setq bibtex-completion-display-formats
-  ;  '((t . "${=type=:7} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${author:30} ${title:72} ")))
-  (setq bibtex-completion-additional-search-fields '(keywords))
-  (setq bibtex-completion-notes-template-one-file
-	(format "\n** TODO ${=key=} - ${title}\n  :PROPERTIES:\n    :Author: ${author-or-editor}\n    :Journal: ${journal}\n  :END:\n\n"))
-  (setq bibtex-completion-display-formats
-	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
-  (setq bibtex-completion-pdf-field "file")
-  (setq bibtex-completion-pdf-symbol "PDF")
-  (setq bibtex-completion-notes-symbol "N")
- )
-
-(use-package org-ref :ensure t
-  ;;:defer 1
-  :after (org)
-  :config
-  ;;(setq reftex-default-bibliography '("~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"))
-  ;; see org-ref for use of these variables
-  (setq bibtex-completion-pdf-field "file")
-  (setq org-ref-bibliography-notes  "~/Dropbox/bibliography/notes.org"
-      org-ref-default-bibliography  '("~/Dropbox/bibliography/references.bib")
-      org-ref-pdf-directory         "~/Dropbox/bibliography/bibtex-pdfs/")
-  ;;(setq bibtex-completion-bibliography "~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"
-  ;;    bibtex-completion-library-path "~/OneDrive/2020.03.28_PunchingShearReferences/PDFs"
-  ;;    bibtex-completion-notes-path "~/OneDrive/2020.03.28_PunchingShearReferences/Literature-manuscript.org")
-  (setq org-ref-show-broken-links nil)
-  (setq bibtex-completion-pdf-open-function 'org-open-file)
-  (setq org-ref-note-title-format
-   "** TODO %k - %t
- :PROPERTIES:
-  :CUSTOM_ID: %k
-  :AUTHOR: %9a
-  :JOURNAL: %j
-  :DOI: %D
-  :URL: %U
- :END:
-")
-
-  (setq bibtex-completion-display-formats
-	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
-  (defun my/org-ref-notes-function (candidates)
-    (let ((key (helm-marked-candidates)))
-      (funcall org-ref-notes-function (car key))))
-
-  (helm-delete-action-from-source "Edit notes" helm-source-bibtex)
-;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
-  (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
-)
-
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
@@ -653,6 +681,8 @@
 
 (setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
 
+(after! org
+  (map! :leader :desc "org-capture"           "x" #'org-capture))
 (after! org
   (add-hook 'org-capture-mode-hook #'org-id-get-create)
   (setq org-capture-templates

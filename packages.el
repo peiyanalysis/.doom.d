@@ -139,5 +139,13 @@
 (package! ivy-yasnippet)
 (package! helm-bibtex)
 (package! hungry-delete)
-(package! org-noter-plus)
 (package! org-journal)
+(package! org-protocol-capture-html
+  :recipe (:host github :repo "alphapapa/org-protocol-capture-html"))
+(package! nov)
+;; (package! mathpix.el
+  ;; :recipe (:host github :repo "jethrokuan/mathpix.el"))
+
+(package! org-web-tools)
+(package! org-noter)
+(package! org-noter-pdftools)
