@@ -1,22 +1,12 @@
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(map! :leader
-      :desc "Other frame"                       "o o" #'other-frame)
+(setq doom-theme 'doom-Iosvkem)
 
-(map! :leader :desc"doom/scratch"            "X" #'doom/open-scratch-buffer)
-
-(setq user-full-name "Pei Yu"
-      user-mail-address "yp9106@outlook.com")
-
-(setq doom-theme 'doom-manegarm)
-
-(setq doom-theme 'doom-manegarm)
+(setq doom-theme 'doom-Iosvkem)
 
 (setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
         doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
-        doom-unicode-font (font-spec :family "Sarasa Mono SC")
-        ;; doom-big-font (font-spec :family "Fira Mono" :size 19)
-        )
+        doom-unicode-font (font-spec :family "Sarasa Mono SC"))
 (set-fontset-font t 'unicode "Symbola" nil 'prepend)
 
 (setq display-line-numbers-type nil)
@@ -25,15 +15,15 @@
   :hook
   (window-setup . doom-modeline-mode)
   :config
-  (use-package nyan-mode
-    :hook (doom-modeline-mode . nyan-mode)
-    :config
-    (nyan-mode 1)
-    (setq nyan-animate-nyancat t)
-    (setq nyan-wavy-trail t)
-    (setq mode-line-format
-          (list
-           '(:eval (list (nyan-create))))))
+  ;; (use-package nyan-mode
+  ;;   :hook (doom-modeline-mode . nyan-mode)
+  ;;   :config
+  ;;   (nyan-mode 1)
+  ;;   (setq nyan-animate-nyancat t)
+  ;;   (setq nyan-wavy-trail t)
+  ;;   (setq mode-line-format
+  ;;         (list
+  ;;          '(:eval (list (nyan-create))))))
   (display-time-mode t)
   (setq doom-modeline-icon (display-graphic-p))
   (setq doom-modeline-height 40)
@@ -46,18 +36,8 @@
   (setq doom-modeline-buffer-encoding nil))
 (use-package posframe)
 
-;; window
-;; window swap - ace-window
-(use-package! ace-window
-  :config
-  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-  :init
-  (map! :leader
-        :prefix "w"
-        :desc "ace-window-select" "a" #'ace-window))
-
-(use-package winner-mode
-  :hook (after-init . winner-mode))
+(map! :leader
+      :desc "Other frame"                       "o o" #'other-frame)
 
 (use-package saveplace
   :hook (after-init . save-place-mode))
@@ -68,40 +48,32 @@
       :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
       :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
 
-;; input method
+(use-package! ace-window
+  :config
+  (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+  :init
+  (map! :leader
+        :prefix "w"
+        :desc "ace-window-select" "a" #'ace-window))
+
+(use-package winner-mode
+  :hook (after-init . winner-mode))
+(map! :leader
+      :prefix "w"
+      :desc   "winner-undo"  "u"        #'winner-undo
+      :desc   "winner-redo"  "C-r"      #'winner-redo)
+
 (use-package! pyim
   :demand t
   :config
-  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  ;; (use-package pyim-basedict
-  ;;   :config (pyim-basedict-enable))
-  ;; 设置 zh－wiki 词库和 zh－moegirl 词库
   (setq pyim-dicts
         '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
           (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
           (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
           (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
-  ;; 我使用全拼
-  (setq pyim-default-scheme 'quanpin)
-  ;; 开启拼音搜索功能
-  (pyim-isearch-mode 1)
-  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;; 手动安装 posframe 包。
-  (setq pyim-page-tooltip 'posframe)
-  ;; 选词框显示 9 个候选词
-  (setq pyim-page-length 9)
-  ;; 半角标点
-  (setq pyim-punctuation-dict nil)
   :bind
   (("C-c M-c C-w" . pyim-forward-word)
    ("C-c M-c C-b" . pyim-backward-word)))
-(define-key pyim-mode-map "." 'pyim-page-next-page)
-(define-key pyim-mode-map "," 'pyim-page-previous-page)
-(define-key pyim-mode-map ";"
-  (lambda ()
-    (interactive)
-    (pyim-page-select-word-by-number 2)))
 
 (use-package rime
   :config
@@ -112,8 +84,7 @@
               :internal-border-width 10))
   (setq rime-posframe-style 'vertical)
   (setq default-input-method "rime"
-        rime-show-candidate 'posframe))
-;;  http://ergoemacs.org/emacs/emacs_bind_number_pad_keys.html
+        rime-show-candidate 'posframe)
   (map! "<kp-1>" "1"
         "<kp-2>" "2"
         "<kp-3>" "3"
@@ -124,54 +95,35 @@
         "<kp-8>" "8"
         "<kp-9>" "9"
         "<kp-0>" "0")
+  :bind
+  (:map rime-active-mode-map
+  ("<tab>" . 'rime-inline-ascii)
+  :map rime-mode-map
+  ("C-`" . 'rime-send-keybinding)    ;; <----
+  ("M-j" . 'rime-force-enable)))
 
 ;; search
 (use-package! ace-pinyin
   :after evil
   :config
+  ;; 允许avy跨窗口搜索
   (setq avy-all-windows t)
+  ;; 全局使用ace搜索
   (ace-pinyin-global-mode t))
 
 ;; evil-find-char-pinyin
 (use-package! evil-find-char-pinyin
   :after evil
   :config
+  ;;  允许avy跨窗口搜索
   (setq avy-all-windows t)
+  ;; 全局使用ace搜索
   (evil-find-char-pinyin-mode t))
 
-(use-package parinfer
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            evil           ; If you use Evil.
-            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-            paredit        ; Introduce some paredit commands.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'scheme-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)))
-
-;; tex-live
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
 (setq TeX-view-program-selection '((output-pdf "Okular")))
-;; (setq TeX-view-program-selection
-;;    (quote
-;;     (((output-dvi has-no-display-manager)
-;;       "dvi2tty")
-;;      ((output-dvi style-pstricks)
-;;       "dvips and gv")
-;;      (output-dvi "xdvi")
-;;      (output-pdf "Okular")
-;;      (output-html "xdg-open"))))
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-start-server t)
 (setq TeX-PDF-mode t)
@@ -180,12 +132,12 @@
 
 (setq TeX-engine 'xetex)
 
+(use-package! latex-auto-activating-snippets)
+
+(use-package! latex-auto-activating-snippets)
+
 (use-package auto-activating-snippets
   :hook (latex-mode . latex-auto-activating-snippets-mode))
-
-(use-package! latex-auto-activating-snippets)
-
-(use-package! latex-auto-activating-snippets)
 
 (use-package cdlatex
   :hook ((LaTeX-mode . turn-on-cdlatex)
@@ -198,13 +150,10 @@
 
 (add-to-list 'load-path "/home/py06/.doom.d/packages")
 (require 'mathpix)
+(map! "" #'mathpix-screenshot)
 (setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
       mathpix-app-key "b667a7350e26f378b208"
       mathpix-screenshot-method "scrot -s %s")
-
-(use-package! gif-screencast
-  :bind
-  ("<f12>" . gif-screencast-start-or-stop))
 
 ;; smartparens
 (use-package! smartparens
@@ -216,7 +165,7 @@
         "C-M-d" #'sp-down-sexp
         "C-M-p" #'sp-backward-down-sexp
         "C-M-n" #'sp-up-sexp
-         "C-M-s" #'sp-splice-sexp
+        "C-M-s" #'sp-splice-sexp
         "C-)" #'sp-forward-slurp-sexp
         "C-}" #'sp-forward-barf-sexp
         "C-(" #'sp-backward-slurp-sexp
@@ -387,25 +336,6 @@
   (setq elfeed-curl-max-connections 10)
   (setq elfeed-db-directory "~/.doom.d/elfeed-db/")) ; customize this ofc
 
-(defun elfeed-mark-all-as-read ()
-  "Mark the whole buffer as read."
-  (interactive)
-  (mark-whole-buffer)
-  (elfeed-search-untag-all-unread))
-
-(defun bjm/elfeed-load-db-and-open ()
-  "Wrapper to load the elfeed db from disk before opening"
-  (interactive)
-  (elfeed-db-load)
-  (elfeed)
-  (elfeed-search-update--force))
-
-(defun bjm/elfeed-save-db-and-bury ()
-  "Wrapper to save the elfeed db to disk before burying buffer"
-  (interactive)
-  (elfeed-db-save)
-  (quit-window))
-
 (use-package elfeed-goodies
   :config
   (elfeed-goodies/setup))
@@ -515,17 +445,13 @@
 (require 'find-lisp)
 (setq org-directory "~/Dropbox/.org/")
 
-(setq org-id-link-to-org-use-id t)
-
-(setq org-id-link-to-org-use-id t)
-
 (setq org-ellipsis " ▼ ")
 
 (setq org-ellipsis " ▼ ")
 
-(setq org-adapt-indentation t)
+(map! )
 
-(setq org-adapt-indentation t)
+(map! )
 
 ;; org-outline quick movement
 (after! org
@@ -574,16 +500,6 @@
                      ((executable-find "scrot") "scrot -s %s")))))
   (setq org-download-method '+org/org-download-method))
 
-(use-package org-noter-pdftools
-  :after org-noter
-  :config
-  (with-eval-after-load 'pdf-annot
-    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
-
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link))
-
-;; org-roam
 (use-package! org-roam
   :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
   :hook
@@ -664,51 +580,29 @@
 (unless (server-running-p)
   (org-roam-server-mode))
 
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
+(map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
 
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold)
-              ("MEETING" :foreground "forest green" :weight bold)
-              ("PHONE" :foreground "forest green" :weight bold)
-              ("BREAK" :foreground "forest green" :weight bold))))
+(use-package parinfer
+  :bind
+  (("C-," . parinfer-toggle-mode))
+  :init
+  (progn
+    (setq parinfer-extensions
+          '(defaults       ; should be included.
+            pretty-parens  ; different paren styles for different modes.
+            evil           ; If you use Evil.
+            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+            paredit        ; Introduce some paredit commands.
+            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+            smart-yank))   ; Yank behavior depend on mode.
+    (add-hook 'clojure-mode-hook #'parinfer-mode)
+    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
+    (add-hook 'scheme-mode-hook #'parinfer-mode)
+    (add-hook 'lisp-mode-hook #'parinfer-mode)))
 
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-
-(after! org
-  (map! :leader :desc "org-capture"           "x" #'org-capture))
-(after! org
-  (add-hook 'org-capture-mode-hook #'org-id-get-create)
-  (setq org-capture-templates
-          `(("i" "Inbox" entry (file "~/Dropbox/.org/inbox.org")
-             ,(concat "* TODO %?\n"
-                      "/Entered on/ %u"))
-            ;; metacognition (元认知) in current org-file
-            ("m" "Metacognition")
-            ;; meta question: 思考疑问？
-            ("mq" "Questions" entry (function ,(lambda ()
-                                                 (jethro/olp-current-buffer "Metacog" "Questions")))
-             ,(concat "* TODO Q: %?\n"
-                      "/Entered on/ %u"))
-            ;; meta note: 记录思考
-            ("mn" "Notes" entry (function ,(lambda ()
-                                             (jethro/olp-current-buffer "Metacog" "Notes")))
-             "* %?\n"))))
-
-(defun jethro/olp-current-buffer (&rest outline-path)
-  "Find the OUTLINE-PATH of the current buffer."
-  (let ((m (jethro/find-or-create-olp (cons (buffer-file-name) outline-path))))
-    (set-buffer (marker-buffer m))
-    (org-capture-put-target-region-and-position)
-    (widen)
-    (goto-char m)
-    (set-marker m nil)))
+(setq user-full-name "Pei Yu"
+      user-mail-address "yp9106@outlook.com")
 
 (defun jethro/find-or-create-olp (path &optional this-buffer)
   "Return a marker pointing to the entry at outline path OLP.
@@ -757,88 +651,92 @@ only headings."
              end (save-excursion (org-end-of-subtree t t))))
      (point-marker))))
 
-(setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
-                               "~/Dropbox/.org/repeater.org"
-                               "~/Dropbox/.org/todolist.org" )))
-(setq org-agenda-bin  '("~/Dropbox/.org/bin.org"))
-(setq org-agenda-future  '("~/Dropbox/.org/future.org"))
-
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                 (org-agenda-files :maxlevel . 9)
-                                 (org-agenda-bin :maxlevel . 1))))
-
-(use-package! org-agenda
-  :init
-  ;; customize ort-agenda custom command
-  (map! "<f1>" #'jethro/switch-to-agenda)
-  ;; ?
-  (setq org-agenda-block-separator nil
-        org-agenda-start-with-log-mode t)
-  ;; useful switch direct
-  (defun jethro/switch-to-agenda ()
-    (interactive)
-    (org-agenda nil " "))
-  :config
-  ;; is project mode
-  (defun jethro/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (save-restriction
+(defun jethro/olp-current-buffer (&rest outline-path)
+  "Find the OUTLINE-PATH of the current buffer."
+  (let ((m (jethro/find-or-create-olp (cons (buffer-file-name) outline-path))))
+    (set-buffer (marker-buffer m))
+    (org-capture-put-target-region-and-position)
     (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-  ;; skip project
-  (defun jethro/skip-projects ()
-  "Skip trees that are projects"
-  (save-restriction
-    (widen)
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      (cond
-       ((org-is-habit-p)
-        next-headline)
-       ((jethro/is-project-p)
-        next-headline)
-       (t
-        nil)))))
+    (goto-char m)
+    (set-marker m nil)))
 
-(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-(setq org-agenda-custom-commands
-    `((" " "Agenda"
-       ((agenda ""
-               ((org-agenda-span 'week)
-                (org-deadline-warning-days 365)))
-       (todo "TODO"
-             ((org-agenda-overriding-header "Inbox")
-              (org-agenda-files '("~/Dropbox/.org/inbox.org"))))
-       (todo "NEXT"
-             ((org-agenda-overriding-header "In Progress")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org"))))
-       ;; (todo "TODO"
-       ;;       ((org-agenda-overriding-header "Active Projects")
-       ;;        (org-agenda-skip-function #'jethro/skip-projects)
-       ;;        (org-agenda-files '(,(expand-file-name "projects.org" jethro/org-agenda-directory)))))
-       (todo "TODO"
-             ((org-agenda-overriding-header "One-off Tasks")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org" "~/Dropbox/.org/inbox.org"))
-              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("MEETING" :foreground "forest green" :weight bold)
+              ("PHONE" :foreground "forest green" :weight bold))))
 
-(defun jethro/skip-projects ()
-"Skip trees that are projects"
-(save-restriction
-  (widen)
-  (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-    (cond
-     ((org-is-habit-p)
-      next-headline)
-     ((jethro/is-project-p)
-      next-headline)
-     (t
-      nil)))))
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+(setq org-capture-directory "~/Dropbox/.org/")
+
+(after! org
+  (map! :leader :desc "org-capture"           "x" #'org-capture))
+
+(use-package doct
+  :ensure t
+  ;;recommended: defer until calling doct
+  :commands (doct))
+(setq org-capture-templates
+      (doct '(
+              ;;Standard inbox inbox
+              ("Inbox"
+               :keys "i"
+               :file "~/Dropbox/.org/inbox.org"
+               :template ("* %{todo-state} %? \n")
+               :todo-state "TODO"
+               :create-id t)
+              ;;Metacognition
+              ("Metacog"
+               :keys "m"
+               :prepend t
+               :template ("* %{todo-state} %? \n")
+               :children (;; MetaNotes
+                          ("MetaNotes"
+                           :keys "n"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
+                          ("MetaQuestions"
+                           :keys "q"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
+                          ("MetaTodos"
+                           :keys "t"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
+
+(add-hook 'org-capture-mode-hook #'org-id-get-create)
+
+(map! :leader
+      (:prefix-map ("z" . "tasks detailize")
+                   :desc "1. file-kill task"                "1" #'org-cut-subtree
+                   :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
+                   :desc "3. file-Schedual"                 "3" #'org-schedual
+                   :desc "4. file-Deadline"                 "4" #'org-deadline
+                   :desc "5. file-Priority"                 "5" #'org-priority
+                   :desc "6. file-E. E."                    "6" #'org-set-effort
+                   :desc "q. agenda-kill task"              "q" #'org-agenda-kill
+                   :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
+                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedual
+                   :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
+                   :desc "t. agenda-Priority"               "t" #'org-agenda-priority
+                   :desc "t. agenda-E. E."                  "y" #'org-agenda-set-effort))

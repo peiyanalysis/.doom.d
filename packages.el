@@ -112,7 +112,7 @@
 ;;                             :no-byte-compile t)))
 (package! org-noter-pdftools)
 (package! elfeed-protocol)
-(package! nyan-mode)
+;; (package! nyan-mode)
 (package! elfeed)
 (package! elfeed-org)
 (package! elfeed-goodies)
@@ -128,7 +128,6 @@
 (package! ebib)
 (package! doct
   :recipe (:host github :repo "progfolio/doct"))
-(package! org-journal)
 (package! auto-activating-snippets
   :recipe (:host github :repo "ymarco/auto-activating-snippets"))
 (package! LaTeX-auto-activating-snippets
@@ -149,3 +148,13 @@
 (package! org-web-tools)
 (package! org-noter)
 (package! org-noter-pdftools)
+(package! valign
+  :recipe (:host github :repo "casouri/valign"))
+
+(package! poet-theme)
+(package! org-super-agenda)
+(package! dash)
+(package! ts)
+
+(package! s)
+(package! ht)
