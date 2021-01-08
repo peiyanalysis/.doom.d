@@ -4,7 +4,7 @@
 #+end_src
 
 * Appearance
-** Theme
+** COMMENT Theme
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-Iosvkem)
 #+end_src
@@ -474,11 +474,10 @@
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 #+end_src
 ** Pdf-tools
-
 * Applications
 ** Emacs-hugo
 ** Easy-hugo
- #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 (use-package! easy-hugo
   :config
   (setq! easy-hugo-root "~/Blog/RandN/"
@@ -762,7 +761,6 @@
                      ((executable-find "scrot") "scrot -s %s")))))
   (setq org-download-method '+org/org-download-method))
 #+end_src
-
 ** Roam
 *** use-package
 #+begin_src emacs-lisp
@@ -867,7 +865,7 @@
 #+end_src
 用这个来编辑最基本的 doom-emacs 操作。
 
-** Parinfer
+** COMMENT Parinfer
 #+begin_src emacs-lisp
 (use-package parinfer
   :bind
@@ -893,7 +891,119 @@
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 #+END_SRC
-* Shameless copied functions
+* Org-agenda
+** files
+#+begin_src emacs-lisp
+(setq   py/org-inbox        (concat org-directory "inbox.org")
+        py/org-todolist     (concat org-directory "todolist.org")
+        py/org-bin          (concat org-directory "bin.org")
+        py/org-repeater     (concat org-directory "repeater.org")
+        py/org-archive      (concat org-directory "archive.org")
+        py/org-maybe_future       (concat org-directory "maybe_future.org"))
+#+end_src
+
+** TODOkeywords and triggers
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "STUCKED(s@/!)" "|" "CANCELLED(c@/!)"))))
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("STUCKED" :foreground "grey" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold))))
+#+end_src
+
+#+RESULTS:
+| TODO      | :foreground | red          | :weight | bold |
+| NEXT      | :foreground | blue         | :weight | bold |
+| DONE      | :foreground | forest green | :weight | bold |
+| WAITING   | :foreground | orange       | :weight | bold |
+| STUCKED   | :foreground | grey         | :weight | bold |
+| HOLD      | :foreground | magenta      | :weight | bold |
+| CANCELLED | :foreground | forest green | :weight | bold |
+
+
+#+begin_src emacs-lisp
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+#+end_src
+
+- Keyword triggers
+  + Moving a task to CANCELLED adds a CANCELLED tag
+  + Moving a task to WAITING adds a WAITING tag
+  + Moving a task to HOLD adds WAITING and HOLD tags
+  + Moving a task to a done state removes WAITING and HOLD tags
+  + Moving a task to TODO removes WAITING, CANCELLED, and HOLD tags
+  + Moving a task to NEXT removes WAITING, CANCELLED, and HOLD tags
+  + Moving a task to DONE removes WAITING, CANCELLED, and HOLD tags
+#+begin_src emacs-lisp
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+#+end_src
+
+** Capture
+:PROPERTIES:
+:ID:       90d48555-ca54-483e-a486-7d6be8e5a301
+:END:
+=key binding=
+#+begin_src emacs-lisp
+(after! org
+  (map! :leader :desc "org-capture"           "x" #'org-capture))
+#+end_src
+
+=capture templates=
+#+begin_src emacs-lisp
+(use-package doct
+  :ensure t
+  ;;recommended: defer until calling doct
+  :commands (doct))
+(setq org-capture-templates
+      (doct '(
+              ;;Standard inbox inbox
+              ("Inbox"
+               :keys "i"
+               :file py/org-inbox
+               :template ("* %{todo-state} %? \n")
+               :todo-state "TODO"
+               :create-id t)
+              ;;Metacognition
+              ("Metacog"
+               :keys "m"
+               :prepend t
+               :template ("* %{todo-state} %? \n")
+               :children (;; MetaNotes
+                          ("MetaNotes"
+                           :keys "n"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
+                          ("MetaQuestions"
+                           :keys "q"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
+                          ("MetaTodos"
+                           :keys "t"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
+#+end_src
+
+Related functions
+#+begin_src emacs-lisp
+(add-hook 'org-capture-mode-hook #'org-id-get-create)
+#+end_src
+
+Shameless copied functions
 #+begin_src emacs-lisp
 (defun jethro/find-or-create-olp (path &optional this-buffer)
   "Return a marker pointing to the entry at outline path OLP.
@@ -952,31 +1062,109 @@ only headings."
     (set-marker m nil)))
 
 #+end_src
+
+** Detailize
+use a series of commands to finish it.
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix-map ("z" . "tasks detailize")
+                   :desc "1. file-kill task"                "1" #'org-cut-subtree
+                   :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
+                   :desc "3. file-Schedule"                 "3" #'org-schedule
+                   :desc "4. file-Deadline"                 "4" #'org-deadline
+                   :desc "5. file-Priority"                 "5" #'org-priority
+                   :desc "6. file-E. E."                    "6" #'org-set-effort
+                   :desc "q. agenda-kill task"              "q" #'org-agenda-kill
+                   :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
+                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedule
+                   :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
+                   :desc "t. agenda-Priority"               "t" #'org-agenda-priority
+                   :desc "y. agenda-E. E."                  "y" #'org-agenda-set-effort))
+#+end_src
+
+#+RESULTS:
+: org-agenda-set-effort
+
+** Refile
+#+begin_src emacs-lisp
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (py/org-bin :maxlevel . 9)
+                           (py/org-todolist :maxlevel . 9)
+                           (py/org-archive :maxlevel . 9)
+                           (py/org-maybe_future :maxlevel . 9)))
+#+end_src
+
+Avoid done task refiled
+#+begin_src emacs-lisp
+(defun bh/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+(setq org-refile-target-verify-function 'bh/verify-refile-target)
+#+end_src
+
+** Agenda
+:PROPERTIES:
+:ID:       bbf61454-2f4b-4d80-b0e7-6771647aea59
+:END:
+
+#+begin_src emacs-lisp
+(setq org-agenda-files py/org-inbox) ;will be py/org-inbox
+#+end_src
+
+#+RESULTS:
+: ~/Dropbox/.org/inbox.org
+
+#+begin_src emacs-lisp
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+#+end_src
+
+#+RESULTS:
+: %40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands `(("z" "Agenda"
+                                    ((agenda ""
+                                             ((org-agenda-span 'week)
+                                              (org-agenda-files '(,(expand-file-name py/org-inbox)))
+                                              (org-deadline-warning-days 365)
+                                              (org-agenda-use-time-grid t)
+                                              (org-agenda-time-grid '((daily today)
+                                                                      (0600 0800 1000 1200 1400 1600 1800 2000 2200)
+                                                                      "......"
+                                                                      "----------------"))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "To Refile.")
+                                            (org-agenda-files '(,(expand-file-name py/org-inbox)))))
+                                     (todo "NEXT"
+                                           ((org-agenda-overriding-header "In progress.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
+                                     (todo "STUCKED"
+                                           ((org-agenda-overriding-header "Stucked.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "One-off Tasks.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                                     ))))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(map! "<C-f2>" #'py/switch-to-agenda)
+(defun py/switch-to-agenda ()
+  (interactive)
+  (org-agenda nil "z"))
+#+end_src
+
 * Metacog
 ** Questions
-*** TODO Q: 我需要什么样的议程软件？
-:PROPERTIES:
-:ID:       d8c727f8-91b0-40db-a57d-1809db67d52a
-:END:
-/Entered on/ [2021-01-05 Tue]
-*** TODO Task 增加一个英语语法检查功能
-:PROPERTIES:
-:ID:       cb51443e-3381-4f97-9d85-d847df7e937f
-:END:
-/Entered on/ [2021-01-05 Tue]
-*** TODO Task 增加个 posframe 类型的 company 技术。
-:PROPERTIES:
-:ID:       b9670492-c2d1-49f7-807d-b527271ac662
-:END:
-/Entered on/ [2021-01-05 Tue]
-[[https://github.com/redguardtoo/wucuo][wucuo]]
 ** Notes
 *** TODO 设计议程：文件，外观，逻辑来完成功能
 **** TODO 功能
 ***** DONE 收集想法
 Capture to inbox
 利用了 [[https://github.com/progfolio/doct][Github DOCT]]
-***** TODO 完善想法
+***** DONE 完善想法
 - 想法
   + 2 min 以内：直接处理掉，移入 archive
   + 类型分类：增加工作类型的 tag
@@ -1039,321 +1227,11 @@ refile inbox 中 item 到 one-off/project/braindrump
    a. 根据重要程度展示 TODO 项目
 5. One-off Tasks
    a. 只展示 next 中的标着 TODO 的项目
-**** TODO 逻辑
-***** TODO 文件（文件模板）
-***** TODO 收集（org-capture）
-***** TODO 完善（类似 org-gtd 的增加 tag 的方法）
-***** TODO 分配（org-refile）
-***** TODO 工作（org-todolist）
+**** TODO 代码
+***** DONE 文件（文件模板）
+***** DONE 收集（org-capture）
+***** DONE 完善（类似 org-gtd 的增加 tag 的方法）
+***** DONE 分配（org-refile）
+***** TODO 工作（in todolist）
 ***** TODO 检查（how？）
 ***** TODO 外观（org-super-agenda）
-* Org-agenda
-** TODOkeywords and triggers
-#+begin_src emacs-lisp
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold)
-              ("MEETING" :foreground "forest green" :weight bold)
-              ("PHONE" :foreground "forest green" :weight bold))))
-#+end_src
-
-#+begin_src emacs-lisp
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-#+end_src
-
-- Keyword triggers
-  + Moving a task to CANCELLED adds a CANCELLED tag
-  + Moving a task to WAITING adds a WAITING tag
-  + Moving a task to HOLD adds WAITING and HOLD tags
-  + Moving a task to a done state removes WAITING and HOLD tags
-  + Moving a task to TODO removes WAITING, CANCELLED, and HOLD tags
-  + Moving a task to NEXT removes WAITING, CANCELLED, and HOLD tags
-  + Moving a task to DONE removes WAITING, CANCELLED, and HOLD tags
-#+begin_src emacs-lisp
-(setq org-todo-state-tags-triggers
-      (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAITING" ("WAITING" . t))
-              ("HOLD" ("WAITING") ("HOLD" . t))
-              (done ("WAITING") ("HOLD"))
-              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-#+end_src
-
-** Capture
-=Directory=
-#+begin_src emacs-lisp
-(setq org-capture-directory "~/Dropbox/.org/")
-#+end_src
-
-=key binding=
-#+begin_src emacs-lisp
-(after! org
-  (map! :leader :desc "org-capture"           "x" #'org-capture))
-#+end_src
-
-=capture templates=
-#+begin_src emacs-lisp
-(use-package doct
-  :ensure t
-  ;;recommended: defer until calling doct
-  :commands (doct))
-(setq org-capture-templates
-      (doct '(
-              ;;Standard inbox inbox
-              ("Inbox"
-               :keys "i"
-               :file "~/Dropbox/.org/inbox.org"
-               :template ("* %{todo-state} %? \n")
-               :todo-state "TODO"
-               :create-id t)
-              ;;Metacognition
-              ("Metacog"
-               :keys "m"
-               :prepend t
-               :template ("* %{todo-state} %? \n")
-               :children (;; MetaNotes
-                          ("MetaNotes"
-                           :keys "n"
-                           :type entry
-                           :todo-state "TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
-                          ("MetaQuestions"
-                           :keys "q"
-                           :type entry
-                           :todo-state "TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
-                          ("MetaTodos"
-                           :keys "t"
-                           :type entry
-                           :todo-state "TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
-#+end_src
-
-Related functions
-#+begin_src emacs-lisp
-(add-hook 'org-capture-mode-hook #'org-id-get-create)
-#+end_src
-** Detailize
-use a series of commands to finish it.
-#+begin_src emacs-lisp
-(map! :leader
-      (:prefix-map ("z" . "tasks detailize")
-                   :desc "1. file-kill task"                "1" #'org-cut-subtree
-                   :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
-                   :desc "3. file-Schedual"                 "3" #'org-schedual
-                   :desc "4. file-Deadline"                 "4" #'org-deadline
-                   :desc "5. file-Priority"                 "5" #'org-priority
-                   :desc "6. file-E. E."                    "6" #'org-set-effort
-                   :desc "q. agenda-kill task"              "q" #'org-agenda-kill
-                   :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
-                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedual
-                   :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
-                   :desc "t. agenda-Priority"               "t" #'org-agenda-priority
-                   :desc "t. agenda-E. E."                  "y" #'org-agenda-set-effort))
-#+end_src
-
-#+RESULTS:
-: org-agenda-set-effort
-
-(map! :leader
-      (:prefix-map ("a" . "applications")
-       (:prefix ("j" . "journal")
-        :desc "New journal entry" "j" #'org-journal-new-entry
-        :desc "Search journal entry" "s" #'org-journal-search)))
-
-
-** COMMENT Org-agenda
-*** Capture
-:PROPERTIES:
-:ID:       6a95bac1-7814-4c81-bd38-7db9a654eff3
-:END:
-#+begin_src emacs-lisp
-(after! org
-  (map! :leader :desc "org-capture"           "x" #'org-capture))
-(after! org
-  (add-hook 'org-capture-mode-hook #'org-id-get-create)
-  (setq org-capture-templates
-          `(("i" "Inbox" entry (file "~/Dropbox/.org/inbox.org")
-             ,(concat "* TODO %?\n"
-                      "/Entered on/ %u"))
-            ("m" "Metacognition")
-            ;; meta note: 记录思考
-            ("mn" "Notes" entry (function ,(lambda ()
-                                             (jethro/olp-current-buffer "Metacog" "Notes")))
-             "* %?\n")
-            ;; metacognition (元认知) in current org-file
-            ("mq" "Questions" entry (function ,(lambda ()
-                                                 (jethro/olp-current-buffer "Metacog" "Questions")))
-             ,(concat "* TODO Q: %?\n"
-                      "/Entered on/ %u"))
-            ;; meta question: 思考疑问？
-            ("mt" "Todos" entry (function ,(lambda ()
-                                                 (jethro/olp-current-buffer "Metacog" "Todos")))
-             ,(concat "* TODO Task %?\n"
-                      "/Entered on/ %u")))))
-#+end_src
-
-*** COMMENT Todo keyword
-#+begin_src emacs-lisp
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "BREAK"))))
-
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold)
-              ("MEETING" :foreground "forest green" :weight bold)
-              ("PHONE" :foreground "forest green" :weight bold)
-              ("BREAK" :foreground "forest green" :weight bold))))
-#+end_src
-#+begin_src emacs-lisp
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-#+end_src
-
-*** agenda-files
-#+begin_src emacs-lisp
-(setq org-agenda-files (quote ("~/Dropbox/.org/inbox.org"
-                               "~/Dropbox/.org/repeater.org"
-                               "~/Dropbox/.org/todolist.org" )))
-(setq org-agenda-bin  '("~/Dropbox/.org/bin.org"))
-(setq org-agenda-future  '("~/Dropbox/.org/future.org"))
-#+end_src
-
-*** refile targets
-#+begin_src emacs-lisp
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                 (org-agenda-files :maxlevel . 9)
-                                 (org-agenda-bin :maxlevel . 1))))
-#+end_src
-
-*** use-package
-#+begin_src emacs-lisp
-(use-package! org-agenda
-  :init
-  ;; customize ort-agenda custom command
-  (map! "<f1>" #'jethro/switch-to-agenda)
-  ;; ?
-  (setq org-agenda-block-separator nil
-        org-agenda-start-with-log-mode t)
-  ;; useful switch direct
-  (defun jethro/switch-to-agenda ()
-    (interactive)
-    (org-agenda nil " "))
-  :config
-  ;; is project mode
-  (defun jethro/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-  ;; skip project
-  (defun jethro/skip-projects ()
-  "Skip trees that are projects"
-  (save-restriction
-    (widen)
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      (cond
-       ((org-is-habit-p)
-        next-headline)
-       ((jethro/is-project-p)
-        next-headline)
-       (t
-        nil)))))
-#+end_src
-
-*** apperance
-#+begin_src emacs-lisp
-(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-(setq org-agenda-custom-commands
-    `((" " "Agenda"
-       ((agenda ""
-               ((org-agenda-span 'week)
-                (org-deadline-warning-days 365)))
-       (todo "TODO"
-             ((org-agenda-overriding-header "Inbox")
-              (org-agenda-files '("~/Dropbox/.org/inbox.org"))))
-       (todo "NEXT"
-             ((org-agenda-overriding-header "In Progress")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org"))))
-       ;; (todo "TODO"
-       ;;       ((org-agenda-overriding-header "Active Projects")
-       ;;        (org-agenda-skip-function #'jethro/skip-projects)
-       ;;        (org-agenda-files '(,(expand-file-name "projects.org" jethro/org-agenda-directory)))))
-       (todo "TODO"
-             ((org-agenda-overriding-header "One-off Tasks")
-              (org-agenda-files '("~/Dropbox/.org/todolist.org" "~/Dropbox/.org/inbox.org"))
-              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
-#+end_src
-
-* COMMENT Org-journal
-#+begin_src emacs-lisp
-  (map! :leader
-        (:prefix "n"
-         :desc "add journal" "n" #'org-journal-new-entry))
-(use-package org-journal
-  :custom
-  (org-journal-dir "~/Dropbox/.org/journal/")
-  (org-journal-date-prefix "#+TITLE: ")
-  (org-journal-file-format "%Y-%m-%d.org")
-  (org-journal-dir org-directory)
-  (org-journal-date-format "%Y-%m-%d"))
-#+end_src
-
-key bindings
-Bindings available in =org-journal-mode=:
-
-- =C-c C-f= - go to the next journal file.
-
-- =C-c C-b= - go to the previous journal file.
-
-- =C-c C-j= - insert a new entry into the current journal file (creates the file if not
-  present).
-
-- =C-c C-s= - search the journal for a string.
-
-All journal entries are registered in the Emacs Calendar. To see available journal
-entries do =M-x calendar=. Bindings available in the =calendar-mode=:
-
-- =j m= - mark entries in calendar
-
-- =j r= - view an entry in a new buffer.
-
-- =j d= - view an entry but do not switch to it.
-
-- =j n= - add a new entry into the day's file (creates the file if not present).
-
-- =j s w= - search in all entries of the current week.
-
-- =j s m= - search in all entries of the current month.
-
-- =j s y= - search in all entries of the current year.
-
-- =j s f= - search in all entries of all time.
-
-- =j s F= - search in all entries in the future.
-
-- =[= - go to previous day with journal entries.
-
-- =]= - go to next day with journal entries.

@@ -1,9 +1,5 @@
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(setq doom-theme 'doom-Iosvkem)
-
-(setq doom-theme 'doom-Iosvkem)
-
 (setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
         doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
         doom-unicode-font (font-spec :family "Sarasa Mono SC"))
@@ -582,27 +578,78 @@
 
 (map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
 
-(use-package parinfer
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            evil           ; If you use Evil.
-            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-            paredit        ; Introduce some paredit commands.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'scheme-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)))
-
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
+
+(setq   py/org-inbox        (concat org-directory "inbox.org")
+        py/org-todolist     (concat org-directory "todolist.org")
+        py/org-bin          (concat org-directory "bin.org")
+        py/org-repeater     (concat org-directory "repeater.org")
+        py/org-archive      (concat org-directory "archive.org")
+        py/org-maybe_future       (concat org-directory "maybe_future.org"))
+
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "STUCKED(s@/!)" "|" "CANCELLED(c@/!)"))))
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("STUCKED" :foreground "grey" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold))))
+
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+(after! org
+  (map! :leader :desc "org-capture"           "x" #'org-capture))
+
+(use-package doct
+  :ensure t
+  ;;recommended: defer until calling doct
+  :commands (doct))
+(setq org-capture-templates
+      (doct '(
+              ;;Standard inbox inbox
+              ("Inbox"
+               :keys "i"
+               :file py/org-inbox
+               :template ("* %{todo-state} %? \n")
+               :todo-state "TODO"
+               :create-id t)
+              ;;Metacognition
+              ("Metacog"
+               :keys "m"
+               :prepend t
+               :template ("* %{todo-state} %? \n")
+               :children (;; MetaNotes
+                          ("MetaNotes"
+                           :keys "n"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
+                          ("MetaQuestions"
+                           :keys "q"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
+                          ("MetaTodos"
+                           :keys "t"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
+
+(add-hook 'org-capture-mode-hook #'org-id-get-create)
 
 (defun jethro/find-or-create-olp (path &optional this-buffer)
   "Return a marker pointing to the entry at outline path OLP.
@@ -660,83 +707,62 @@ only headings."
     (goto-char m)
     (set-marker m nil)))
 
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold)
-              ("MEETING" :foreground "forest green" :weight bold)
-              ("PHONE" :foreground "forest green" :weight bold))))
-
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-
-(setq org-todo-state-tags-triggers
-      (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAITING" ("WAITING" . t))
-              ("HOLD" ("WAITING") ("HOLD" . t))
-              (done ("WAITING") ("HOLD"))
-              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-
-(setq org-capture-directory "~/Dropbox/.org/")
-
-(after! org
-  (map! :leader :desc "org-capture"           "x" #'org-capture))
-
-(use-package doct
-  :ensure t
-  ;;recommended: defer until calling doct
-  :commands (doct))
-(setq org-capture-templates
-      (doct '(
-              ;;Standard inbox inbox
-              ("Inbox"
-               :keys "i"
-               :file "~/Dropbox/.org/inbox.org"
-               :template ("* %{todo-state} %? \n")
-               :todo-state "TODO"
-               :create-id t)
-              ;;Metacognition
-              ("Metacog"
-               :keys "m"
-               :prepend t
-               :template ("* %{todo-state} %? \n")
-               :children (;; MetaNotes
-                          ("MetaNotes"
-                           :keys "n"
-                           :type entry
-                           :todo-state "TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
-                          ("MetaQuestions"
-                           :keys "q"
-                           :type entry
-                           :todo-state "TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
-                          ("MetaTodos"
-                           :keys "t"
-                           :type entry
-                           :todo-state "TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
-
-(add-hook 'org-capture-mode-hook #'org-id-get-create)
-
 (map! :leader
       (:prefix-map ("z" . "tasks detailize")
                    :desc "1. file-kill task"                "1" #'org-cut-subtree
                    :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
-                   :desc "3. file-Schedual"                 "3" #'org-schedual
+                   :desc "3. file-Schedule"                 "3" #'org-schedule
                    :desc "4. file-Deadline"                 "4" #'org-deadline
                    :desc "5. file-Priority"                 "5" #'org-priority
                    :desc "6. file-E. E."                    "6" #'org-set-effort
                    :desc "q. agenda-kill task"              "q" #'org-agenda-kill
                    :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
-                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedual
+                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedule
                    :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
                    :desc "t. agenda-Priority"               "t" #'org-agenda-priority
-                   :desc "t. agenda-E. E."                  "y" #'org-agenda-set-effort))
+                   :desc "y. agenda-E. E."                  "y" #'org-agenda-set-effort))
+
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (py/org-bin :maxlevel . 9)
+                           (py/org-todolist :maxlevel . 9)
+                           (py/org-archive :maxlevel . 9)
+                           (py/org-maybe_future :maxlevel . 9)))
+
+(defun bh/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+(setq org-refile-target-verify-function 'bh/verify-refile-target)
+
+(setq org-agenda-files py/org-inbox) ;will be py/org-inbox
+
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+
+(setq org-agenda-custom-commands `(("z" "Agenda"
+                                    ((agenda ""
+                                             ((org-agenda-span 'week)
+                                              (org-agenda-files '(,(expand-file-name py/org-inbox)))
+                                              (org-deadline-warning-days 365)
+                                              (org-agenda-use-time-grid t)
+                                              (org-agenda-time-grid '((daily today)
+                                                                      (0600 0800 1000 1200 1400 1600 1800 2000 2200)
+                                                                      "......"
+                                                                      "----------------"))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "To Refile.")
+                                            (org-agenda-files '(,(expand-file-name py/org-inbox)))))
+                                     (todo "NEXT"
+                                           ((org-agenda-overriding-header "In progress.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
+                                     (todo "STUCKED"
+                                           ((org-agenda-overriding-header "Stucked.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "One-off Tasks.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                                     ))))
+
+(map! "<C-f2>" #'py/switch-to-agenda)
+(defun py/switch-to-agenda ()
+  (interactive)
+  (org-agenda nil "z"))
