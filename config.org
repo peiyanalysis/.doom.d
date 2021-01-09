@@ -686,7 +686,6 @@
 *** org-directory
 #+begin_src emacs-lisp
 ;; basic org settings
-(require 'find-lisp)
 (setq org-directory "~/Dropbox/.org/")
 #+end_src
 *** COMMENT valign
@@ -902,6 +901,21 @@
         py/org-maybe_future       (concat org-directory "maybe_future.org"))
 #+end_src
 
+#+RESULTS:
+: ~/Dropbox/.org/maybe_future.org
+
+#+begin_src emacs-lisp
+(setq py/org-project-directory (file-truename (concat org-directory "projects/")))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq py/org-project-files
+      (directory-files-recursively py/org-project-directory (rx ".org" eos)))
+#+end_src
+
+#+RESULTS:
+| /home/py06/Dropbox/.org/projects/chemo.org | /home/py06/Dropbox/.org/projects/degree.org |
+
 ** TODOkeywords and triggers
 #+begin_src emacs-lisp
 (setq org-todo-keywords
@@ -926,6 +940,12 @@
 | HOLD      | :foreground | magenta      | :weight | bold |
 | CANCELLED | :foreground | forest green | :weight | bold |
 
+#+begin_src emacs-lisp
+(setq org-agenda-files py/org-project-files)
+#+end_src
+
+#+RESULTS:
+| /home/py06/Dropbox/.org/projects/chemo.org |
 
 #+begin_src emacs-lisp
 (setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
@@ -952,7 +972,7 @@
 
 ** Capture
 :PROPERTIES:
-:ID:       90d48555-ca54-483e-a486-7d6be8e5a301
+:ID:       33370970-cc3a-4ac5-ba2f-37d91fb9175c
 :END:
 =key binding=
 #+begin_src emacs-lisp
@@ -962,10 +982,13 @@
 
 =capture templates=
 #+begin_src emacs-lisp
+(require 'org-protocol-capture-html)
+
 (use-package doct
   :ensure t
   ;;recommended: defer until calling doct
   :commands (doct))
+
 (setq org-capture-templates
       (doct '(
               ;;Standard inbox inbox
@@ -975,6 +998,12 @@
                :template ("* %{todo-state} %? \n")
                :todo-state "TODO"
                :create-id t)
+              ;;org-protocol-capture-html
+              ;; ("Web Content"
+              ;;  :keys "w"
+              ;;  :file ""
+              ;;  :todo-state "TODO"
+              ;;  :template ("* %a :website:\n\n%U %?\n\n%:initial"))
               ;;Metacognition
               ("Metacog"
                :keys "m"
@@ -1086,13 +1115,27 @@ use a series of commands to finish it.
 : org-agenda-set-effort
 
 ** Refile
+:PROPERTIES:
+:ID:       f0b5e5dc-f2c2-43e1-a14f-a9a188068213
+:END:
+
 #+begin_src emacs-lisp
 (setq org-refile-targets '((nil :maxlevel . 9)
                            (py/org-bin :maxlevel . 9)
                            (py/org-todolist :maxlevel . 9)
+                           (py/org-project-files :maxlevel . 9)
                            (py/org-archive :maxlevel . 9)
                            (py/org-maybe_future :maxlevel . 9)))
 #+end_src
+
+#+RESULTS:
+: ((nil :maxlevel . 9) (py/org-bin :maxlevel . 9) (py/org-todolist :maxlevel . 9) (py/org-project-files :maxlevel . 9) (py/org-archive :maxlevel . 9) (py/org-maybe_future :maxlevel . 9))
+
+#+begin_src emacs-lisp
+;;(add-to-list 'org-refile-targets '((py/org-project-files . (:level . 1))))
+#+end_src
+
+#+RESULTS:
 
 Avoid done task refiled
 #+begin_src emacs-lisp
@@ -1155,6 +1198,8 @@ Avoid done task refiled
   (interactive)
   (org-agenda nil "z"))
 #+end_src
+
+** Archive
 
 * Metacog
 ** Questions

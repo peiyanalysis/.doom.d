@@ -438,7 +438,6 @@
 )
 
 ;; basic org settings
-(require 'find-lisp)
 (setq org-directory "~/Dropbox/.org/")
 
 (setq org-ellipsis " ▼ ")
@@ -588,6 +587,11 @@
         py/org-archive      (concat org-directory "archive.org")
         py/org-maybe_future       (concat org-directory "maybe_future.org"))
 
+(setq py/org-project-directory (file-truename (concat org-directory "projects/")))
+
+(setq py/org-project-files
+      (directory-files-recursively py/org-project-directory (rx ".org" eos)))
+
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "STUCKED(s@/!)" "|" "CANCELLED(c@/!)"))))
@@ -599,6 +603,8 @@
               ("STUCKED" :foreground "grey" :weight bold)
               ("HOLD" :foreground "magenta" :weight bold)
               ("CANCELLED" :foreground "forest green" :weight bold))))
+
+(setq org-agenda-files py/org-project-files)
 
 (setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
 
@@ -614,10 +620,13 @@
 (after! org
   (map! :leader :desc "org-capture"           "x" #'org-capture))
 
+(require 'org-protocol-capture-html)
+
 (use-package doct
   :ensure t
   ;;recommended: defer until calling doct
   :commands (doct))
+
 (setq org-capture-templates
       (doct '(
               ;;Standard inbox inbox
@@ -627,6 +636,12 @@
                :template ("* %{todo-state} %? \n")
                :todo-state "TODO"
                :create-id t)
+              ;;org-protocol-capture-html
+              ;; ("Web Content"
+              ;;  :keys "w"
+              ;;  :file ""
+              ;;  :todo-state "TODO"
+              ;;  :template ("* %a :website:\n\n%U %?\n\n%:initial"))
               ;;Metacognition
               ("Metacog"
                :keys "m"
@@ -725,8 +740,11 @@ only headings."
 (setq org-refile-targets '((nil :maxlevel . 9)
                            (py/org-bin :maxlevel . 9)
                            (py/org-todolist :maxlevel . 9)
+                           (py/org-project-files :maxlevel . 9)
                            (py/org-archive :maxlevel . 9)
                            (py/org-maybe_future :maxlevel . 9)))
+
+;;(add-to-list 'org-refile-targets '((py/org-project-files . (:level . 1))))
 
 (defun bh/verify-refile-target ()
   "Exclude todo keywords with a done state from refile targets"
