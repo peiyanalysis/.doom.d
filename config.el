@@ -1,9 +1,16 @@
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
-        doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
-        doom-unicode-font (font-spec :family "Sarasa Mono SC"))
-(set-fontset-font t 'unicode "Symbola" nil 'prepend)
+(setq doom-theme 'doom-dracula)
+
+(setq doom-theme 'doom-dracula)
+
+(setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
+      doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 30)
+      doom-variable-pitch-font (font-spec :family "Monaco" :size 20))
+(push "Sarasa Mono SC Nerd" doom-unicode-extra-fonts)
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
 
 (setq display-line-numbers-type nil)
 
@@ -785,3 +792,11 @@ only headings."
 (defun py/switch-to-agenda ()
   (interactive)
   (org-agenda nil "z"))
+
+(use-package! org-journal
+  :config
+  (setq org-journal-date-prefix "#+TITLE: "
+        org-journal-dir (concat org-directory "journal/")
+        org-journal-file-format "%Y-%m-%d.org"
+        org-journal-date-format "%A, %d %B %Y"
+        org-journal-carryover-items nil))

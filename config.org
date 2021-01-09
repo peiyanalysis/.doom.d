@@ -10,17 +10,30 @@
 #+end_src
 
 ** Fonts
+theme
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Source Code Pro" :size 16 :weight 'semi-light)
-        doom-variable-pitch-font (font-spec :family "Libre Baskerville") ; inherits `doom-font''s :size
-        doom-unicode-font (font-spec :family "Sarasa Mono SC"))
-(set-fontset-font t 'unicode "Symbola" nil 'prepend)
+(setq doom-theme 'doom-dracula)
 #+end_src
+
+#+RESULTS:
+: doom-dracula
+
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
+      doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 30)
+      doom-variable-pitch-font (font-spec :family "Monaco" :size 20))
+(push "Sarasa Mono SC Nerd" doom-unicode-extra-fonts)
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+#+end_src
+
+#+RESULTS:
+| Sarasa Mono SC Nerd | Weather Icons | github-octicons | FontAwesome | all-the-icons | file-icons | Material Icons |
 
 #+begin_srC emacs-lisp
 (setq display-line-numbers-type nil)
 #+end_src
-
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :hook
@@ -1199,6 +1212,19 @@ Avoid done task refiled
 #+end_src
 
 ** Archive
+** journal
+#+begin_src emacs-lisp
+(use-package! org-journal
+  :config
+  (setq org-journal-date-prefix "#+TITLE: "
+        org-journal-dir (concat org-directory "journal/")
+        org-journal-file-format "%Y-%m-%d.org"
+        org-journal-date-format "%A, %d %B %Y"
+        org-journal-carryover-items nil))
+#+end_src
+
+#+RESULTS:
+: t
 
 * Metacog
 ** Questions
