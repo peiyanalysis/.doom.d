@@ -737,14 +737,15 @@ only headings."
                    :desc "t. agenda-Priority"               "t" #'org-agenda-priority
                    :desc "y. agenda-E. E."                  "y" #'org-agenda-set-effort))
 
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+
 (setq org-refile-targets '((nil :maxlevel . 9)
                            (py/org-bin :maxlevel . 9)
                            (py/org-todolist :maxlevel . 9)
                            (py/org-project-files :maxlevel . 9)
                            (py/org-archive :maxlevel . 9)
-                           (py/org-maybe_future :maxlevel . 9)))
-
-;;(add-to-list 'org-refile-targets '((py/org-project-files . (:level . 1))))
+                           (py/org-maybe_future :maxlevel . 9)
+                           (org-roam-index-file :maxlevel . 9)))
 
 (defun bh/verify-refile-target ()
   "Exclude todo keywords with a done state from refile targets"

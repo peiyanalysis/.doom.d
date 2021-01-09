@@ -908,6 +908,7 @@
 (setq py/org-project-directory (file-truename (concat org-directory "projects/")))
 #+end_src
 
+Why this is ok but no =find-lisp-find-file= failed.
 #+begin_src emacs-lisp
 (setq py/org-project-files
       (directory-files-recursively py/org-project-directory (rx ".org" eos)))
@@ -1118,6 +1119,9 @@ use a series of commands to finish it.
 :PROPERTIES:
 :ID:       f0b5e5dc-f2c2-43e1-a14f-a9a188068213
 :END:
+#+begin_src emacs-lisp
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+#+end_src
 
 #+begin_src emacs-lisp
 (setq org-refile-targets '((nil :maxlevel . 9)
@@ -1125,17 +1129,12 @@ use a series of commands to finish it.
                            (py/org-todolist :maxlevel . 9)
                            (py/org-project-files :maxlevel . 9)
                            (py/org-archive :maxlevel . 9)
-                           (py/org-maybe_future :maxlevel . 9)))
+                           (py/org-maybe_future :maxlevel . 9)
+                           (org-roam-index-file :maxlevel . 9)))
 #+end_src
 
 #+RESULTS:
-: ((nil :maxlevel . 9) (py/org-bin :maxlevel . 9) (py/org-todolist :maxlevel . 9) (py/org-project-files :maxlevel . 9) (py/org-archive :maxlevel . 9) (py/org-maybe_future :maxlevel . 9))
-
-#+begin_src emacs-lisp
-;;(add-to-list 'org-refile-targets '((py/org-project-files . (:level . 1))))
-#+end_src
-
-#+RESULTS:
+: ((nil :maxlevel . 9) (py/org-bin :maxlevel . 9) (py/org-todolist :maxlevel . 9) (py/org-project-files :maxlevel . 9) (py/org-archive :maxlevel . 9) (py/org-maybe_future :maxlevel . 9) (org-roam-index-file :maxlevel . 9))
 
 Avoid done task refiled
 #+begin_src emacs-lisp
