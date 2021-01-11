@@ -4,15 +4,22 @@
 
 (setq doom-theme 'doom-dracula)
 
-(setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
-      doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 30)
-      doom-variable-pitch-font (font-spec :family "Monaco" :size 20))
+(setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 14)
+      doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
+      doom-variable-pitch-font (font-spec :family "Monaco" :size 18))
 (push "Sarasa Mono SC Nerd" doom-unicode-extra-fonts)
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 
 (setq display-line-numbers-type nil)
+
+(setq display-line-numbers-type nil)
+
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
 
 (use-package doom-modeline
   :hook
@@ -65,18 +72,6 @@
       :prefix "w"
       :desc   "winner-undo"  "u"        #'winner-undo
       :desc   "winner-redo"  "C-r"      #'winner-redo)
-
-(use-package! pyim
-  :demand t
-  :config
-  (setq pyim-dicts
-        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
-          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
-          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
-          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
-  :bind
-  (("C-c M-c C-w" . pyim-forward-word)
-   ("C-c M-c C-b" . pyim-backward-word)))
 
 (use-package rime
   :config
@@ -158,6 +153,74 @@
       mathpix-app-key "b667a7350e26f378b208"
       mathpix-screenshot-method "scrot -s %s")
 
+(require 'awesome-pair)
+(dolist (hook (list
+               'c-mode-common-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'java-mode-hook
+               'haskell-mode-hook
+               'latex-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-interaction-mode-hook
+               'lisp-mode-hook
+               'maxima-mode-hook
+               'ielm-mode-hook
+               'sh-mode-hook
+               'makefile-gmake-mode-hook
+               'php-mode-hook
+               'python-mode-hook
+               'js-mode-hook
+               'go-mode-hook
+               'qml-mode-hook
+               'jade-mode-hook
+               'css-mode-hook
+               'ruby-mode-hook
+               'coffee-mode-hook
+               'rust-mode-hook
+               'qmake-mode-hook
+               'lua-mode-hook
+               'swift-mode-hook
+               'minibuffer-inactive-mode-hook
+               ))
+  (add-hook hook '(lambda () (awesome-pair-mode 1))))
+
+(define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
+(define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
+(define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
+(define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
+(define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
+(define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
+(define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
+(define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
+(define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
+(define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
+(define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
+(define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
+(define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
+(define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
+(define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
+(define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
+(define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
+(define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
+
+(use-package maple-iedit
+  :ensure nil
+  :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+  :config
+  (setq maple-iedit-ignore-case t)
+
+  (defhydra maple/iedit ()
+    ("n" maple-iedit-match-next "next")
+    ("t" maple-iedit-skip-and-match-next "skip and next")
+    ("T" maple-iedit-skip-and-match-previous "skip and previous")
+    ("p" maple-iedit-match-previous "prev"))
+  :bind (:map evil-visual-state-map
+              ("n" . maple/iedit/body)
+              ("C-n" . maple-iedit-match-next)
+              ("C-p" . maple-iedit-match-previous)
+              ("C-t" . maple-iedit-skip-and-match-next)))
+
 ;; smartparens
 (use-package! smartparens
   :init
@@ -218,10 +281,9 @@
 
 (use-package ivy-yasnippet)
 
-(setq hungry-delete-mode t)
-(map! :leader
-      (:prefix ("e" . "edit")
-               :desc "hungry delete" "d" #'hungry-delete-forward))
+(use-package! hungry-delete
+  :config
+  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
 
 (use-package! company-posframe
   :hook (company-mode . company-posframe-mode))
@@ -230,15 +292,15 @@
   :config (global-so-long-mode 1))
 
 (map! :leader
-      :prefix "c"
-      (:prefix-map ("H" . "hide code")
-       :desc "hide block"               "b" #'hs-hide-block
-       :desc "hide level"               "l" #'hs-hide-level
-       :desc "hide all"                 "a" #'hs-hide-all)
-      (:prefix-map ("S" . "show code")
-       :desc "show block"               "b" #'hs-show-block
-       :desc "show level"               "l" #'hs-show-level
-       :desc "show all"                 "a" #'hs-show-all))
+      (:prefix-map  ("e" . "edit")
+       (:prefix-map ("h" . "hide code")
+        :desc "hide block"               "b" #'hs-hide-block
+        :desc "hide level"               "l" #'hs-hide-level
+        :desc "hide all"                 "a" #'hs-hide-all)
+       (:prefix-map ("s" . "show code")
+        :desc "show block"               "b" #'hs-show-block
+        :desc "show level"               "l" #'hs-show-level
+        :desc "show all"                 "a" #'hs-show-all )))
 
 (use-package whitespace
   :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
@@ -258,6 +320,71 @@
       :desc "insert time"                "i t" #'insert-time)
 
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
+
+(use-package! writeroom-mode
+  :hook
+  (w3m-mode . writeroom-mode)
+  :config
+  (advice-add 'text-scale-adjust :after
+              #'visual-fill-column-adjust)
+  ;;https://github.com/joostkremers/writeroom-mode#fullscreen-effect
+  (setq writeroom-fullscreen-effect 'maximized))
+
+(use-package grugru
+  :config (grugru-default-setup))
+
+(use-package! undo-fu
+  :after-call doom-switch-buffer after-find-file
+  :init
+  (after! undo-tree
+    (global-undo-tree-mode -1))
+  :config
+  ;; Store more undo history to prevent loss of data
+  (setq undo-limit 400000
+        undo-strong-limit 3000000
+        undo-outer-limit 3000000)
+
+  (define-minor-mode undo-fu-mode
+    "Enables `undo-fu' for the current session."
+    :keymap (let ((map (make-sparse-keymap)))
+              (define-key map [remap undo] #'undo-fu-only-undo)
+              (define-key map [remap redo] #'undo-fu-only-redo)
+              (define-key map (kbd "C-_")     #'undo-fu-only-undo)
+              (define-key map (kbd "M-_")     #'undo-fu-only-redo)
+              (define-key map (kbd "C-M-_")   #'undo-fu-only-redo-all)
+              (define-key map (kbd "C-x r u") #'undo-fu-session-save)
+              (define-key map (kbd "C-x r U") #'undo-fu-session-recover)
+              map)
+    :init-value nil
+    :global t)
+  (undo-fu-mode +1))
+
+(map! :leader
+      (:prefix "e"
+       :desc "undo-fu-only-undo"          "u"      #'undo-fu-only-undo
+       :desc "undo-fu-only-redo"          "r"      #'undo-fu-only-redo
+       :desc "undo-fu-only-redo-allow"    "a"      #'undo-fu-only-redo-all
+       :desc "undo-fu-session-save"       "e"      #'undo-fu-session-save
+       :desc "undo-fu-session-recover"    "d"      #'undo-fu-session-recover ))
+
+(use-package! undo-fu-session
+  :hook (undo-fu-mode . global-undo-fu-session-mode)
+  :preface
+  (setq undo-fu-session-directory (concat doom-cache-dir "undo-fu-session/")
+        undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+
+  ;; HACK We avoid `:config' here because `use-package's `:after' complicates
+  ;;      the load order of a package's `:config' block and makes it impossible
+  ;;      for the user to override its settings with merely `after!' (or
+  ;;      `eval-after-load'). See jwiegley/use-package#829.
+  (after! undo-fu-session
+    ;; HACK Use the faster zstd to compress undo files instead of gzip
+    (when (executable-find "zstd")
+      (defadvice! doom--undo-fu-session-use-zstd-a (filename)
+        :filter-return #'undo-fu-session--make-file-name
+        (if undo-fu-session-compression
+            (concat (file-name-sans-extension filename) ".zst")
+          filename)))))
 
 (use-package! nov)
 
@@ -378,6 +505,11 @@
        :desc "Attach" "a" #'telega-chatbuf-attach
        :desc "Cancel aux" "x" #'telega-chatbuf-cancel-aux))
 
+(use-package maple-explorer
+  :commands (maple-explorer-file maple-explorer-buffer maple-explorer-imenu maple-explorer-recentf)
+  :config
+  (setq maple-explorer-file-display-alist '((side . left) (slot . -1))))
+
 (use-package ebib
   :config
   (setq ebib-file-search-dirs  '("~/Dropbox/bibliography/"))
@@ -444,190 +576,31 @@
   (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
 )
 
-;; basic org settings
-(setq org-directory "~/Dropbox/.org/")
-
-(setq org-ellipsis " ▼ ")
-
-(setq org-ellipsis " ▼ ")
-
-(map! )
-
-(map! )
-
-;; org-outline quick movement
-(after! org
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading))
-
-(map! :leader
-      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
-
-(use-package! org-download
-  :commands
-  org-download-dnd
-  org-download-yank
-  org-download-screenshot
-  org-download-dnd-base64
-  :init
-  (map! :map org-mode-map
-        "s-Y" #'org-download-screenshot
-        "s-y" #'org-download-yank)
-  (pushnew! dnd-protocol-alist
-            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
-            '("^data:" . org-download-dnd-base64))
-  (advice-add #'org-download-enable :override #'ignore)
-  :config
-  (defun +org/org-download-method (link)
-    (let* ((filename
-            (file-name-nondirectory
-             (car (url-path-and-query
-                   (url-generic-parse-url link)))))
-           ;; Create folder name with current buffer name, and place in root dir
-           (dirname (concat "./images/"
-                            (replace-regexp-in-string " " "_"
-                                                      (downcase (file-name-base buffer-file-name)))))
-           (filename-with-timestamp (format "%s%s.%s"
-                                            (file-name-sans-extension filename)
-                                            (format-time-string org-download-timestamp)
-                                            (file-name-extension filename))))
-      (make-directory dirname t)
-      (expand-file-name filename-with-timestamp dirname)))
-  :config
-  (setq org-download-screenshot-method
-        (cond (IS-MAC "screencapture -i %s")
-              (IS-LINUX
-               (cond ((executable-find "maim")  "maim -u -s %s")
-                     ((executable-find "scrot") "scrot -s %s")))))
-  (setq org-download-method '+org/org-download-method))
-
-(use-package! org-roam
-  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
-  :hook
-  (after-init . org-roam-mode)
-  :init
-  (map! :leader
-       (:prefix ("r" . "roam")
-                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-                (:prefix ("d" . "by date")
-                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
-                      :desc "Today"          "t" #'org-roam-dailies-today
-                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
-                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)
-                :desc "Find file"                     "f" #'org-roam-find-file
-                :desc "Show graph"                    "g" #'org-roam-graph
-                :desc "Insert new text"               "i" #'org-roam-insert
-                :desc "Insert selected text"          "I" #'org-roam-insert-immediate
-                :desc "Jump to index"                 "j" #'org-roam-jump-to-index
-                :desc "Roam buffer"                   "r" #'org-roam
-                :desc "Org Roam Capture"              "x" #'org-roam-capture))
-  :config
-  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
-        org-roam-index-file (concat org-roam-directory "index.org")
-        org-roam-dailies-directory "scratch/"
-        org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-graph-exclude-matcher "private"
-        org-roam-tag-sources '(prop last-directory)
-        org-id-link-to-org-use-id t))
-
-(setq org-roam-capture-templates
-             ;; literally
-      '(("d" "default" plain (function org-roam--capture-get-point)
-           "%?"
-           :file-name "${slug}"
-           :head "#+title: ${title}\n"
-           :unnarrowed t)))
-;; org-roam-capture-immediate
-(setq org-roam-capture-immediate-template
-             ;; default
-             '("d" "default" plain (function org-roam--capture-get-point)
-               "%?"
-               :file-name "${slug}"
-               :head "#+title: ${title}\n"
-               :unnarrowed t))
-
-(setq org-roam-capture-ref-templates nil)
-(add-to-list 'org-roam-capture-ref-templates
-             '("r" "ref" plain (function org-roam-capture--get-point)
-               ""
-               :file-name "${slug}"
-               :head "#+title: ${title}\n#+roam_key: ${ref}\n"
-               :unnarrowed t))
-(add-to-list 'org-roam-capture-ref-templates
-             '("a" "Annotation" plain (function org-roam-capture--get-point)
-               "%U \n${body}\n"
-               :file-name "${slug}"
-               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
-               :immediate-finish t
-               :unnarrowed t))
-
-(use-package! org-roam-protocol
-  :after org-protocol)
-
-(use-package! org-roam-server
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 9090
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
-;; kept server running
-(unless (server-running-p)
-  (org-roam-server-mode))
-
 (map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
 
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 
-(setq   py/org-inbox        (concat org-directory "inbox.org")
-        py/org-todolist     (concat org-directory "todolist.org")
-        py/org-bin          (concat org-directory "bin.org")
-        py/org-repeater     (concat org-directory "repeater.org")
-        py/org-archive      (concat org-directory "archive.org")
-        py/org-maybe_future       (concat org-directory "maybe_future.org"))
+(setq org-directory "~/Dropbox/.org/")
 
-(setq py/org-project-directory (file-truename (concat org-directory "projects/")))
+(setq org-directory "~/Dropbox/.org/")
 
-(setq py/org-project-files
-      (directory-files-recursively py/org-project-directory (rx ".org" eos)))
+(setq py/things-dir     (concat org-directory   "things/") ;things stand for roams
+      py/braindump-dir  (concat py/things-dir   "braindump/") ;second brain
+      py/project-dir    (concat py/things-dir   "project/") ;projects for project files
+      py/image-dir      (concat py/things-dir   "image/")   ;image stored
+      py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
+      py/art-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
 
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "STUCKED(s@/!)" "|" "CANCELLED(c@/!)"))))
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("STUCKED" :foreground "grey" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold))))
-
-(setq org-agenda-files py/org-project-files)
-
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-
-(setq org-todo-state-tags-triggers
-      (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAITING" ("WAITING" . t))
-              ("HOLD" ("WAITING") ("HOLD" . t))
-              (done ("WAITING") ("HOLD"))
-              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+(setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
+        py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
+        py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
+        py/braindump-index      (concat py/braindump-dir "braindump_index.org")
+        py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
+        py/arts                 (concat py/art-dir     "arts.org"))     ;tempo ideas of pastime
 
 (after! org
   (map! :leader :desc "org-capture"           "x" #'org-capture))
-
-(require 'org-protocol-capture-html)
 
 (use-package doct
   :ensure t
@@ -639,9 +612,12 @@
               ;;Standard inbox inbox
               ("Inbox"
                :keys "i"
-               :file py/org-inbox
-               :template ("* %{todo-state} %? \n")
-               :todo-state "TODO"
+               :file py/inbox
+               :template ("* %{todo-state} %?"
+                          ":PROPERTIES:"
+                          ":INIT:       %U"
+                          ":END:")
+               :todo-state "🔀 TODO"
                :create-id t)
               ;;org-protocol-capture-html
               ;; ("Web Content"
@@ -653,25 +629,26 @@
               ("Metacog"
                :keys "m"
                :prepend t
-               :template ("* %{todo-state} %? \n")
+               :template ("* %{todo-state} %?"
+                          ":PROPERTIES:"
+                          ":INIT:       %U"
+                          ":END:")
                :children (;; MetaNotes
                           ("MetaNotes"
                            :keys "n"
                            :type entry
-                           :todo-state "TODO"
+                           :todo-state "🔀 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
                           ("MetaQuestions"
                            :keys "q"
                            :type entry
-                           :todo-state "TODO"
+                           :todo-state "🔀 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
                           ("MetaTodos"
                            :keys "t"
                            :type entry
-                           :todo-state "TODO"
+                           :todo-state "🔀 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
-
-(add-hook 'org-capture-mode-hook #'org-id-get-create)
 
 (defun jethro/find-or-create-olp (path &optional this-buffer)
   "Return a marker pointing to the entry at outline path OLP.
@@ -729,74 +706,159 @@ only headings."
     (goto-char m)
     (set-marker m nil)))
 
+(setq org-refile-targets nil)
+
+(setq org-refile-targets nil)
+
+(add-to-list 'org-refile-targets '(nil :maxlevel . 9))
+
+(add-to-list 'org-refile-targets '(py/next :maxlevel . 1))
+
+(add-to-list 'org-refile-targets '(py/arts :maxlevel . 1))
+
+(add-to-list 'org-refile-targets '(py/braindump-inbox :maxlevel . 1))
+
+(setq py/project-files
+      (directory-files-recursively py/project-dir (rx ".org" eos)))
+
+(add-to-list 'org-refile-targets '(py/project-files :maxlevel . 1))
+
+(add-to-list 'org-refile-targets '(py/thoughts :maxlevel . 1))
+
+(add-to-list 'org-refile-targets '(py/arts :maxlevel . 1))
+
+(setq org-todo-keywords
+        '((sequence
+           "🔀 TODO(t)"  ; A task that needs doing & is ready to do
+           "🗡 INPROCESS(s)"  ; A task that is in progress
+           "📌 WAITING(w)"  ; Something is holding up this task; or it is paused
+           "⏰ LEAVETO(l)"  ; entry delivered to others
+           "⤴ REFILE?(r)"   ;might
+           "|"
+           "⏭ NEXT(n)"
+           "✅ DONE(d)"  ; Task successfully completed
+           "CANCELED(c@)") ; Task was cancelled, aborted or is no longer applicable
+           )) ; Task was completed
+
+(setq org-tag-alist
+      '(("@errand" . ?e)
+        ("@office" . ?o)
+        ("@home" . ?h)))
+
 (map! :leader
-      (:prefix-map ("z" . "tasks detailize")
-                   :desc "1. file-kill task"                "1" #'org-cut-subtree
-                   :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
-                   :desc "3. file-Schedule"                 "3" #'org-schedule
-                   :desc "4. file-Deadline"                 "4" #'org-deadline
-                   :desc "5. file-Priority"                 "5" #'org-priority
-                   :desc "6. file-E. E."                    "6" #'org-set-effort
-                   :desc "q. agenda-kill task"              "q" #'org-agenda-kill
-                   :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
-                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedule
-                   :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
-                   :desc "t. agenda-Priority"               "t" #'org-agenda-priority
-                   :desc "y. agenda-E. E."                  "y" #'org-agenda-set-effort))
+      :prefix "m"
+      :desc "id-create"         "i" #'org-id-get-create)
 
-(setq org-refile-allow-creating-parent-nodes 'confirm)
+(map! :leader
+      :prefix "n"
+      (:prefix-map              ("i" . "id")
+       :desc "id-create"        "C" #'org-id-get-create
+       :desc "id-goto"          "g" #'org-id-goto
+       :desc "id-copy"          "c" #'org-id-copy))
 
-(setq org-refile-targets '((nil :maxlevel . 9)
-                           (py/org-bin :maxlevel . 9)
-                           (py/org-todolist :maxlevel . 9)
-                           (py/org-project-files :maxlevel . 9)
-                           (py/org-archive :maxlevel . 9)
-                           (py/org-maybe_future :maxlevel . 9)
-                           (org-roam-index-file :maxlevel . 9)))
+(map! :leader
+      :desc "set initial property" "mdi" #'org-set-property-initial-time
+      :desc "set initial property" "mcs" #'org-set-property-initial-time)
 
-(defun bh/verify-refile-target ()
-  "Exclude todo keywords with a done state from refile targets"
-  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-(setq org-refile-target-verify-function 'bh/verify-refile-target)
+(map! :leader
+      (:prefix "m"
+       (:prefix "c"
+        :desc "set effort"    "e"     #'org-set-effort)))
 
-(setq org-agenda-files py/org-inbox) ;will be py/org-inbox
+(add-to-list 'org-global-properties
+      '("Effort_ALL". "0:05 0:15 0:30 1:00 1:30 2:00 3:00 4:00"))
 
-(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-
-(setq org-agenda-custom-commands `(("z" "Agenda"
-                                    ((agenda ""
-                                             ((org-agenda-span 'week)
-                                              (org-agenda-files '(,(expand-file-name py/org-inbox)))
-                                              (org-deadline-warning-days 365)
-                                              (org-agenda-use-time-grid t)
-                                              (org-agenda-time-grid '((daily today)
-                                                                      (0600 0800 1000 1200 1400 1600 1800 2000 2200)
-                                                                      "......"
-                                                                      "----------------"))))
-                                     (todo "TODO"
-                                           ((org-agenda-overriding-header "To Refile.")
-                                            (org-agenda-files '(,(expand-file-name py/org-inbox)))))
-                                     (todo "NEXT"
-                                           ((org-agenda-overriding-header "In progress.")
-                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
-                                     (todo "STUCKED"
-                                           ((org-agenda-overriding-header "Stucked.")
-                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
-                                     (todo "TODO"
-                                           ((org-agenda-overriding-header "One-off Tasks.")
-                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))
-                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                                     ))))
-
-(map! "<C-f2>" #'py/switch-to-agenda)
-(defun py/switch-to-agenda ()
-  (interactive)
-  (org-agenda nil "z"))
-
-(use-package! org-journal
+(use-package! notdeft
   :config
-  (setq org-journal-date-prefix "#+TITLE: "
-        org-journal-dir (concat org-directory "journal/")
-        org-journal-file-format "%Y-%m-%d.org"
-        org-journal-date-format "%A, %d %B %Y"
-        org-journal-carryover-items nil))
+  (setq notdeft-extension "org")
+  (setq notdeft-directories '("~/Dropbox/.org/"))
+  (setq notdeft-xapian-program "/home/py06/.local/share/notdeft-xapian")
+  :bind (:map notdeft-mode-map
+         ("C-q" . notdeft-quit)
+         ("C-r" . notdeft-refresh)))
+
+(setenv "XAPIAN_CJK_NGRAM" "1")
+
+(map! :leader
+      (:prefix "n"
+       :desc "notdeft" "n" #'notdeft ))
+
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+  :hook
+  (after-init . org-roam-mode))
+
+(setq   org-roam-directory              py/braindump-dir
+        org-roam-index-file             py/braindump-index
+        org-roam-dailies-directory      "dailies/"
+        org-roam-db-gc-threshold        most-positive-fixnum
+        org-roam-graph-exclude-matcher  "private"
+        org-roam-tag-sources            '(prop last-directory)
+        org-id-link-to-org-use-id t)
+
+(map! :leader
+      (:prefix ("r" . "roam")
+       :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+       (:prefix ("d" . "by date")
+        :desc "Arbitrary date" "d" #'org-roam-dailies-find-date
+        :desc "Today"          "t" #'org-roam-dailies-find-today
+        :desc "Tomorrow"       "m" #'org-roam-dailies-find-tomorrow
+       :desc "Yesterday"       "y" #'org-roam-dailies-find-yesterday)
+       :desc "Find file"                     "f" #'org-roam-find-file
+       :desc "Show graph"                    "g" #'org-roam-graph
+       :desc "Insert new text"               "i" #'org-roam-insert
+       :desc "Insert selected text"          "I" #'org-roam-insert-immediate
+       :desc "Jump to index"                 "j" #'org-roam-jump-to-index
+       :desc "Roam buffer"                   "r" #'org-roam
+       :desc "Org Roam Capture"              "x" #'org-roam-capture))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+(setq org-roam-capture-templates
+             ;; literally
+      '(("d" "default" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)))
+;; org-roam-capture-immediate
+(setq org-roam-capture-immediate-template
+             ;; default
+             '("d" "default" plain (function org-roam--capture-get-point)
+               "%?"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n"
+               :unnarrowed t))
+
+(setq org-roam-capture-ref-templates nil)
+(add-to-list 'org-roam-capture-ref-templates
+             '("r" "ref" plain (function org-roam-capture--get-point)
+               ""
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+               :unnarrowed t))
+(add-to-list 'org-roam-capture-ref-templates
+             '("a" "Annotation" plain (function org-roam-capture--get-point)
+               "%U \n${body}\n"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+               :immediate-finish t
+               :unnarrowed t))
+
+(use-package! org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+;; kept server running
+(unless (server-running-p)
+  (org-roam-server-mode))

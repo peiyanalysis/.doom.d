@@ -4,36 +4,37 @@
 #+end_src
 
 * Appearance
-** COMMENT Theme
-#+begin_src emacs-lisp
-(setq doom-theme 'doom-Iosvkem)
-#+end_src
-
-** Fonts
-theme
+** theme
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-dracula)
 #+end_src
 
-#+RESULTS:
-: doom-dracula
+** Fonts
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
-      doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 30)
-      doom-variable-pitch-font (font-spec :family "Monaco" :size 20))
+(setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 14)
+      doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
+      doom-variable-pitch-font (font-spec :family "Monaco" :size 18))
 (push "Sarasa Mono SC Nerd" doom-unicode-extra-fonts)
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 #+end_src
 
-#+RESULTS:
-| Sarasa Mono SC Nerd | Weather Icons | github-octicons | FontAwesome | all-the-icons | file-icons | Material Icons |
+** line-number
 
-#+begin_srC emacs-lisp
+#+begin_src emacs-lisp
 (setq display-line-numbers-type nil)
 #+end_src
+** cursor
+#+begin_src emacs-lisp
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
+#+end_src
+
+** modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :hook
@@ -133,28 +134,6 @@ theme
 |-------------+---------------------+-------------------|
 
 * Chinese
-** Pyim
-   我利用 pyim 的分词方法来进行中文跳转.
-#+begin_src emacs-lisp
-(use-package! pyim
-  :demand t
-  :config
-  (setq pyim-dicts
-        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
-          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
-          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
-          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
-  :bind
-  (("C-c M-c C-w" . pyim-forward-word)
-   ("C-c M-c C-b" . pyim-backward-word)))
- #+end_src
-
-|---------------+-------------------+----------|
-| 快捷键        | 命令              | 描述     |
-|---------------+-------------------+----------|
-| =C-c M-c C-w= | pyim-forward-word | 分词向前 |
-| =C-c M-c C-b= | pyim-forward-word | 分词向后 |
-|---------------+-------------------+----------|
 
 ** Emacs-rime
    emacs-china 论坛推荐使用 emacs-rime 包进行中文输入。用后感觉：UI 现代，选词快速，好用。
@@ -270,7 +249,7 @@ theme
           ( ?/  "\\slashed" nil t nil nil ))))
 #+end_src
 
-*** mathpix.el :path:secretum:
+*** mathpix.el
 #+begin_src emacs-lisp
 (add-to-list 'load-path "/home/py06/.doom.d/packages")
 (require 'mathpix)
@@ -285,8 +264,79 @@ theme
 |--------+--------------------+-------------|
 | C-x m  | mathpix-screenshot | mathpix 操作 |
 |--------+--------------------+-------------|
+*** awesome pair
+#+begin_src emacs-lisp
+(require 'awesome-pair)
+(dolist (hook (list
+               'c-mode-common-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'java-mode-hook
+               'haskell-mode-hook
+               'latex-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-interaction-mode-hook
+               'lisp-mode-hook
+               'maxima-mode-hook
+               'ielm-mode-hook
+               'sh-mode-hook
+               'makefile-gmake-mode-hook
+               'php-mode-hook
+               'python-mode-hook
+               'js-mode-hook
+               'go-mode-hook
+               'qml-mode-hook
+               'jade-mode-hook
+               'css-mode-hook
+               'ruby-mode-hook
+               'coffee-mode-hook
+               'rust-mode-hook
+               'qmake-mode-hook
+               'lua-mode-hook
+               'swift-mode-hook
+               'minibuffer-inactive-mode-hook
+               ))
+  (add-hook hook '(lambda () (awesome-pair-mode 1))))
 
-** TODO Smartparens
+(define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
+(define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
+(define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
+(define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
+(define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
+(define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
+(define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
+(define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
+(define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
+(define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
+(define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
+(define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
+(define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
+(define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
+(define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
+(define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
+(define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
+(define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
+#+end_src
+** maple-edit
+#+begin_src emacs-lisp
+(use-package maple-iedit
+  :ensure nil
+  :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+  :config
+  (setq maple-iedit-ignore-case t)
+
+  (defhydra maple/iedit ()
+    ("n" maple-iedit-match-next "next")
+    ("t" maple-iedit-skip-and-match-next "skip and next")
+    ("T" maple-iedit-skip-and-match-previous "skip and previous")
+    ("p" maple-iedit-match-previous "prev"))
+  :bind (:map evil-visual-state-map
+              ("n" . maple/iedit/body)
+              ("C-n" . maple-iedit-match-next)
+              ("C-p" . maple-iedit-match-previous)
+              ("C-t" . maple-iedit-skip-and-match-next)))
+#+end_src
+** Smartparens
    修改成 leader 键
 #+begin_src emacs-lisp
 ;; smartparens
@@ -388,7 +438,7 @@ theme
 |------------+-----------------+----------------|
 | =SPC g i = | ivy-magit-todos | 展示每个关键词 |
 |------------+-----------------+----------------|
-** Yasnippet :path:
+** Yasnippet
 #+begin_src emacs-lisp
 (use-package yasnippet
   :config
@@ -402,17 +452,15 @@ theme
 #+begin_src emacs-lisp
 (use-package ivy-yasnippet)
 #+end_src
-
 ** Hungry delete
 #+begin_src emacs-lisp
-(setq hungry-delete-mode t)
-(map! :leader
-      (:prefix ("e" . "edit")
-               :desc "hungry delete" "d" #'hungry-delete-forward))
+(use-package! hungry-delete
+  :config
+  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
 #+end_src
 
 #+RESULTS:
-: hungry-delete-forward
+: t
 
 ** Company-poseframe
 #+begin_src emacs-lisp
@@ -428,16 +476,19 @@ theme
 ** Hide-show-mode
 #+begin_src emacs-lisp
 (map! :leader
-      :prefix "c"
-      (:prefix-map ("H" . "hide code")
-       :desc "hide block"               "b" #'hs-hide-block
-       :desc "hide level"               "l" #'hs-hide-level
-       :desc "hide all"                 "a" #'hs-hide-all)
-      (:prefix-map ("S" . "show code")
-       :desc "show block"               "b" #'hs-show-block
-       :desc "show level"               "l" #'hs-show-level
-       :desc "show all"                 "a" #'hs-show-all))
+      (:prefix-map  ("e" . "edit")
+       (:prefix-map ("h" . "hide code")
+        :desc "hide block"               "b" #'hs-hide-block
+        :desc "hide level"               "l" #'hs-hide-level
+        :desc "hide all"                 "a" #'hs-hide-all)
+       (:prefix-map ("s" . "show code")
+        :desc "show block"               "b" #'hs-show-block
+        :desc "show level"               "l" #'hs-show-level
+        :desc "show all"                 "a" #'hs-show-all )))
 #+end_src
+
+#+RESULTS:
+: hs-show-all
 
 ** Whitespace
 #+begin_src emacs-lisp
@@ -468,6 +519,79 @@ theme
 ** Commentaries
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
+#+end_src
+** White-room
+#+begin_src emacs-lisp
+(use-package! writeroom-mode
+  :hook
+  (w3m-mode . writeroom-mode)
+  :config
+  (advice-add 'text-scale-adjust :after
+              #'visual-fill-column-adjust)
+  ;;https://github.com/joostkremers/writeroom-mode#fullscreen-effect
+  (setq writeroom-fullscreen-effect 'maximized))
+#+end_src
+** grugru
+#+begin_src emacs-lisp
+(use-package grugru
+  :config (grugru-default-setup))
+#+end_src
+
+#+RESULTS:
+** undo-fu
+#+begin_src emacs-lisp
+(use-package! undo-fu
+  :after-call doom-switch-buffer after-find-file
+  :init
+  (after! undo-tree
+    (global-undo-tree-mode -1))
+  :config
+  ;; Store more undo history to prevent loss of data
+  (setq undo-limit 400000
+        undo-strong-limit 3000000
+        undo-outer-limit 3000000)
+
+  (define-minor-mode undo-fu-mode
+    "Enables `undo-fu' for the current session."
+    :keymap (let ((map (make-sparse-keymap)))
+              (define-key map [remap undo] #'undo-fu-only-undo)
+              (define-key map [remap redo] #'undo-fu-only-redo)
+              (define-key map (kbd "C-_")     #'undo-fu-only-undo)
+              (define-key map (kbd "M-_")     #'undo-fu-only-redo)
+              (define-key map (kbd "C-M-_")   #'undo-fu-only-redo-all)
+              (define-key map (kbd "C-x r u") #'undo-fu-session-save)
+              (define-key map (kbd "C-x r U") #'undo-fu-session-recover)
+              map)
+    :init-value nil
+    :global t)
+  (undo-fu-mode +1))
+
+(map! :leader
+      (:prefix "e"
+       :desc "undo-fu-only-undo"          "u"      #'undo-fu-only-undo
+       :desc "undo-fu-only-redo"          "r"      #'undo-fu-only-redo
+       :desc "undo-fu-only-redo-allow"    "a"      #'undo-fu-only-redo-all
+       :desc "undo-fu-session-save"       "e"      #'undo-fu-session-save
+       :desc "undo-fu-session-recover"    "d"      #'undo-fu-session-recover ))
+
+(use-package! undo-fu-session
+  :hook (undo-fu-mode . global-undo-fu-session-mode)
+  :preface
+  (setq undo-fu-session-directory (concat doom-cache-dir "undo-fu-session/")
+        undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+
+  ;; HACK We avoid `:config' here because `use-package's `:after' complicates
+  ;;      the load order of a package's `:config' block and makes it impossible
+  ;;      for the user to override its settings with merely `after!' (or
+  ;;      `eval-after-load'). See jwiegley/use-package#829.
+  (after! undo-fu-session
+    ;; HACK Use the faster zstd to compress undo files instead of gzip
+    (when (executable-find "zstd")
+      (defadvice! doom--undo-fu-session-use-zstd-a (filename)
+        :filter-return #'undo-fu-session--make-file-name
+        (if undo-fu-session-compression
+            (concat (file-name-sans-extension filename) ".zst")
+          filename)))))
 #+end_src
 
 * Reader
@@ -614,6 +738,13 @@ theme
        :desc "Attach" "a" #'telega-chatbuf-attach
        :desc "Cancel aux" "x" #'telega-chatbuf-cancel-aux))
 #+end_src
+** maple-explorer
+#+begin_src emacs-lisp
+(use-package maple-explorer
+  :commands (maple-explorer-file maple-explorer-buffer maple-explorer-imenu maple-explorer-recentf)
+  :config
+  (setq maple-explorer-file-display-alist '((side . left) (slot . -1))))
+#+end_src
 
 ** Bibliography
 *** ebib
@@ -694,323 +825,179 @@ theme
 )
 #+end_src
 
-* Org-mode
-** Directories
-*** org-directory
-#+begin_src emacs-lisp
-;; basic org settings
-(setq org-directory "~/Dropbox/.org/")
-#+end_src
-*** COMMENT valign
-#+begin_src emacs-lisp
-(use-package valign
-  :config
-  (add-hook 'org-mode-hook #'valign-mode))
-#+end_src
-** Headlines
-** Appearance
-*** ellipsis at the end of heading
-#+begin_src emacs-lisp
-(setq org-ellipsis " ▼ ")
-#+end_src
-
-** Opearations
-*** keymap
-#+begin_src emacs-lisp
-(map! )
-#+end_src
-*** quick-movement
-#+begin_src emacs-lisp
-;; org-outline quick movement
-(after! org
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading))
-#+end_src
-
-*** save all buffers
-#+begin_src emacs-lisp
-(map! :leader
-      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
-#+end_src
-** org-download
-#+begin_src emacs-lisp
-(use-package! org-download
-  :commands
-  org-download-dnd
-  org-download-yank
-  org-download-screenshot
-  org-download-dnd-base64
-  :init
-  (map! :map org-mode-map
-        "s-Y" #'org-download-screenshot
-        "s-y" #'org-download-yank)
-  (pushnew! dnd-protocol-alist
-            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
-            '("^data:" . org-download-dnd-base64))
-  (advice-add #'org-download-enable :override #'ignore)
-  :config
-  (defun +org/org-download-method (link)
-    (let* ((filename
-            (file-name-nondirectory
-             (car (url-path-and-query
-                   (url-generic-parse-url link)))))
-           ;; Create folder name with current buffer name, and place in root dir
-           (dirname (concat "./images/"
-                            (replace-regexp-in-string " " "_"
-                                                      (downcase (file-name-base buffer-file-name)))))
-           (filename-with-timestamp (format "%s%s.%s"
-                                            (file-name-sans-extension filename)
-                                            (format-time-string org-download-timestamp)
-                                            (file-name-extension filename))))
-      (make-directory dirname t)
-      (expand-file-name filename-with-timestamp dirname)))
-  :config
-  (setq org-download-screenshot-method
-        (cond (IS-MAC "screencapture -i %s")
-              (IS-LINUX
-               (cond ((executable-find "maim")  "maim -u -s %s")
-                     ((executable-find "scrot") "scrot -s %s")))))
-  (setq org-download-method '+org/org-download-method))
-#+end_src
-** Roam
-*** use-package
-#+begin_src emacs-lisp
-(use-package! org-roam
-  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
-  :hook
-  (after-init . org-roam-mode)
-  :init
-  (map! :leader
-       (:prefix ("r" . "roam")
-                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-                (:prefix ("d" . "by date")
-                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
-                      :desc "Today"          "t" #'org-roam-dailies-today
-                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
-                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)
-                :desc "Find file"                     "f" #'org-roam-find-file
-                :desc "Show graph"                    "g" #'org-roam-graph
-                :desc "Insert new text"               "i" #'org-roam-insert
-                :desc "Insert selected text"          "I" #'org-roam-insert-immediate
-                :desc "Jump to index"                 "j" #'org-roam-jump-to-index
-                :desc "Roam buffer"                   "r" #'org-roam
-                :desc "Org Roam Capture"              "x" #'org-roam-capture))
-  :config
-  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
-        org-roam-index-file (concat org-roam-directory "index.org")
-        org-roam-dailies-directory "scratch/"
-        org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-graph-exclude-matcher "private"
-        org-roam-tag-sources '(prop last-directory)
-        org-id-link-to-org-use-id t))
-#+end_src
-*** roam-cpature template
-#+begin_src emacs-lisp
-(setq org-roam-capture-templates
-             ;; literally
-      '(("d" "default" plain (function org-roam--capture-get-point)
-           "%?"
-           :file-name "${slug}"
-           :head "#+title: ${title}\n"
-           :unnarrowed t)))
-;; org-roam-capture-immediate
-(setq org-roam-capture-immediate-template
-             ;; default
-             '("d" "default" plain (function org-roam--capture-get-point)
-               "%?"
-               :file-name "${slug}"
-               :head "#+title: ${title}\n"
-               :unnarrowed t))
-#+end_src
-*** roam-capture-ref-templates
-#+begin_src emacs-lisp
-(setq org-roam-capture-ref-templates nil)
-(add-to-list 'org-roam-capture-ref-templates
-             '("r" "ref" plain (function org-roam-capture--get-point)
-               ""
-               :file-name "${slug}"
-               :head "#+title: ${title}\n#+roam_key: ${ref}\n"
-               :unnarrowed t))
-(add-to-list 'org-roam-capture-ref-templates
-             '("a" "Annotation" plain (function org-roam-capture--get-point)
-               "%U \n${body}\n"
-               :file-name "${slug}"
-               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
-               :immediate-finish t
-               :unnarrowed t))
-#+end_src
-
-#+RESULTS:
-| a | Annotation | plain | #'org-roam-capture--get-point | %U |
-
-*** roam-protocol
-#+begin_src emacs-lisp
-(use-package! org-roam-protocol
-  :after org-protocol)
-#+end_src
-
-*** roam-server
-#+begin_src emacs-lisp
-(use-package! org-roam-server
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 9090
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
-;; kept server running
-(unless (server-running-p)
-  (org-roam-server-mode))
-#+end_src
-
-* Meta config
-** Scratch
+* Scratch
 #+begin_src emacs-lisp
 (map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
 #+end_src
 用这个来编辑最基本的 doom-emacs 操作。
 
-** COMMENT Parinfer
-#+begin_src emacs-lisp
-(use-package parinfer
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            evil           ; If you use Evil.
-            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-            paredit        ; Introduce some paredit commands.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'scheme-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)))
-#+end_src
 * Security
 #+begin_src emacs-lisp
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 #+END_SRC
-* Org-agenda
-** files
-#+begin_src emacs-lisp
-(setq   py/org-inbox        (concat org-directory "inbox.org")
-        py/org-todolist     (concat org-directory "todolist.org")
-        py/org-bin          (concat org-directory "bin.org")
-        py/org-repeater     (concat org-directory "repeater.org")
-        py/org-archive      (concat org-directory "archive.org")
-        py/org-maybe_future       (concat org-directory "maybe_future.org"))
-#+end_src
 
-#+RESULTS:
-: ~/Dropbox/.org/maybe_future.org
-
-#+begin_src emacs-lisp
-(setq py/org-project-directory (file-truename (concat org-directory "projects/")))
-#+end_src
-
-Why this is ok but no =find-lisp-find-file= failed.
-#+begin_src emacs-lisp
-(setq py/org-project-files
-      (directory-files-recursively py/org-project-directory (rx ".org" eos)))
-#+end_src
-
-#+RESULTS:
-| /home/py06/Dropbox/.org/projects/chemo.org | /home/py06/Dropbox/.org/projects/degree.org |
-
-** TODOkeywords and triggers
-#+begin_src emacs-lisp
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "STUCKED(s@/!)" "|" "CANCELLED(c@/!)"))))
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("STUCKED" :foreground "grey" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold))))
-#+end_src
-
-#+RESULTS:
-| TODO      | :foreground | red          | :weight | bold |
-| NEXT      | :foreground | blue         | :weight | bold |
-| DONE      | :foreground | forest green | :weight | bold |
-| WAITING   | :foreground | orange       | :weight | bold |
-| STUCKED   | :foreground | grey         | :weight | bold |
-| HOLD      | :foreground | magenta      | :weight | bold |
-| CANCELLED | :foreground | forest green | :weight | bold |
-
-#+begin_src emacs-lisp
-(setq org-agenda-files py/org-project-files)
-#+end_src
-
-#+RESULTS:
-| /home/py06/Dropbox/.org/projects/chemo.org |
-
-#+begin_src emacs-lisp
-(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
-#+end_src
-
-- Keyword triggers
-  + Moving a task to CANCELLED adds a CANCELLED tag
-  + Moving a task to WAITING adds a WAITING tag
-  + Moving a task to HOLD adds WAITING and HOLD tags
-  + Moving a task to a done state removes WAITING and HOLD tags
-  + Moving a task to TODO removes WAITING, CANCELLED, and HOLD tags
-  + Moving a task to NEXT removes WAITING, CANCELLED, and HOLD tags
-  + Moving a task to DONE removes WAITING, CANCELLED, and HOLD tags
-#+begin_src emacs-lisp
-(setq org-todo-state-tags-triggers
-      (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAITING" ("WAITING" . t))
-              ("HOLD" ("WAITING") ("HOLD" . t))
-              (done ("WAITING") ("HOLD"))
-              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-#+end_src
-
-** Capture
+* org-mode faces and operations
 :PROPERTIES:
-:ID:       33370970-cc3a-4ac5-ba2f-37d91fb9175c
+:ID:       c657f8f4-abbc-4d83-8198-822910968303
 :END:
-=key binding=
+** ellipsis at the end of heading
+
+#+begin_src emacs-lisp
+(setq org-ellipsis " ▼ ")
+#+end_src
+** heading-level-face
+#+begin_src emacs-lisp
+(custom-set-faces
+'(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+'(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+'(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
++end_src
+#+RESULTS:
+*** org-super-star
+
+#+begin_src emacs-lisp
+(use-package! org-superstar
+:config
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
+#+end_src
+
+** bold/delete/emph
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+** org-heading and item
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix "m"
+       (:prefix-map ("m" . "modify")
+        :desc "item or text"             "i" #'org-toggle-item
+        :desc "heading or text"          "h" #'org-toggle-heading )))
+#+end_src
+
+#+RESULTS:
+: org-toggle-heading
+
+* org-mode and workflow
+** files
+
+#+begin_src emacs-lisp
+(setq org-directory "~/Dropbox/.org/")
+#+end_src
+
+#+begin_src emacs-lisp
+(setq py/things-dir     (concat org-directory   "things/") ;things stand for roams
+      py/braindump-dir  (concat py/things-dir   "braindump/") ;second brain
+      py/project-dir    (concat py/things-dir   "project/") ;projects for project files
+      py/image-dir      (concat py/things-dir   "image/")   ;image stored
+      py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
+      py/art-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+#+end_src
+
+#+begin_src emacs-lisp
+(setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
+        py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
+        py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
+        py/braindump-index      (concat py/braindump-dir "braindump_index.org")
+        py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
+        py/arts                 (concat py/art-dir     "arts.org"))     ;tempo ideas of pastime
+#+end_src
+
+#+RESULTS:
+: ~/Dropbox/.org/things/braindump/art/arts.org
+
+*** COMMENT What now
+
+#+begin_src sh
+cd ~/Dropbox/.org
+ls -R
+#+end_src
+
+#+RESULTS:
+| .:                                                                                                             |
+| inbox.org                                                                                                      |
+| inbox.org_archive                                                                                              |
+| next.org                                                                                                       |
+| things                                                                                                         |
+|                                                                                                                |
+| ./things:                                                                                                      |
+| braindump                                                                                                      |
+| image                                                                                                          |
+| project                                                                                                        |
+|                                                                                                                |
+| ./things/braindump:                                                                                            |
+| alphapapa_org_protocol_capture_html_capture_html_from_the_browser_selection_into_emacs_as_org_mode_content.org |
+| arts                                                                                                           |
+| bibliography_management.org                                                                                    |
+| braindump_inbox.org                                                                                            |
+| daily                                                                                                          |
+| ebib.org                                                                                                       |
+| elisp_学习笔记.org                                                                                             |
+| Index.org                                                                                                      |
+| ivy-bibtex.org                                                                                                 |
+| jethro_kuan.org                                                                                                |
+| org_mode_agaist_bipolar_disorder.org                                                                           |
+| org-ref.org                                                                                                    |
+| org_roam_bibtex.org                                                                                            |
+| pdf-noter.org                                                                                                  |
+| pdf_reading.org                                                                                                |
+| pdf-tools.org                                                                                                  |
+| redguardtoo_wucuo_fastest_solution_to_spell_check_camel_case_code_or_plain_text.org                            |
+| thoughts                                                                                                       |
+| webs.org                                                                                                       |
+| 为什么有的人很回避与领导接触_知乎.org                                                                          |
+| 互联网性别战争不可避免_但我们仍要寻找共识.org                                                                  |
+| 强大的_org_mode_4_使用_capture_功能快速记录_zmonster_s_blog.org                                                |
+| 您认为博士期间最重要的事情是什么_知乎.org                                                                      |
+| 田园终结_资本内卷_我们需要新的道路.org                                                                         |
+|                                                                                                                |
+| ./things/braindump/arts:                                                                                       |
+| arts.org                                                                                                       |
+|                                                                                                                |
+| ./things/braindump/daily:                                                                                      |
+|                                                                                                                |
+| ./things/braindump/thoughts:                                                                                   |
+| thoughts.org                                                                                                   |
+|                                                                                                                |
+| ./things/image:                                                                                                |
+|                                                                                                                |
+| ./things/project:                                                                                              |
+
+** task managerment
+Still wanna to use a collect and conquer (C&C) method to manage my tasks.
+*Capture* my random idea into the =inbox.org= file;
+*Refile* the captured idea to =project= =next.org= =things= =arts= =braindump= files or directories.
+*** capture
+keymap
+
 #+begin_src emacs-lisp
 (after! org
   (map! :leader :desc "org-capture"           "x" #'org-capture))
 #+end_src
 
-=capture templates=
+doct
 #+begin_src emacs-lisp
-(require 'org-protocol-capture-html)
-
 (use-package doct
   :ensure t
   ;;recommended: defer until calling doct
   :commands (doct))
+#+end_src
 
+tempaltes
+
+#+begin_src emacs-lisp
 (setq org-capture-templates
       (doct '(
               ;;Standard inbox inbox
               ("Inbox"
                :keys "i"
-               :file py/org-inbox
-               :template ("* %{todo-state} %? \n")
-               :todo-state "TODO"
+               :file py/inbox
+               :template ("* %{todo-state} %?"
+                          ":PROPERTIES:"
+                          ":INIT:       %U"
+                          ":END:")
+               :todo-state "🔀 TODO"
                :create-id t)
               ;;org-protocol-capture-html
               ;; ("Web Content"
@@ -1022,29 +1009,35 @@ Why this is ok but no =find-lisp-find-file= failed.
               ("Metacog"
                :keys "m"
                :prepend t
-               :template ("* %{todo-state} %? \n")
+               :template ("* %{todo-state} %?"
+                          ":PROPERTIES:"
+                          ":INIT:       %U"
+                          ":END:")
                :children (;; MetaNotes
                           ("MetaNotes"
                            :keys "n"
                            :type entry
-                           :todo-state "TODO"
+                           :todo-state "🔀 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
                           ("MetaQuestions"
                            :keys "q"
                            :type entry
-                           :todo-state "TODO"
+                           :todo-state "🔀 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
                           ("MetaTodos"
                            :keys "t"
                            :type entry
-                           :todo-state "TODO"
+                           :todo-state "🔀 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
 #+end_src
 
-Related functions
-#+begin_src emacs-lisp
-(add-hook 'org-capture-mode-hook #'org-id-get-create)
-#+end_src
+#+RESULTS:
+| i  | Inbox         | entry | (file py/inbox)                                              | #'doct--fill-template | :doct    | (:doct-name Inbox :keys i :file py/inbox :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :todo-state 🔀 TODO(t) :create-id t :doct-custom (:todo-state 🔀 TODO(t) :create-id t)) |       |                                                                                                                                                                                                                                                                            |
+| m  | Metacog       |       |                                                              |                       |          |                                                                                                                                                                                                    |       |                                                                                                                                                                                                                                                                            |
+| mn | MetaNotes     | entry | #'(lambda nil (jethro/olp-current-buffer Metacog Notes))     | #'doct--fill-template | :prepend | t                                                                                                                                                                                                  | :doct | (:doct-name MetaNotes :keys n :type entry :todo-state 🔀 TODO(t) :function (lambda nil (jethro/olp-current-buffer Metacog Notes)) :inherited-keys mn :prepend t :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :doct-custom (:todo-state 🔀 TODO(t)))   |
+| mq | MetaQuestions | entry | #'(lambda nil (jethro/olp-current-buffer Metacog Questions)) | #'doct--fill-template | :prepend | t                                                                                                                                                                                                  | :doct | (:doct-name MetaQuestions :keys q :type entry :todo-state 🔀 TODO :function (lambda nil (jethro/olp-current-buffer Metacog Questions)) :inherited-keys mq :prepend t :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :doct-custom (:todo-state 🔀 TODO)) |
+| mt | MetaTodos     | entry | #'(lambda nil (jethro/olp-current-buffer Metacog Todos))     | #'doct--fill-template | :prepend | t                                                                                                                                                                                                  | :doct | (:doct-name MetaTodos :keys t :type entry :todo-state 🔀 TODO :function (lambda nil (jethro/olp-current-buffer Metacog Todos)) :inherited-keys mt :prepend t :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :doct-custom (:todo-state 🔀 TODO))         |
+
 
 Shameless copied functions
 #+begin_src emacs-lisp
@@ -1105,203 +1098,776 @@ only headings."
     (set-marker m nil)))
 
 #+end_src
+*** refile
+:PROPERTIES:
+:ID:       dd1f4fcc-c04c-45c1-bc6c-7550ff84bba0
+:END:
+Inspried by [[https://emacs.stackexchange.com/questions/24976/org-mode-can-you-set-up-context-dependent-refile-targets][context-dependent org-refile]] I should imporve refile process.
+**** initial
+#+begin_src emacs-lisp
+(setq org-refile-targets nil)
+#+end_src
 
-** Detailize
-use a series of commands to finish it.
+#+RESULTS:
+
+**** internal
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(nil :maxlevel . 9))
+#+end_src
+
+**** one-off
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(py/next :maxlevel . 1))
+#+end_src
+
+**** arts
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(py/arts :maxlevel . 1))
+#+end_src
+**** braindump
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(py/braindump-inbox :maxlevel . 1))
+#+end_src
+**** project
+#+begin_src emacs-lisp
+(setq py/project-files
+      (directory-files-recursively py/project-dir (rx ".org" eos)))
+#+end_src
+
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(py/project-files :maxlevel . 1))
+#+end_src
+
+**** thoughts
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(py/thoughts :maxlevel . 1))
+#+end_src
+
+**** arts
+#+begin_src emacs-lisp
+(add-to-list 'org-refile-targets '(py/arts :maxlevel . 1))
+#+end_src
+*** 🔀 TODO archive
+** in-file structures
+*** TODOkeyword
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+        '((sequence
+           "🔀 TODO(t)"  ; A task that needs doing & is ready to do
+           "🗡 INPROCESS(s)"  ; A task that is in progress
+           "📌 WAITING(w)"  ; Something is holding up this task; or it is paused
+           "⏰ LEAVETO(l)"  ; entry delivered to others
+           "⤴ REFILE?(r)"   ;might
+           "|"
+           "⏭ NEXT(n)"
+           "✅ DONE(d)"  ; Task successfully completed
+           "CANCELED(c@)") ; Task was cancelled, aborted or is no longer applicable
+           )) ; Task was completed
+#+end_src
+
+*** tags
+keymap: =Spc m q= org-set-tag-command
+#+begin_src emacs-lisp
+(setq org-tag-alist
+      '(("@errand" . ?e)
+        ("@office" . ?o)
+        ("@home" . ?h)))
+#+end_src
+
+*** properties
+**** id
+modify-id operation
 #+begin_src emacs-lisp
 (map! :leader
-      (:prefix-map ("z" . "tasks detailize")
-                   :desc "1. file-kill task"                "1" #'org-cut-subtree
-                   :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
-                   :desc "3. file-Schedule"                 "3" #'org-schedule
-                   :desc "4. file-Deadline"                 "4" #'org-deadline
-                   :desc "5. file-Priority"                 "5" #'org-priority
-                   :desc "6. file-E. E."                    "6" #'org-set-effort
-                   :desc "q. agenda-kill task"              "q" #'org-agenda-kill
-                   :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
-                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedule
-                   :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
-                   :desc "t. agenda-Priority"               "t" #'org-agenda-priority
-                   :desc "y. agenda-E. E."                  "y" #'org-agenda-set-effort))
+      :prefix "m"
+      :desc "id-create"         "i" #'org-id-get-create)
 #+end_src
 
-#+RESULTS:
-: org-agenda-set-effort
+notes-id operations
+#+begin_src emacs-lisp
+(map! :leader
+      :prefix "n"
+      (:prefix-map              ("i" . "id")
+       :desc "id-create"        "C" #'org-id-get-create
+       :desc "id-goto"          "g" #'org-id-goto
+       :desc "id-copy"          "c" #'org-id-copy))
+#+end_src
 
-** Refile
+**** initial-time
+***** captgure: use the templates
+***** normal:
 :PROPERTIES:
-:ID:       f0b5e5dc-f2c2-43e1-a14f-a9a188068213
-:END:
-#+begin_src emacs-lisp
-(setq org-refile-allow-creating-parent-nodes 'confirm)
-#+end_src
-
-#+begin_src emacs-lisp
-(setq org-refile-targets '((nil :maxlevel . 9)
-                           (py/org-bin :maxlevel . 9)
-                           (py/org-todolist :maxlevel . 9)
-                           (py/org-project-files :maxlevel . 9)
-                           (py/org-archive :maxlevel . 9)
-                           (py/org-maybe_future :maxlevel . 9)
-                           (org-roam-index-file :maxlevel . 9)))
-#+end_src
-
-#+RESULTS:
-: ((nil :maxlevel . 9) (py/org-bin :maxlevel . 9) (py/org-todolist :maxlevel . 9) (py/org-project-files :maxlevel . 9) (py/org-archive :maxlevel . 9) (py/org-maybe_future :maxlevel . 9) (org-roam-index-file :maxlevel . 9))
-
-Avoid done task refiled
-#+begin_src emacs-lisp
-(defun bh/verify-refile-target ()
-  "Exclude todo keywords with a done state from refile targets"
-  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-(setq org-refile-target-verify-function 'bh/verify-refile-target)
-#+end_src
-
-** Agenda
-:PROPERTIES:
-:ID:       bbf61454-2f4b-4d80-b0e7-6771647aea59
+:ID:       e37fa0af-d194-471d-9f67-1803f1e6be44
+:INIT:     [2021-01-11 Mon 23:35]
+:LOCATION: dod
 :END:
 
+keymaps:
 #+begin_src emacs-lisp
-(setq org-agenda-files py/org-inbox) ;will be py/org-inbox
+(map! :leader
+      :desc "set initial property" "mdi" #'org-set-property-initial-time
+      :desc "set initial property" "mcs" #'org-set-property-initial-time)
 #+end_src
 
-#+RESULTS:
-: ~/Dropbox/.org/inbox.org
-
+****** COMMENT works
+:PROPERTIES:
+:LOCATION: dod
+:END:
+Time formate
 #+begin_src emacs-lisp
-(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+(defvar org-initial-current-time-format "[%Y-%m-%d %a %H:%M]"
+  "Format of date to insert with `insert-current-date-time' func
+See help of `format-time-string' for possible replacements")
 #+end_src
 
-#+RESULTS:
-: %40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)
-
 #+begin_src emacs-lisp
-(setq org-agenda-custom-commands `(("z" "Agenda"
-                                    ((agenda ""
-                                             ((org-agenda-span 'week)
-                                              (org-agenda-files '(,(expand-file-name py/org-inbox)))
-                                              (org-deadline-warning-days 365)
-                                              (org-agenda-use-time-grid t)
-                                              (org-agenda-time-grid '((daily today)
-                                                                      (0600 0800 1000 1200 1400 1600 1800 2000 2200)
-                                                                      "......"
-                                                                      "----------------"))))
-                                     (todo "TODO"
-                                           ((org-agenda-overriding-header "To Refile.")
-                                            (org-agenda-files '(,(expand-file-name py/org-inbox)))))
-                                     (todo "NEXT"
-                                           ((org-agenda-overriding-header "In progress.")
-                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
-                                     (todo "STUCKED"
-                                           ((org-agenda-overriding-header "Stucked.")
-                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
-                                     (todo "TODO"
-                                           ((org-agenda-overriding-header "One-off Tasks.")
-                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))
-                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                                     ))))
-#+end_src
-
-
-#+begin_src emacs-lisp
-(map! "<C-f2>" #'py/switch-to-agenda)
-(defun py/switch-to-agenda ()
+(defun org-set-property-initial-time ()
+  "Set the initial time property of entries in orgmode as\n
+:INIT:    [YEAR-MONTH-DAY WEEKDAY HOUR:MIN]\n
+when you realize it IS initalized."
   (interactive)
-  (org-agenda nil "z"))
+  (if (member "INIT" (org-entry-properties nil 'standard))
+      ()
+   (org-set-property "INIT" (format-time-string org-initial-current-time-format (current-time)))
+    ))
 #+end_src
 
-** Archive
-** journal
+**** schedual/deadline
+org-schedual
+org-deadline
+**** effort
+:LOGBOOK:
+CLOCK: [2021-01-11 Mon 07:13]--[2021-01-11 Mon 07:14] =>  0:01
+:END:
+org-set-effort
+
 #+begin_src emacs-lisp
-(use-package! org-journal
+(map! :leader
+      (:prefix "m"
+       (:prefix "c"
+        :desc "set effort"    "e"     #'org-set-effort)))
+#+end_src
+
+#+begin_src emacs-lisp
+(add-to-list 'org-global-properties
+      '("Effort_ALL". "0:05 0:15 0:30 1:00 1:30 2:00 3:00 4:00"))
+#+end_src
+
+**** clock-sum
+:LOGBOOK:
+CLOCK: [2021-01-11 Mon 07:14]--[2021-01-11 Mon 07:14] =>  0:00
+:END:
+clock-in
+clock-in-last-clock
+clock-out
+clock-time-report
+**** pomodoro
+use the basic org-pomodoro
+** knowledge managerment
+*** notdeft -- file manager
+#+begin_src emacs-lisp
+(use-package! notdeft
   :config
-  (setq org-journal-date-prefix "#+TITLE: "
-        org-journal-dir (concat org-directory "journal/")
-        org-journal-file-format "%Y-%m-%d.org"
-        org-journal-date-format "%A, %d %B %Y"
-        org-journal-carryover-items nil))
+  (setq notdeft-extension "org")
+  (setq notdeft-directories '("~/Dropbox/.org/"))
+  (setq notdeft-xapian-program "/home/py06/.local/share/notdeft-xapian")
+  :bind (:map notdeft-mode-map
+         ("C-q" . notdeft-quit)
+         ("C-r" . notdeft-refresh)))
+#+end_src
+
+#+begin_src emacs-lisp
+(setenv "XAPIAN_CJK_NGRAM" "1")
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix "n"
+       :desc "notdeft" "n" #'notdeft ))
 #+end_src
 
 #+RESULTS:
-: t
+: notdeft
+*** org-roam -- knowledge base
+**** directories, files and other basic settings
+#+begin_src emacs-lisp
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+  :hook
+  (after-init . org-roam-mode))
+#+end_src
 
+#+begin_src emacs-lisp
+(setq   org-roam-directory              py/braindump-dir
+        org-roam-index-file             py/braindump-index
+        org-roam-dailies-directory      "dailies/"
+        org-roam-db-gc-threshold        most-positive-fixnum
+        org-roam-graph-exclude-matcher  "private"
+        org-roam-tag-sources            '(prop last-directory)
+        org-id-link-to-org-use-id t)
+#+end_src
+**** keymaps
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("r" . "roam")
+       :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+       (:prefix ("d" . "by date")
+        :desc "Arbitrary date" "d" #'org-roam-dailies-find-date
+        :desc "Today"          "t" #'org-roam-dailies-find-today
+        :desc "Tomorrow"       "m" #'org-roam-dailies-find-tomorrow
+       :desc "Yesterday"       "y" #'org-roam-dailies-find-yesterday)
+       :desc "Find file"                     "f" #'org-roam-find-file
+       :desc "Show graph"                    "g" #'org-roam-graph
+       :desc "Insert new text"               "i" #'org-roam-insert
+       :desc "Insert selected text"          "I" #'org-roam-insert-immediate
+       :desc "Jump to index"                 "j" #'org-roam-jump-to-index
+       :desc "Roam buffer"                   "r" #'org-roam
+       :desc "Org Roam Capture"              "x" #'org-roam-capture))
+#+end_src
+
+#+RESULTS:
+: org-roam-capture
+
+**** roam-capture
+***** roam-protocol
+#+begin_src emacs-lisp
+(use-package! org-roam-protocol
+  :after org-protocol)
+#+end_src
+
+***** roam-cpature template
+#+begin_src emacs-lisp
+(setq org-roam-capture-templates
+             ;; literally
+      '(("d" "default" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)))
+;; org-roam-capture-immediate
+(setq org-roam-capture-immediate-template
+             ;; default
+             '("d" "default" plain (function org-roam--capture-get-point)
+               "%?"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n"
+               :unnarrowed t))
+#+end_src
+***** roam-capture-ref-templates
+#+begin_src emacs-lisp
+(setq org-roam-capture-ref-templates nil)
+(add-to-list 'org-roam-capture-ref-templates
+             '("r" "ref" plain (function org-roam-capture--get-point)
+               ""
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+               :unnarrowed t))
+(add-to-list 'org-roam-capture-ref-templates
+             '("a" "Annotation" plain (function org-roam-capture--get-point)
+               "%U \n${body}\n"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+               :immediate-finish t
+               :unnarrowed t))
+#+end_src
+
+#+RESULTS:
+| a | Annotation | plain | #'org-roam-capture--get-point | %U |
+
+*****
+**** roam-server
+#+begin_src emacs-lisp
+(use-package! org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+;; kept server running
+(unless (server-running-p)
+  (org-roam-server-mode))
+#+end_src
+
+** agenda customization
+***
 * Metacog
-** Questions
 ** Notes
-*** TODO 设计议程：文件，外观，逻辑来完成功能
-**** TODO 功能
-***** DONE 收集想法
-Capture to inbox
-利用了 [[https://github.com/progfolio/doct][Github DOCT]]
-***** DONE 完善想法
-- 想法
-  + 2 min 以内：直接处理掉，移入 archive
-  + 类型分类：增加工作类型的 tag
-  + 地点分类：增加地点类型的 tag
-  + 时间规划：
-    - 某个时间内执行 Schedual-Deadline
-    - 某个时刻前完成 Deadline
-    - 某个时刻后完成 Schedual
-  + 重要程度：Priority
-  + 时间长度猜测：Estimate Effort
-- 实现 不演了直接用一个 keymapset 来处理这个问题
-  - :leader :desc "任务处理" "z"
-    + "1. file-tags: work/position"   "1" #'org-set-tags-command
-    + "2. file-Schedual"        "2" #'org-schedual
-    + "3. file-Deadline"        "3" #'org-deadline
-    + "4. file-Priority"        "4" #'org-priority
-    + "5. file-E. E."           "5" #'org-set-effort
-    + "q. agenda-tags: work/position"   "1" #'org-agenda-set-tags
-    + "w. agenda-Schedual"        "2" #'org-agenda-schedual
-    + "e. agenda-Deadline"        "3" #'org-agenda-deadline
-    + "r. agenda-Priority"        "4" #'org-agenda-priority
-    + "t. agenda-E. E."           "5" #'org-agenda-set-effort
+*** 🔀 TODO captured html
+:PROPERTIES:
+:ID:       e37fa0af-d194-471d-9f67-1803f1e6be44
+:END:
+***** Question
+#+begin_export html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.56 in css mode. -->
+<html>
+  <head>
+    <title>*sx-question*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #f8f8f2;
+        background-color: #1E2029;
+      }
+      .markdown-inline-code {
+        /* markdown-inline-code-face */
+        color: #f1fa8c;
+        background-color: #252631;
+      }
+      .markdown-markup {
+        /* markdown-markup-face */
+        color: #6272a4;
+      }
+      .region {
+        /* region */
+        background-color: #44475a;
+      }
+      .sx-question-mode-content {
+        /* sx-question-mode-content-face */
+        background-color: #090909;
+      }
+      .sx-question-mode-date {
+        /* sx-question-mode-date */
+        color: #f1fa8c;
+      }
+      .sx-question-mode-header {
+      }
+      .sx-question-mode-score {
+      }
+      .sx-question-mode-title {
+        /* sx-question-mode-title */
+        color: #f8f8f2;
+        background-color: #1E2029;
+        font-weight: bold;
+      }
+      .sx-question-mode-title-comments {
+        /* sx-question-mode-title-comments */
+        color: #f8f8f2;
+        background-color: #1E2029;
+        font-weight: bold;
+      }
+      .sx-tag {
+        /* sx-tag */
+        color: #50fa7b;
+      }
+      .sx-user-name {
+        /* sx-user-name */
+        color: #ffb86c;
+      }
+      .sx-user-reputation {
+        /* sx-user-reputation */
+        color: #6272a4;
+      }
+      .underline {
+        /* underline */
+        text-decoration: underline;
+      }
 
-***** TODO 分配想法
-refile inbox 中 item 到 one-off/project/braindrump
-***** TODO 工作
-- 标识：在 agenda 中看得到我正在解决什么问题
-- 计时：在任务开始的时候进行计时，要能做到
-  + 开始
-  + 暂停
-  + 结束
-  + 记录一共有做了多久时间
-***** TODO 定期检查
-对自己的定期工作输出报告（还不知道怎么做）
-**** TODO 文件
-- inbox.org 文件 用于存储想法 capture
-- project 文件夹 里面不同的文件代表着不同的项目，每个项目一个文件，文件中包含是
-  + #+title
-  + * inbox
-  + * todolist
-    - 基本上都是 TODO，有一个是 next
-    - 类似一个基本的 todolist
-  + * maybe_future
-  + * archive
-  + * trash
-- next.org 文件
-- trash.org 文件
-- archive.org 文件
-- repeater.org 文件
-**** TODO 外观
-1. Dayview
-   a. 展示 time-grid
-   b. 展示 next 中的文件
-2. To Refile
-   a. 展示 inbox 中的 TODO 文件
-3. Projects
-   a. inbox TODO
-   b. TODOLIST 展示
-4. Priority
-   a. 根据重要程度展示 TODO 项目
-5. One-off Tasks
-   a. 只展示 next 中的标着 TODO 的项目
-**** TODO 代码
-***** DONE 文件（文件模板）
-***** DONE 收集（org-capture）
-***** DONE 完善（类似 org-gtd 的增加 tag 的方法）
-***** DONE 分配（org-refile）
-***** TODO 工作（in todolist）
-***** TODO 检查（how？）
-***** TODO 外观（org-super-agenda）
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="sx-question-mode-title"><span class="region"><span class="region">Org-mode: Can you set up context-dependent refile targets?</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Author:    </span></span></span><span class="sx-user-name"><span class="region"><span class="region">wiuah</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region"> </span></span></span><span class="sx-user-reputation"><span class="region"><span class="region">31</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Posted on: </span></span></span><span class="sx-question-mode-date"><span class="region"><span class="region">12:17  1 Aug 2016</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Score:     </span></span></span><span class="sx-question-mode-score"><span class="region"><span class="region">3</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Tags:      </span></span></span><span class="sx-tag"><span class="region"><span class="region">[org-mode]</span></span></span><span class="region"><span class="region">
+</span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="region">                                                                        </span></span></span></span><span class="region"><span class="region">
+</span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+I'm new to org-mode (and emacs in general), and have been trying to follow the
+tutorials and manuals to set up a GTD-like system.
+
+I currently have an "inbox.org" file with two first-level headings ("Inbox" and
+"Processing"). I also have a "todo.org" file with a "Projects" heading.
+
+I've set up </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> so that any task in inbox.org can be refiled to
+todo.org. When I refile something, it shows me all the headings in all my org
+files to choose.
+
+However, what I'd really like to do is have the refile targets change based on
+the heading or file I'm currently in.
+
+So, for example, for tasks under the "Inbox" heading, the only refile target
+available should be "Processing".
+
+For tasks under "Processing", the only refile targets available should be
+"Projects", "Someday" (goes to a someday.org file), or "Reference" (goes to a
+reference.org file).
+
+This way, I can create sort of a directional "workflow" to enforce the GTD
+decision model. Is it possible to set this up with org-mode?
+</span></span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="sx-question-mode-content"><span class="region">                                                                        </span></span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+</span></span></span><span class="region"><span class="region">
+</span></span><span class="sx-question-mode-title-comments"><span class="region"><span class="region"> Comments</span></span></span><span class="region"><span class="region">
+</span></span><span class="sx-user-name"><span class="region"><span class="sx-question-mode-content"><span class="region">lurdan</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">: You can control refile target with </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">. (i.e. C-h v
+   org-refile-targets)
+</span></span></span></pre>
+  </body>
+</html>
+#+end_export
+***** Answer 1
+#+begin_export html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.56 in css mode. -->
+<html>
+  <head>
+    <title>*sx-question*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #f8f8f2;
+        background-color: #1E2029;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #ffb86c;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #8be9fd;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #8995ba;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #50fa7b;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #ff79c6;
+      }
+      .markdown-inline-code {
+        /* markdown-inline-code-face */
+        color: #f1fa8c;
+        background-color: #252631;
+      }
+      .markdown-markup {
+        /* markdown-markup-face */
+        color: #6272a4;
+      }
+      .region {
+        /* region */
+        background-color: #44475a;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #f1fa8c;
+      }
+      .sx-question-mode-content {
+        /* sx-question-mode-content-face */
+        background-color: #090909;
+      }
+      .sx-question-mode-date {
+        /* sx-question-mode-date */
+        color: #f1fa8c;
+      }
+      .sx-question-mode-header {
+      }
+      .sx-question-mode-score {
+      }
+      .sx-question-mode-title {
+        /* sx-question-mode-title */
+        color: #f8f8f2;
+        background-color: #1E2029;
+        font-weight: bold;
+      }
+      .sx-user-name {
+        /* sx-user-name */
+        color: #ffb86c;
+      }
+      .sx-user-reputation {
+        /* sx-user-reputation */
+        color: #6272a4;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #bd93f9;
+      }
+      .underline {
+        /* underline */
+        text-decoration: underline;
+      }
+      .variable-name {
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="sx-question-mode-title"><span class="region"><span class="region">Answer</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Author:    </span></span></span><span class="sx-user-name"><span class="region"><span class="region">erikstokes</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region"> </span></span></span><span class="sx-user-reputation"><span class="region"><span class="region">11215</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Posted on: </span></span></span><span class="sx-question-mode-date"><span class="region"><span class="region">00:57 12 Sep 2016 (edited 7mo ago by Chris Hunt)</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Score:     </span></span></span><span class="sx-question-mode-score"><span class="region"><span class="region">4</span></span></span><span class="region"><span class="region">
+</span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="region">                                                                        </span></span></span></span><span class="region"><span class="region">
+</span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+</span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-mode</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> already has a feature like this for </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> and </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-agenda</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">. We can
+use that to bootstrap a similar feature for </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">:
+
+    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">require</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> '</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">dash</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
+
+    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defvar</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Contexts for `</span></span></span></span><span class="string"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">'.
+
+    Takes the same values as `</span></span></span></span><span class="string"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture-templates-contexts</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">' except
+    that the first value of each entry should be a valid setting for
+    `</span></span></span></span><span class="string"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">'."</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
+
+    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defun</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile--get-context-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> ()
+      </span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">"Get the refile targets for the current headline.
+
+    Returns the first set of targets in `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">' that
+    the current headline satisfies, or `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">' if there
+    are no such."</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">or</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">car</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">-first</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">lambda</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (x)
+                                (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-contextualize-validate-key</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+                                 (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">car</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> x)
+                                 org-refile-contexts))
+                              org-refile-contexts
+                     ))
+          </span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
+      )
+
+    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defun</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-with-context</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="type"><span class="region"><span class="sx-question-mode-content"><span class="region">&amp;optional</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer rfloc msg)
+      </span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">"Refile the headline to a location based on `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">'.
+
+    Changes the set of available refile targets based on `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">', but is otherwise identical to `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">'"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">interactive</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"P"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
+      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">let</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> ((</span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (org-refile--get-context-targets)))
+        (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer rfloc msg)
+        )
+      )
+
+Set the contexts you want in </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> using the same rules as
+</span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture-templates-contexts</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">: it is a list of pairs </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">(targets conditions)</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">,
+where </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> is the desired setting for </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> and </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">conditions</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> is a
+list of predicates to test the current headline against (most generally, these
+can be any function taking no arguments).
+
+For example this setting will cause anything in the "notes.org" file under the
+"Inbox" heading to be refiled to "Projects"
+
+    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">setq</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> org-refile-contexts
+          '(((((</span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"notes.org"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">) . (</span></span></span><span class="builtin"><span class="region"><span class="sx-question-mode-content"><span class="region">:regexp</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> . </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Projects"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)))
+             ((</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">lambda</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> () (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">string=</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-find-top-headline</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">) </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Inbox"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)))
+             )
+            ))
+
+More conditions and more targets can be added to achieve almost any workflow.
+
+Bind </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture-with-context</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> to the key normally bound to </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> and it
+should replace it seamlessly:
+
+    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">define-key</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-mode-map</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">kbd</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"C-c C-w"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">) #'org-refile-with-context)
+</span></span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="sx-question-mode-content"><span class="region">                                                                        </span></span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+</span></span></span></pre>
+  </body>
+</html>
+
+#+end_export
+***** Answer 2
+#+begin_export html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.56 in css mode. -->
+<html>
+  <head>
+    <title>*sx-question*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #f8f8f2;
+        background-color: #1E2029;
+      }
+      .button {
+        /* button */
+        color: #bd93f9;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #6272a4;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #6272a4;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #8be9fd;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #8995ba;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #50fa7b;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #ff79c6;
+      }
+      .markdown-comment {
+        /* markdown-comment-face */
+        color: #6272a4;
+      }
+      .markdown-inline-code {
+        /* markdown-inline-code-face */
+        color: #f1fa8c;
+        background-color: #252631;
+      }
+      .markdown-markup {
+        /* markdown-markup-face */
+        color: #6272a4;
+      }
+      .region {
+        /* region */
+        background-color: #44475a;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #f1fa8c;
+      }
+      .sx-question-mode-content {
+        /* sx-question-mode-content-face */
+        background-color: #090909;
+      }
+      .sx-question-mode-date {
+        /* sx-question-mode-date */
+        color: #f1fa8c;
+      }
+      .sx-question-mode-header {
+      }
+      .sx-question-mode-score {
+      }
+      .sx-question-mode-title {
+        /* sx-question-mode-title */
+        color: #f8f8f2;
+        background-color: #1E2029;
+        font-weight: bold;
+      }
+      .sx-user-name {
+        /* sx-user-name */
+        color: #ffb86c;
+      }
+      .sx-user-reputation {
+        /* sx-user-reputation */
+        color: #6272a4;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #bd93f9;
+      }
+      .underline {
+        /* underline */
+        text-decoration: underline;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #f1fa8c;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="sx-question-mode-title"><span class="region"><span class="region">Answer</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Author:    </span></span></span><span class="sx-user-name"><span class="region"><span class="region">mutbuerger</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region"> </span></span></span><span class="sx-user-reputation"><span class="region"><span class="region">3099</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Posted on: </span></span></span><span class="sx-question-mode-date"><span class="region"><span class="region">16:58  1 Aug 2016 (edited 4y ago by Community)</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
+Score:     </span></span></span><span class="sx-question-mode-score"><span class="region"><span class="region">1</span></span></span><span class="region"><span class="region">
+</span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="region">                                                                        </span></span></span></span><span class="region"><span class="region">
+</span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+</span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> uses a </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">rfloc</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> argument that, after reading the docstring,
+unfortunately remains mysterious. </span></span></span><span class="button"><span class="region"><span class="sx-question-mode-content"><span class="region">This answer</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> clarifies how </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">rfloc</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> should look
+like. The following function sets the </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">rfloc</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> based on a FILE argument, that is
+the target file, a HEADING argument, specifying the target heading the current
+heading should be refiled to (must be exact, meaning you have to include tags
+and todo states if there are any), and a PARENT argument that describes the
+top-level heading whose subitems will be refiled to that target:
+
+</span></span></span><span class="markdown-comment"><span class="region"><span class="sx-question-mode-content"><span class="region">&lt;!-- language: lang-el --&gt;</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+
+    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defun</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-enh</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (file heading parent </span></span></span><span class="type"><span class="region"><span class="sx-question-mode-content"><span class="region">&amp;optional</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer msg)
+      </span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">"Refile entries with top-level PARENT under the (exact) HEADING in FILE."</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">let</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> ((rfloc
+             (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">if</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">equal</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> parent
+                  (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">save-excursion</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+                    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">re-search-backward</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"^</span></span></span></span><span class="string"><span class="warning"><span class="region"><span class="sx-question-mode-content"><span class="region">\</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">* "</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> nil 'noerror 1)
+                    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">nth</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> 4 (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-heading-components</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">))))
+                 `(,heading
+                   ,file
+                   nil
+                   ,(</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">with-current-buffer</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">find-file-noselect</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> file)
+                      (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-find-exact-headline-in-buffer</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> heading))))))
+        (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer rfloc msg)))
+
+In your case, refiling subitems from "Inbox" under the "Processing" heading in
+the same file would be:
+
+</span></span></span><span class="markdown-comment"><span class="region"><span class="sx-question-mode-content"><span class="region">&lt;!-- language: lang-el --&gt;</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+
+    (org-refile-enh </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"~/path/to/inbox.org"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="comment-delimiter"><span class="region"><span class="sx-question-mode-content"><span class="region">;</span></span></span></span><span class="comment"><span class="region"><span class="sx-question-mode-content"><span class="region">target file
+    </span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">                </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Processing"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">          </span></span></span><span class="comment-delimiter"><span class="region"><span class="sx-question-mode-content"><span class="region">;</span></span></span></span><span class="comment"><span class="region"><span class="sx-question-mode-content"><span class="region">target heading
+    </span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">                </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Inbox"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">               </span></span></span><span class="comment-delimiter"><span class="region"><span class="sx-question-mode-content"><span class="region">;</span></span></span></span><span class="comment"><span class="region"><span class="sx-question-mode-content"><span class="region">top-level heading of refiled item
+    </span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">                )
+</span></span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="sx-question-mode-content"><span class="region">                                                                        </span></span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
+</span></span></span></pre>
+  </body>
+</html>
+
+#+end_export
+*** 🔀 TODO 这个时间不知道为何不能同时启动pyim和rime-emacs，只好放弃掉了doom的pyim和init中的pyim
+:PROPERTIES:
+:INIT:       [2021-01-11 Mon 16:34]
+:END:
+*** 🔀 TODO 考虑弄个 id 直接插入的函数
+:PROPERTIES:
+:INIT:       [2021-01-11 Mon 16:22]
+:END:
+*** 🔀 TODO 我应该弄个从 buffer capture 到 org-mode html 的东西（也可以用 pandoc 到 org-mode 啦，这个更好）
+:PROPERTIES:
+:INIT:       [2021-01-11 Mon 16:20]
+:END:
+** Questions
+*** 🔀 TODO
+:PROPERTIES:
+:INIT:       [2021-01-11 Mon 06:47]
+:END:

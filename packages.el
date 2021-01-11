@@ -74,7 +74,6 @@
   :recipe (:host github :repo "tumashu/cnfonts"))
 (package! window-purpose)
 ;; TODO initial punctution , ; Thu 03 Dec 2020 03:42:48 PM CST
-(package! pyim)
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
 (package! ace-window
@@ -158,3 +157,31 @@
 
 (package! s)
 (package! ht)
+(package! org-starter)
+(package! notdeft
+  :recipe (:host github :repo "hasu/notdeft"))
+(package! good-scroll.el
+  :recipe (:host github :repo "io12/good-scroll.el"))
+(package! maple-iedit
+  :recipe (:host github :repo "honmaple/emacs-maple-iedit"))
+(package! org-latex-impatient)
+(package! beacon)
+(package! berrys-theme)
+(package! burly
+  :recipe (:host github :repo "alphapapa/burly.el"))
+(package! awesome-pair
+  :recipe (:host github :repo "manateelazycat/awesome-pair"))
+(package! grugru
+  :recipe (:host github :repo "ROCKTAKEY/grugru"))
+(package! org-treeusage)
+
+(package! org-superstar)
+(package! undo-fu)
+(package! undo-fu-session)
+
+(package! emacs-maple-explorer
+  :recipe (:host github :repo "honmaple/emacs-maple-explorer"))
+
+(package! sx)
+
+(package! evil-multiedit)

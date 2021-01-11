@@ -1,0 +1,666 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/py06/.doom.d/config.org
+
+
+* COMMENT Parinfer
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-01-10 Sun 15:25
+:ARCHIVE_FILE: ~/.doom.d/config.org
+:ARCHIVE_OLPATH: Meta config
+:ARCHIVE_CATEGORY: config
+:END:
+#+begin_src emacs-lisp
+(use-package parinfer
+  :bind
+  (("C-," . parinfer-toggle-mode))
+  :init
+  (progn
+    (setq parinfer-extensions
+          '(defaults       ; should be included.
+            pretty-parens  ; different paren styles for different modes.
+            evil           ; If you use Evil.
+            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+            paredit        ; Introduce some paredit commands.
+            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+            smart-yank))   ; Yank behavior depend on mode.
+    (add-hook 'clojure-mode-hook #'parinfer-mode)
+    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
+    (add-hook 'scheme-mode-hook #'parinfer-mode)
+    (add-hook 'lisp-mode-hook #'parinfer-mode)))
+#+end_src
+
+* COMMENT Theme
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-01-10 Sun 15:25
+:ARCHIVE_FILE: ~/.doom.d/config.org
+:ARCHIVE_OLPATH: Appearance
+:ARCHIVE_CATEGORY: config
+:END:
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-Iosvkem)
+#+end_src
+
+
+* COMMENT good-scroll
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-01-10 Sun 16:17
+:ARCHIVE_FILE: ~/.doom.d/config.org
+:ARCHIVE_OLPATH: Coding
+:ARCHIVE_CATEGORY: config
+:END:
+#+begin_src emacs-lisp
+(good-scroll-mode 1)
+#+end_src
+
+#+begin_src emacs-lisp
+(map! )
+#+end_src
+
+* COMMENT Pyim
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-01-11 Mon 16:35
+:ARCHIVE_FILE: ~/.doom.d/config.org
+:ARCHIVE_OLPATH: Chinese
+:ARCHIVE_CATEGORY: config
+:END:
+   我利用 pyim 的分词方法来进行中文跳转.
+#+begin_src emacs-lisp
+(use-package! pyim
+  :demand t
+  :config
+  (setq pyim-dicts
+        '((:name "zh-tsinghua"          :file "/home/py06/.doom.d/pyim_dicts/zh-tsinghua.pyim")
+          (:name "zh-wiki"              :file "/home/py06/.doom.d/pyim_dicts/zh-wiki.pyim")
+          (:name "zh-math"              :file "/home/py06/.doom.d/pyim_dicts/zh-math.pyim")
+          (:name "zh-moegirl"           :file "/home/py06/.doom.d/pyim_dicts/zh-moegirl.pyim")))
+  :bind
+  (("C-c M-c C-w" . pyim-forward-word)
+   ("C-c M-c C-b" . pyim-backward-word)))
+ #+end_src
+
+|---------------+-------------------+----------|
+| 快捷键        | 命令              | 描述     |
+|---------------+-------------------+----------|
+| =C-c M-c C-w= | pyim-forward-word | 分词向前 |
+| =C-c M-c C-b= | pyim-forward-word | 分词向后 |
+|---------------+-------------------+----------|
+
+
+
+
+
+
+* COMMENT Appearance
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-01-11 Mon 16:36
+:ARCHIVE_FILE: ~/.doom.d/config.org
+:ARCHIVE_OLPATH: Org-mode
+:ARCHIVE_CATEGORY: config
+:END:
+** ellipsis at the end of heading
+#+begin_src emacs-lisp
+(setq org-ellipsis " ▼ ")
+#+end_src
+** heading-level-face
+#+begin_src emacs-lisp
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
+#+end_src
+
+** org-super-star
+#+begin_src emacs-lisp
+(use-package! org-superstar
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
+#+end_src
+** bold/delete/emph
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+
+
+* COMMENT Org-mode
+** Directories
+#+begin_src emacs-lisp
+;; basic org settin gs
+(setq org-directory "~/Dropbox/.org/")
+#+end_src
+** Appearance
+*** ellipsis at the end of heading
+#+begin_src emacs-lisp
+(setq org-ellipsis " ▼ ")
+#+end_src
+*** heading-level-face
+#+begin_src emacs-lisp
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
+#+end_src
+
+*** org-super-star
+#+begin_src emacs-lisp
+(use-package! org-superstar
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
+#+end_src
+*** bold/delete/emph
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+** Opearations
+*** quick-movement
+#+begin_src emacs-lisp
+;; org-outline quick movement
+(after! org
+  (map! :map org-mode-map
+        "M-n" #'outline-next-visible-heading
+        "M-p" #'outline-previous-visible-heading))
+#+end_src
+*** save all buffers
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "save org buffers"           "f o" #'org-save-all-org-buffers)
+#+end_src
+*** org-treeusage
+#+begin_src emacs-lisp
+(use-package org-treeusage
+  :bind ("C-c d" . org-treeusage-mode)
+  :custom
+  ;; Below two settings recreate the above image
+  ((org-treescope-overlay-header nil)
+   (org-treeusage-overlay-usecolorbands nil)))
+#+end_src
+** org-download
+#+begin_src emacs-lisp
+(use-package! org-download
+  :commands
+  org-download-dnd
+  org-download-yank
+  org-download-screenshot
+  org-download-dnd-base64
+  :init
+  (map! :map org-mode-map
+        "s-Y" #'org-download-screenshot
+        "s-y" #'org-download-yank)
+  (pushnew! dnd-protocol-alist
+            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . +org-dragndrop-download-dnd-fn)
+            '("^data:" . org-download-dnd-base64))
+  (advice-add #'org-download-enable :override #'ignore)
+  :config
+  (defun +org/org-download-method (link)
+    (let* ((filename
+            (file-name-nondirectory
+             (car (url-path-and-query
+                   (url-generic-parse-url link)))))
+           ;; Create folder name with current buffer name, and place in root dir
+           (dirname (concat "./images/"
+                            (replace-regexp-in-string " " "_"
+                                                      (downcase (file-name-base buffer-file-name)))))
+           (filename-with-timestamp (format "%s%s.%s"
+                                            (file-name-sans-extension filename)
+                                            (format-time-string org-download-timestamp)
+                                            (file-name-extension filename))))
+      (make-directory dirname t)
+      (expand-file-name filename-with-timestamp dirname)))
+  :config
+  (setq org-download-screenshot-method
+        (cond (IS-MAC "screencapture -i %s")
+              (IS-LINUX
+               (cond ((executable-find "maim")  "maim -u -s %s")
+                     ((executable-find "scrot") "scrot -s %s")))))
+  (setq org-download-method '+org/org-download-method))
+#+end_src
+** notdeft
+#+BEGIN: clocktable :scope subtree :maxlevel 2
+#+CAPTION: Clock summary at [2021-01-11 Mon 01:20]
+| Headline    | Time |      |
+|-------------+------+------|
+| *Total time*  | *0:01* |      |
+|-------------+------+------|
+| \_  notdeft |      | 0:01 |
+#+END:
+
+DEADLINE: <2021-01-11 Mon> SCHEDULED: <2021-01-11 Mon>
+:PROPERTIES:
+:ID:       7423a983-739c-4cf9-8674-8dd01e65046f
+:Effort:   3:00
+:END:
+:LOGBOOK:
+CLOCK: [2021-01-11 Mon 01:20]--[2021-01-11 Mon 01:20] =>  0:00
+CLOCK: [2021-01-11 Mon 01:18]--[2021-01-11 Mon 01:19] =>  0:01
+:END:
+#+begin_src emacs-lisp
+(use-package! notdeft
+  :config
+  (setq notdeft-extension "org")
+  (setq notdeft-directories '("~/Dropbox/.org/"))
+  (setq notdeft-xapian-program "/home/py06/.local/share/notdeft-xapian")
+  :bind (:map notdeft-mode-map
+         ("C-q" . notdeft-quit)
+         ("C-r" . notdeft-refresh)))
+#+end_src
+
+#+begin_src emacs-lisp
+(setenv "XAPIAN_CJK_NGRAM" "1")
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix "n"
+       :desc "notdeft" "n" #'notdeft ))
+#+end_src
+
+#+RESULTS:
+: notdeft
+
+** Roam
+*** use-package
+#+begin_src emacs-lisp
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+  :hook
+  (after-init . org-roam-mode)
+  :init
+  (map! :leader
+       (:prefix ("r" . "roam")
+                :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+                (:prefix ("d" . "by date")
+                      :desc "Arbitrary date" "d" #'org-roam-dailies-date
+                      :desc "Today"          "t" #'org-roam-dailies-today
+                      :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
+                      :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)
+                :desc "Find file"                     "f" #'org-roam-find-file
+                :desc "Show graph"                    "g" #'org-roam-graph
+                :desc "Insert new text"               "i" #'org-roam-insert
+                :desc "Insert selected text"          "I" #'org-roam-insert-immediate
+                :desc "Jump to index"                 "j" #'org-roam-jump-to-index
+                :desc "Roam buffer"                   "r" #'org-roam
+                :desc "Org Roam Capture"              "x" #'org-roam-capture))
+  :config
+  (setq org-roam-directory (file-truename "~/Dropbox/.org/roams/")
+        org-roam-index-file (concat org-roam-directory "index.org")
+        org-roam-dailies-directory "scratch/"
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-roam-graph-exclude-matcher "private"
+        org-roam-tag-sources '(prop last-directory)
+        org-id-link-to-org-use-id t))
+#+end_src
+*** roam-cpature template
+#+begin_src emacs-lisp
+(setq org-roam-capture-templates
+             ;; literally
+      '(("d" "default" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)))
+;; org-roam-capture-immediate
+(setq org-roam-capture-immediate-template
+             ;; default
+             '("d" "default" plain (function org-roam--capture-get-point)
+               "%?"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n"
+               :unnarrowed t))
+#+end_src
+*** roam-capture-ref-templates
+#+begin_src emacs-lisp
+(setq org-roam-capture-ref-templates nil)
+(add-to-list 'org-roam-capture-ref-templates
+             '("r" "ref" plain (function org-roam-capture--get-point)
+               ""
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+               :unnarrowed t))
+(add-to-list 'org-roam-capture-ref-templates
+             '("a" "Annotation" plain (function org-roam-capture--get-point)
+               "%U \n${body}\n"
+               :file-name "${slug}"
+               :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+               :immediate-finish t
+               :unnarrowed t))
+#+end_src
+
+#+RESULTS:
+| a | Annotation | plain | #'org-roam-capture--get-point | %U |
+
+*** roam-protocol
+#+begin_src emacs-lisp
+(use-package! org-roam-protocol
+  :after org-protocol)
+#+end_src
+
+*** roam-server
+#+begin_src emacs-lisp
+(use-package! org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+;; kept server running
+(unless (server-running-p)
+  (org-roam-server-mode))
+#+end_src
+
+* COMMENT Org-agenda
+** files
+#+begin_src emacs-lisp
+(setq   py/org-inbox        (concat org-directory "inbox.org")
+        py/org-todolist     (concat org-directory "todolist.org")
+        py/org-bin          (concat org-directory "bin.org")
+        py/org-repeater     (concat org-directory "repeater.org")
+        py/org-archive      (concat org-directory "archive.org")
+        py/org-maybe_future       (concat org-directory "maybe_future.org"))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq py/org-project-directory (file-truename (concat org-directory "projects/")))
+#+end_src
+
+#+RESULTS:
+: /home/py06/Dropbox/.org/projects/
+
+Why this is ok but no =find-lisp-find-file= failed.
+#+begin_src emacs-lisp
+(setq py/org-project-files
+      (directory-files-recursively py/org-project-directory (rx ".org" eos)))
+#+end_src
+
+#+RESULTS:
+| /home/py06/Dropbox/.org/projects/chemo.org | /home/py06/Dropbox/.org/projects/degree.org |
+
+** TODOkeywords and triggers :CANCELLED:
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "STUCKED(s@/!)" "|" "CANCELLED(c@/!)"))))
+(setq org-todo-keyword-faces
+      (quote (("TODO"           :background "red"              :weight bold)
+              ("NEXT"           :background "blue"             :weight bold)
+              ("DONE"           :background "forest green"     :weight bold)
+              ("WAITING"        :background "orange"           :weight bold)
+              ("STUCKED"        :background "balck"            :weight bold)
+              ("HOLD"           :background "magenta"          :weight bold)
+              ("CANCELLED"      :background "forest green"     :weight bold))))
+#+end_src
+
+#+RESULTS:
+| TODO      | :background | red          | :weight | bold |
+| NEXT      | :background | blue         | :weight | bold |
+| DONE      | :background | forest green | :weight | bold |
+| WAITING   | :background | orange       | :weight | bold |
+| STUCKED   | :background | balck        | :weight | bold |
+| HOLD      | :background | magenta      | :weight | bold |
+| CANCELLED | :background | forest green | :weight | bold |
+
+#+begin_src emacs-lisp
+(setq org-agenda-files py/org-project-files)
+#+end_src
+
+#+RESULTS:
+| /home/py06/Dropbox/.org/projects/chemo.org |
+
+#+begin_src emacs-lisp
+(setq org-treat-S-cursor-todo-selection-as-state-change nil) ;
+#+end_src
+
+** keyword triggers
+  + Moving a task to CANCELLED adds a CANCELLED tag
+  + Moving a task to WAITING adds a WAITING tag
+  + Moving a task to HOLD adds WAITING and HOLD tags
+  + Moving a task to a done state removes WAITING and HOLD tags
+  + Moving a task to TODO removes WAITING, CANCELLED, and HOLD tags
+  + Moving a task to NEXT removes WAITING, CANCELLED, and HOLD tags
+  + Moving a task to DONE removes WAITING, CANCELLED, and HOLD tags
+#+begin_src emacs-lisp
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+#+end_src
+
+** Capture
+:PROPERTIES:
+:ID:       33370970-cc3a-4ac5-ba2f-37d91fb9175c
+:END:
+=key binding=
+#+begin_src emacs-lisp
+(after! org
+  (map! :leader :desc "org-capture"           "x" #'org-capture))
+#+end_src
+
+=capture templates=
+#+begin_src emacs-lisp
+(require 'org-protocol-capture-html)
+
+(use-package doct
+  :ensure t
+  ;;recommended: defer until calling doct
+  :commands (doct))
+
+(setq org-capture-templates
+      (doct '(
+              ;;Standard inbox inbox
+              ("Inbox"
+               :keys "i"
+               :file py/org-inbox
+               :template ("* %{todo-state} %? \n")
+               :todo-state "TODO"
+               :create-id t)
+              ;;org-protocol-capture-html
+              ;; ("Web Content"
+              ;;  :keys "w"
+              ;;  :file ""
+              ;;  :todo-state "TODO"
+              ;;  :template ("* %a :website:\n\n%U %?\n\n%:initial"))
+              ;;Metacognition
+              ("Metacog"
+               :keys "m"
+               :prepend t
+               :template ("* %{todo-state} %? \n")
+               :children (;; MetaNotes
+                          ("MetaNotes"
+                           :keys "n"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
+                          ("MetaQuestions"
+                           :keys "q"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
+                          ("MetaTodos"
+                           :keys "t"
+                           :type entry
+                           :todo-state "TODO"
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
+#+end_src
+
+Related functions
+
+Shameless copied functions
+#+begin_src emacs-lisp
+(defun jethro/find-or-create-olp (path &optional this-buffer)
+  "Return a marker pointing to the entry at outline path OLP.
+If anything goes wrong, throw an error, and if you need to do
+something based on this error, you can catch it with
+`condition-case'.
+If THIS-BUFFER is set, the outline path does not contain a file,
+only headings."
+  (let* ((file (pop path))
+         (level 1)
+         (lmin 1)
+         (lmax 1)
+         (start (point-min))
+         (end (point-max))
+         found flevel)
+    (unless (derived-mode-p 'org-mode)
+      (error "Buffer %s needs to be in Org mode" buffer))
+    (org-with-wide-buffer
+     (goto-char start)
+     (dolist (heading path)
+       (let ((re (format org-complex-heading-regexp-format
+                         (regexp-quote heading)))
+             (cnt 0))
+         (while (re-search-forward re end t)
+           (setq level (- (match-end 1) (match-beginning 1)))
+           (when (and (>= level lmin) (<= level lmax))
+             (setq found (match-beginning 0) flevel level cnt (1+ cnt))))
+         (when (> cnt 1)
+           (error "Heading not unique on level %d: %s" lmax heading))
+         (when (= cnt 0)
+           ;; Create heading if it doesn't exist
+           (goto-char end)
+           (unless (bolp) (newline))
+           (org-insert-heading nil nil t)
+           (unless (= lmax 1) (org-do-demote))
+           (insert heading)
+           (setq end (point))
+           (goto-char start)
+           (while (re-search-forward re end t)
+             (setq level (- (match-end 1) (match-beginning 1)))
+             (when (and (>= level lmin) (<= level lmax))
+               (setq found (match-beginning 0) flevel level cnt (1+ cnt))))))
+       (goto-char found)
+       (setq lmin (1+ flevel) lmax (+ lmin (if org-odd-levels-only 1 0)))
+       (setq start found
+             end (save-excursion (org-end-of-subtree t t))))
+     (point-marker))))
+
+(defun jethro/olp-current-buffer (&rest outline-path)
+  "Find the OUTLINE-PATH of the current buffer."
+  (let ((m (jethro/find-or-create-olp (cons (buffer-file-name) outline-path))))
+    (set-buffer (marker-buffer m))
+    (org-capture-put-target-region-and-position)
+    (widen)
+    (goto-char m)
+    (set-marker m nil)))
+
+#+end_src
+
+** Detailize
+use a series of commands to finish it.
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix-map ("z" . "tasks detailize")
+                   :desc "1. file-kill task"                "1" #'org-cut-subtree
+                   :desc "2. file-tags: work/position"      "2" #'org-set-tags-command
+                   :desc "3. file-Schedule"                 "3" #'org-schedule
+                   :desc "4. file-Deadline"                 "4" #'org-deadline
+                   :desc "5. file-Priority"                 "5" #'org-priority
+                   :desc "6. file-E. E."                    "6" #'org-set-effort
+                   :desc "q. agenda-kill task"              "q" #'org-agenda-kill
+                   :desc "w. agenda-tags: work/position"    "w" #'org-agenda-set-tags
+                   :desc "e. agenda-Schedual"               "e" #'org-agenda-schedule
+                   :desc "r. agenda-Deadline"               "r" #'org-agenda-deadline
+                   :desc "t. agenda-Priority"               "t" #'org-agenda-priority
+                   :desc "y. agenda-E. E."                  "y" #'org-agenda-set-effort))
+#+end_src
+
+#+RESULTS:
+: org-agenda-set-effort
+
+** Refile
+:PROPERTIES:
+:ID:       f0b5e5dc-f2c2-43e1-a14f-a9a188068213
+:END:
+#+begin_src emacs-lisp
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (py/org-bin :maxlevel . 9)
+                           (py/org-todolist :maxlevel . 9)
+                           (py/org-project-files :maxlevel . 9)
+                           (py/org-archive :maxlevel . 9)
+                           (py/org-maybe_future :maxlevel . 9)
+                           (org-roam-index-file :maxlevel . 9)))
+#+end_src
+
+#+RESULTS:
+: ((nil :maxlevel . 9) (py/org-bin :maxlevel . 9) (py/org-todolist :maxlevel . 9) (py/org-project-files :maxlevel . 9) (py/org-archive :maxlevel . 9) (py/org-maybe_future :maxlevel . 9) (org-roam-index-file :maxlevel . 9))
+
+Avoid done task refiled
+#+begin_src emacs-lisp
+(defun bh/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+(setq org-refile-target-verify-function 'bh/verify-refile-target)
+#+end_src
+
+** Agenda
+:PROPERTIES:
+:ID:       bbf61454-2f4b-4d80-b0e7-6771647aea59
+:END:
+
+#+begin_src emacs-lisp
+(setq org-agenda-files py/org-inbox) ;will be py/org-inbox
+#+end_src
+
+#+RESULTS:
+: ~/Dropbox/.org/inbox.org
+
+#+begin_src emacs-lisp
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+#+end_src
+
+#+RESULTS:
+: %40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands `(("z" "Agenda"
+                                    ((agenda ""
+                                             ((org-agenda-span 'week)
+                                              (org-agenda-files '(,(expand-file-name py/org-inbox)))
+                                              (org-deadline-warning-days 365)
+                                              (org-agenda-use-time-grid t)
+                                              (org-agenda-time-grid '((daily today)
+                                                                      (0600 0800 1000 1200 1400 1600 1800 2000 2200)
+                                                                      "......"
+                                                                      "----------------"))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "To Refile.")
+                                            (org-agenda-files '(,(expand-file-name py/org-inbox)))))
+                                     (todo "NEXT"
+                                           ((org-agenda-overriding-header "In progress.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
+                                     (todo "STUCKED"
+                                           ((org-agenda-overriding-header "Stucked.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "One-off Tasks.")
+                                            (org-agenda-files '(,(expand-file-name py/org-todolist)))
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                                     ))))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(map! "<C-f2>" #'py/switch-to-agenda)
+(defun py/switch-to-agenda ()
+  (interactive)
+  (org-agenda nil "z"))
+#+end_src
