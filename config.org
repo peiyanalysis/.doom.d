@@ -841,31 +841,38 @@
 :PROPERTIES:
 :ID:       c657f8f4-abbc-4d83-8198-822910968303
 :END:
-** ellipsis at the end of heading
-
-#+begin_src emacs-lisp
-(setq org-ellipsis " ▼ ")
-#+end_src
 ** heading-level-face
 #+begin_src emacs-lisp
 (custom-set-faces
-'(org-level-1 ((t (:inherit outline-1 :height 1.3))))
-'(org-level-2 ((t (:inherit outline-2 :height 1.2))))
-'(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
-+end_src
-#+RESULTS:
-*** org-super-star
+ '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
+#+end_src
+** org-super-star
 
 #+begin_src emacs-lisp
 (use-package! org-superstar
-:config
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-(setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
 #+end_src
 
+** ellipsis at the end of heading
+
+#+begin_src emacs-lisp
+(setq org-ellipsis " ··· ")
+#+end_src
 ** bold/delete/emph
 #+begin_src emacs-lisp
 (setq org-hide-emphasis-markers t)
+#+end_src
+** valign formate
+#+begin_src emacs-lisp
+(use-package! valign
+  :init
+  (require 'valign)
+  :hook
+  ('org-mode . #'valign-mode))
 #+end_src
 ** org-heading and item
 #+begin_src emacs-lisp
@@ -875,9 +882,6 @@
         :desc "item or text"             "i" #'org-toggle-item
         :desc "heading or text"          "h" #'org-toggle-heading )))
 #+end_src
-
-#+RESULTS:
-: org-toggle-heading
 
 * org-mode and workflow
 ** files
@@ -892,8 +896,11 @@
       py/project-dir    (concat py/things-dir   "project/") ;projects for project files
       py/image-dir      (concat py/things-dir   "image/")   ;image stored
       py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
-      py/art-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+      py/arts-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
 #+end_src
+
+#+RESULTS:
+: ~/Dropbox/.org/things/braindump/arts/
 
 #+begin_src emacs-lisp
 (setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
@@ -901,11 +908,9 @@
         py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
         py/braindump-index      (concat py/braindump-dir "braindump_index.org")
         py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
-        py/arts                 (concat py/art-dir     "arts.org"))     ;tempo ideas of pastime
+        py/arts                 (concat py/arts-dir     "arts.org"))     ;tempo ideas of pastime
 #+end_src
 
-#+RESULTS:
-: ~/Dropbox/.org/things/braindump/art/arts.org
 
 *** COMMENT What now
 
@@ -997,7 +1002,7 @@ tempaltes
                           ":PROPERTIES:"
                           ":INIT:       %U"
                           ":END:")
-               :todo-state "🔀 TODO"
+               :todo-state "🎬 TODO"
                :create-id t)
               ;;org-protocol-capture-html
               ;; ("Web Content"
@@ -1017,26 +1022,19 @@ tempaltes
                           ("MetaNotes"
                            :keys "n"
                            :type entry
-                           :todo-state "🔀 TODO"
+                           :todo-state "🎬 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
                           ("MetaQuestions"
                            :keys "q"
                            :type entry
-                           :todo-state "🔀 TODO"
+                           :todo-state "🎬 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
                           ("MetaTodos"
                            :keys "t"
                            :type entry
-                           :todo-state "🔀 TODO"
+                           :todo-state "🎬 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
 #+end_src
-
-#+RESULTS:
-| i  | Inbox         | entry | (file py/inbox)                                              | #'doct--fill-template | :doct    | (:doct-name Inbox :keys i :file py/inbox :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :todo-state 🔀 TODO(t) :create-id t :doct-custom (:todo-state 🔀 TODO(t) :create-id t)) |       |                                                                                                                                                                                                                                                                            |
-| m  | Metacog       |       |                                                              |                       |          |                                                                                                                                                                                                    |       |                                                                                                                                                                                                                                                                            |
-| mn | MetaNotes     | entry | #'(lambda nil (jethro/olp-current-buffer Metacog Notes))     | #'doct--fill-template | :prepend | t                                                                                                                                                                                                  | :doct | (:doct-name MetaNotes :keys n :type entry :todo-state 🔀 TODO(t) :function (lambda nil (jethro/olp-current-buffer Metacog Notes)) :inherited-keys mn :prepend t :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :doct-custom (:todo-state 🔀 TODO(t)))   |
-| mq | MetaQuestions | entry | #'(lambda nil (jethro/olp-current-buffer Metacog Questions)) | #'doct--fill-template | :prepend | t                                                                                                                                                                                                  | :doct | (:doct-name MetaQuestions :keys q :type entry :todo-state 🔀 TODO :function (lambda nil (jethro/olp-current-buffer Metacog Questions)) :inherited-keys mq :prepend t :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :doct-custom (:todo-state 🔀 TODO)) |
-| mt | MetaTodos     | entry | #'(lambda nil (jethro/olp-current-buffer Metacog Todos))     | #'doct--fill-template | :prepend | t                                                                                                                                                                                                  | :doct | (:doct-name MetaTodos :keys t :type entry :todo-state 🔀 TODO :function (lambda nil (jethro/olp-current-buffer Metacog Todos)) :inherited-keys mt :prepend t :template (* %{todo-state} %? :PROPERTIES: :INIT:       %U :END:) :doct-custom (:todo-state 🔀 TODO))         |
 
 
 Shameless copied functions
@@ -1134,6 +1132,9 @@ Inspried by [[https://emacs.stackexchange.com/questions/24976/org-mode-can-you-s
       (directory-files-recursively py/project-dir (rx ".org" eos)))
 #+end_src
 
+#+RESULTS:
+| ~/Dropbox/.org/things/project/chemotaxis.org |
+
 #+begin_src emacs-lisp
 (add-to-list 'org-refile-targets '(py/project-files :maxlevel . 1))
 #+end_src
@@ -1147,23 +1148,63 @@ Inspried by [[https://emacs.stackexchange.com/questions/24976/org-mode-can-you-s
 #+begin_src emacs-lisp
 (add-to-list 'org-refile-targets '(py/arts :maxlevel . 1))
 #+end_src
-*** 🔀 TODO archive
 ** in-file structures
-*** TODOkeyword
+*** todo keyword
 #+begin_src emacs-lisp
 (setq org-todo-keywords
         '((sequence
-           "🔀 TODO(t)"  ; A task that needs doing & is ready to do
+           "🎬 TODO(t)"  ; A task that needs doing & is ready to do
            "🗡 INPROCESS(s)"  ; A task that is in progress
            "📌 WAITING(w)"  ; Something is holding up this task; or it is paused
            "⏰ LEAVETO(l)"  ; entry delivered to others
            "⤴ REFILE?(r)"   ;might
            "|"
-           "⏭ NEXT(n)"
-           "✅ DONE(d)"  ; Task successfully completed
+           "💡 NEXT(n)"
+           "☯ DONE(d)"  ; Task successfully completed
            "CANCELED(c@)") ; Task was cancelled, aborted or is no longer applicable
            )) ; Task was completed
 #+end_src
+
+*** todo keyword faces
+:PROPERTIES:
+:ID:       e5b8a7ba-e9f6-4f3f-99d7-1bdd289b1ae2
+:INIT:     [2021-01-12 Tue 08:04]
+:END:
+#+begin_src emacs-lisp
+(setq org-todo-keyword-faces
+      (quote (("🎬 TODO" :foreground "red" :weight bold)
+              ("🗡 INPROCESS" :foreground "forest green" :weight bold)
+              ("📌 WAITING" :foreground "orange" :weight bold)
+              ("⏰ LEAVETO" :foreground "forest green" :weight bold)
+              ("⤴ REFILE" :foreground "magenta" :weight bold)
+              ("💡 NEXT" :foreground "blue" :weight bold)
+              ("☯ DONE" :foreground "forest green" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              )))
+#+end_src
+
+#+RESULTS:
+| 🎬 TODO     | :foreground | red          | :weight | bold |
+| 🗡 INPROCESS | :foreground | forest green | :weight | bold |
+| 📌 WAITING  | :foreground | orange       | :weight | bold |
+| ⏰ LEAVETO  | :foreground | forest green | :weight | bold |
+| ⤴ REFILE    | :foreground | magenta      | :weight | bold |
+| 💡 NEXT     | :foreground | blue         | :weight | bold |
+| ☯ DONE      | :foreground | forest green | :weight | bold |
+| CANCELLED   | :foreground | forest green | :weight | bold |
+
+
+#+caption:
+| 🎬 TODO     | :foreground | red          | :weight | bold |
+| 🗡 INPROCESS | :foreground | forest green | :weight | bold |
+| 📌 WAITING  | :foreground | orange       | :weight | bold |
+| ⏰ LEAVETO  | :foreground | forest green | :weight | bold |
+| ⤴ REFILE    | :foreground | magenta      | :weight | bold |
+| 💡 NEXT     | :foreground | blue         | :weight | bold |
+| ☯ DONE      | :foreground | forest green | :weight | bold |
+| CANCELLED   | :foreground | forest green | :weight | bold |
+
+
 
 *** tags
 keymap: =Spc m q= org-set-tag-command
@@ -1177,12 +1218,6 @@ keymap: =Spc m q= org-set-tag-command
 *** properties
 **** id
 modify-id operation
-#+begin_src emacs-lisp
-(map! :leader
-      :prefix "m"
-      :desc "id-create"         "i" #'org-id-get-create)
-#+end_src
-
 notes-id operations
 #+begin_src emacs-lisp
 (map! :leader
@@ -1209,7 +1244,7 @@ keymaps:
       :desc "set initial property" "mcs" #'org-set-property-initial-time)
 #+end_src
 
-****** COMMENT works
+****** works
 :PROPERTIES:
 :LOCATION: dod
 :END:
@@ -1219,6 +1254,9 @@ Time formate
   "Format of date to insert with `insert-current-date-time' func
 See help of `format-time-string' for possible replacements")
 #+end_src
+
+#+RESULTS:
+: org-initial-current-time-format
 
 #+begin_src emacs-lisp
 (defun org-set-property-initial-time ()
@@ -1231,6 +1269,9 @@ when you realize it IS initalized."
    (org-set-property "INIT" (format-time-string org-initial-current-time-format (current-time)))
     ))
 #+end_src
+
+#+RESULTS:
+: org-set-property-initial-time
 
 **** schedual/deadline
 org-schedual
@@ -1396,10 +1437,146 @@ use the basic org-pomodoro
 #+end_src
 
 ** agenda customization
-***
+We discuss different agendas here
+*** super-agenda
+#+begin_src emacs-lisp
+(use-package! org-super-agenda
+:config
+(add-hook! 'after-init-hook 'org-super-agenda-mode)
+(setq
+   org-agenda-skip-scheduled-if-done t
+   org-agenda-skip-deadline-if-done t
+   org-agenda-include-deadlines t
+   org-agenda-include-diary nil
+   org-agenda-block-separator nil
+   org-agenda-compact-blocks t
+   org-agenda-start-with-log-mode t)
+(setq org-columns-default-format
+      "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+
+)
+#+end_src
+
+*** 🎬 TODO agenda
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      `(("B" "BrainDump"
+         ((todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "To Refile")
+                 (org-agenda-files '(,(expand-file-name py/braindump-inbox)))))
+          (todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "To Detail")
+                 (org-agenda-files (directory-files-recursively py/braindump-dir (rx ".org" eos)))))
+          (todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "Arts, To Refile")
+                 (org-agenda-files '(,(expand-file-name py/arts)))))
+          (todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "Arts, To Detail")
+                 (org-agenda-files (directory-files-recursively py/arts-dir (rx ".org" eos)))))))
+        ("A" "Pei's Agenda"
+         ((agenda "" ((org-agenda-span 2)
+                      (org-agenda-start-day "-1d")
+                      (org-super-agenda-groups
+                       '((:name "Today List"
+                                :time-grid t
+                                :date today
+                                :todo "⚔ INPROCESS"
+                                :scheduled today
+                                :order 1)))))
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:name "Next to do"
+                                 :priority>= "B"
+                                 :order 2)
+                          (:name "Important"
+                                 :todo "✰ Important"
+                                 :order 6)
+                          (:name "Due Today"
+                                 :deadline today
+                                 :order 3)
+                          (:name "Due Soon"
+                                 :deadline future
+                                 :order 8)
+                          (:name "Overdue"
+                                 :deadline past
+                                 :order 20)
+                          (:name "Issues"
+                                 :tag "Issue"
+                                 :order 12)
+                          (:name "Projects"
+                                 :tag "Project"
+                                 :order 14)
+                          (:name "Emacs"
+                                 :tag "Emacs"
+                                 :order 13)
+                          (:name "Research"
+                                 :tag "Research"
+                                 :order 15)
+                          (:name "To read"
+                                 :tag ("BOOK" "READ")
+                                 :order 30)
+                          (:name "Waiting"
+                                 :todo "⚑ WAITING"
+                                 :order 18)
+                          (:name "trivial"
+                                 :priority<= "C"
+                                 :todo ("SOMEDAY")
+                                 :order 90)))))
+          ))))
+#+end_src
+
+*** ☯ DONE braindump detailize
+怎么排除 py/braindump 中的 的py/braindump-inbox 文件？
+- part: braindump_inbox
+  + file: py/braindump_inbox
+  + span: 365
+  + todo keywords: TODO and INPROCESS
+  + time grid: nil
+  + schedual: nil
+  + deadline: nil
+  + priority: sort by this order 1
+  + order: 1
+  + tags: nil
+  + effort: sort by this order 2
+- part: braindump/  without inbox
+  + file: all files in py/braindump (without files in arts/ and py/braindump_inbox and py/daily)
+  + span: 365
+  + todo keywords: TODO and INPROCESS
+  + time grid: nil
+  + schedual: nil
+  + deadline: nil
+  + priority: sort by this order 1
+  + order: 1
+  + tags: nil
+  + effort: sort by this order 2
+- part: art.org
+  + file: py/art
+  + span: 365
+  + todo keywords: TODO and INPROCESS
+  + time grid: nil
+  + schedual: nil
+  + deadline: nil
+  + priority: sort by this order 1
+  + order: 1
+  + tags: nil
+  + effort: sort by this order 2
+- part: art/ without inbox
+  + name: all files in py/arts (without files in arts.org)
+  + file: braindump_inbox
+  + span: 365
+  + todo keywords: TODO and INPROCESS
+  + time grid: nil
+  + schedual: nil
+  + deadline: nil
+  + priority: sort by this order 1
+  + order: 1
+  + tags: nil
+  + effort: sort by this order
+
 * Metacog
 ** Notes
-*** 🔀 TODO captured html
+*** 🎬 TODO captured html
 :PROPERTIES:
 :ID:       e37fa0af-d194-471d-9f67-1803f1e6be44
 :END:
@@ -1854,20 +2031,16 @@ the same file would be:
 </html>
 
 #+end_export
-*** 🔀 TODO 这个时间不知道为何不能同时启动pyim和rime-emacs，只好放弃掉了doom的pyim和init中的pyim
-:PROPERTIES:
-:INIT:       [2021-01-11 Mon 16:34]
-:END:
-*** 🔀 TODO 考虑弄个 id 直接插入的函数
+*** 🎬 TODO 考虑弄个 id 直接插入的函数
 :PROPERTIES:
 :INIT:       [2021-01-11 Mon 16:22]
 :END:
-*** 🔀 TODO 我应该弄个从 buffer capture 到 org-mode html 的东西（也可以用 pandoc 到 org-mode 啦，这个更好）
-:PROPERTIES:
-:INIT:       [2021-01-11 Mon 16:20]
-:END:
 ** Questions
-*** 🔀 TODO
+*** 🎬 TODO could I modify the valign mode make it applicable to the results in org-babal region
+:PROPERTIES:
+:INIT:       [2021-01-12 Tue 08:02]
+:END:
+*** 🎬 TODO
 :PROPERTIES:
 :INIT:       [2021-01-11 Mon 06:47]
 :END:

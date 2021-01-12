@@ -581,6 +581,36 @@
 (setq user-full-name "Pei Yu"
       user-mail-address "yp9106@outlook.com")
 
+(custom-set-faces
+ '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
+
+(use-package! org-superstar
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
+
+(setq org-ellipsis " ··· ")
+
+(setq org-ellipsis " ··· ")
+
+(setq org-hide-emphasis-markers t)
+
+(setq org-hide-emphasis-markers t)
+
+(use-package! valign
+  :init
+  (require 'valign)
+  :hook
+  ('org-mode . #'valign-mode))
+
+(map! :leader
+      (:prefix "m"
+       (:prefix-map ("m" . "modify")
+        :desc "item or text"             "i" #'org-toggle-item
+        :desc "heading or text"          "h" #'org-toggle-heading )))
+
 (setq org-directory "~/Dropbox/.org/")
 
 (setq org-directory "~/Dropbox/.org/")
@@ -590,14 +620,14 @@
       py/project-dir    (concat py/things-dir   "project/") ;projects for project files
       py/image-dir      (concat py/things-dir   "image/")   ;image stored
       py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
-      py/art-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+      py/arts-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
 
 (setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
         py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
         py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
         py/braindump-index      (concat py/braindump-dir "braindump_index.org")
         py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
-        py/arts                 (concat py/art-dir     "arts.org"))     ;tempo ideas of pastime
+        py/arts                 (concat py/arts-dir     "arts.org"))     ;tempo ideas of pastime
 
 (after! org
   (map! :leader :desc "org-capture"           "x" #'org-capture))
@@ -617,7 +647,7 @@
                           ":PROPERTIES:"
                           ":INIT:       %U"
                           ":END:")
-               :todo-state "🔀 TODO"
+               :todo-state "🎬 TODO"
                :create-id t)
               ;;org-protocol-capture-html
               ;; ("Web Content"
@@ -637,17 +667,17 @@
                           ("MetaNotes"
                            :keys "n"
                            :type entry
-                           :todo-state "🔀 TODO"
+                           :todo-state "🎬 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Notes")))
                           ("MetaQuestions"
                            :keys "q"
                            :type entry
-                           :todo-state "🔀 TODO"
+                           :todo-state "🎬 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Questions")))
                           ("MetaTodos"
                            :keys "t"
                            :type entry
-                           :todo-state "🔀 TODO"
+                           :todo-state "🎬 TODO"
                            :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
 
 (defun jethro/find-or-create-olp (path &optional this-buffer)
@@ -729,25 +759,32 @@ only headings."
 
 (setq org-todo-keywords
         '((sequence
-           "🔀 TODO(t)"  ; A task that needs doing & is ready to do
+           "🎬 TODO(t)"  ; A task that needs doing & is ready to do
            "🗡 INPROCESS(s)"  ; A task that is in progress
            "📌 WAITING(w)"  ; Something is holding up this task; or it is paused
            "⏰ LEAVETO(l)"  ; entry delivered to others
            "⤴ REFILE?(r)"   ;might
            "|"
-           "⏭ NEXT(n)"
-           "✅ DONE(d)"  ; Task successfully completed
+           "💡 NEXT(n)"
+           "☯ DONE(d)"  ; Task successfully completed
            "CANCELED(c@)") ; Task was cancelled, aborted or is no longer applicable
            )) ; Task was completed
+
+(setq org-todo-keyword-faces
+      (quote (("🎬 TODO" :foreground "red" :weight bold)
+              ("🗡 INPROCESS" :foreground "forest green" :weight bold)
+              ("📌 WAITING" :foreground "orange" :weight bold)
+              ("⏰ LEAVETO" :foreground "forest green" :weight bold)
+              ("⤴ REFILE" :foreground "magenta" :weight bold)
+              ("💡 NEXT" :foreground "blue" :weight bold)
+              ("☯ DONE" :foreground "forest green" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              )))
 
 (setq org-tag-alist
       '(("@errand" . ?e)
         ("@office" . ?o)
         ("@home" . ?h)))
-
-(map! :leader
-      :prefix "m"
-      :desc "id-create"         "i" #'org-id-get-create)
 
 (map! :leader
       :prefix "n"
@@ -759,6 +796,20 @@ only headings."
 (map! :leader
       :desc "set initial property" "mdi" #'org-set-property-initial-time
       :desc "set initial property" "mcs" #'org-set-property-initial-time)
+
+(defvar org-initial-current-time-format "[%Y-%m-%d %a %H:%M]"
+  "Format of date to insert with `insert-current-date-time' func
+See help of `format-time-string' for possible replacements")
+
+(defun org-set-property-initial-time ()
+  "Set the initial time property of entries in orgmode as\n
+:INIT:    [YEAR-MONTH-DAY WEEKDAY HOUR:MIN]\n
+when you realize it IS initalized."
+  (interactive)
+  (if (member "INIT" (org-entry-properties nil 'standard))
+      ()
+   (org-set-property "INIT" (format-time-string org-initial-current-time-format (current-time)))
+    ))
 
 (map! :leader
       (:prefix "m"
@@ -862,3 +913,84 @@ only headings."
 ;; kept server running
 (unless (server-running-p)
   (org-roam-server-mode))
+
+(use-package! org-super-agenda
+:config
+(add-hook! 'after-init-hook 'org-super-agenda-mode)
+(setq
+   org-agenda-skip-scheduled-if-done t
+   org-agenda-skip-deadline-if-done t
+   org-agenda-include-deadlines t
+   org-agenda-include-diary nil
+   org-agenda-block-separator nil
+   org-agenda-compact-blocks t
+   org-agenda-start-with-log-mode t)
+(setq org-columns-default-format
+      "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+
+)
+
+(setq org-agenda-custom-commands
+      `(("B" "BrainDump"
+         ((todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "To Refile")
+                 (org-agenda-files '(,(expand-file-name py/braindump-inbox)))))
+          (todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "To Detail")
+                 (org-agenda-files (directory-files-recursively py/braindump-dir (rx ".org" eos)))))
+          (todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "Arts, To Refile")
+                 (org-agenda-files '(,(expand-file-name py/arts)))))
+          (todo "🎬 TODO|🗡 INPROCESS"
+                ((org-agenda-overriding-header "Arts, To Detail")
+                 (org-agenda-files (directory-files-recursively py/arts-dir (rx ".org" eos)))))))
+        ("A" "Pei's Agenda"
+         ((agenda "" ((org-agenda-span 2)
+                      (org-agenda-start-day "-1d")
+                      (org-super-agenda-groups
+                       '((:name "Today List"
+                                :time-grid t
+                                :date today
+                                :todo "⚔ INPROCESS"
+                                :scheduled today
+                                :order 1)))))
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:name "Next to do"
+                                 :priority>= "B"
+                                 :order 2)
+                          (:name "Important"
+                                 :todo "✰ Important"
+                                 :order 6)
+                          (:name "Due Today"
+                                 :deadline today
+                                 :order 3)
+                          (:name "Due Soon"
+                                 :deadline future
+                                 :order 8)
+                          (:name "Overdue"
+                                 :deadline past
+                                 :order 20)
+                          (:name "Issues"
+                                 :tag "Issue"
+                                 :order 12)
+                          (:name "Projects"
+                                 :tag "Project"
+                                 :order 14)
+                          (:name "Emacs"
+                                 :tag "Emacs"
+                                 :order 13)
+                          (:name "Research"
+                                 :tag "Research"
+                                 :order 15)
+                          (:name "To read"
+                                 :tag ("BOOK" "READ")
+                                 :order 30)
+                          (:name "Waiting"
+                                 :todo "⚑ WAITING"
+                                 :order 18)
+                          (:name "trivial"
+                                 :priority<= "C"
+                                 :todo ("SOMEDAY")
+                                 :order 90)))))
+          ))))
