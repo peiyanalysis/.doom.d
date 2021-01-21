@@ -386,6 +386,11 @@
             (concat (file-name-sans-extension filename) ".zst")
           filename)))))
 
+(use-package which-key
+  :init
+  (which-key-mode)
+  (which-key-setup-side-window-right))
+
 (use-package! nov)
 
 (use-package! nov)
@@ -610,6 +615,9 @@
        (:prefix-map ("m" . "modify")
         :desc "item or text"             "i" #'org-toggle-item
         :desc "heading or text"          "h" #'org-toggle-heading )))
+
+(after! org
+  (add-hook 'org-mode-hook (lambda () (evil-org-mode 1))))
 
 (setq org-directory "~/Dropbox/.org/")
 
@@ -931,7 +939,7 @@ when you realize it IS initalized."
 )
 
 (setq org-agenda-custom-commands
-      `(("B" "BrainDump"
+      `(("b" "BrainDump"
          ((todo "🎬 TODO|🗡 INPROCESS"
                 ((org-agenda-overriding-header "To Refile")
                  (org-agenda-files '(,(expand-file-name py/braindump-inbox)))))
@@ -944,7 +952,7 @@ when you realize it IS initalized."
           (todo "🎬 TODO|🗡 INPROCESS"
                 ((org-agenda-overriding-header "Arts, To Detail")
                  (org-agenda-files (directory-files-recursively py/arts-dir (rx ".org" eos)))))))
-        ("A" "Pei's Agenda"
+        ("p" "Pei's Agenda"
          ((agenda "" ((org-agenda-span 2)
                       (org-agenda-start-day "-1d")
                       (org-super-agenda-groups
@@ -959,38 +967,5 @@ when you realize it IS initalized."
                         '((:name "Next to do"
                                  :priority>= "B"
                                  :order 2)
-                          (:name "Important"
-                                 :todo "✰ Important"
-                                 :order 6)
-                          (:name "Due Today"
-                                 :deadline today
-                                 :order 3)
-                          (:name "Due Soon"
-                                 :deadline future
-                                 :order 8)
-                          (:name "Overdue"
-                                 :deadline past
-                                 :order 20)
-                          (:name "Issues"
-                                 :tag "Issue"
-                                 :order 12)
-                          (:name "Projects"
-                                 :tag "Project"
-                                 :order 14)
-                          (:name "Emacs"
-                                 :tag "Emacs"
-                                 :order 13)
-                          (:name "Research"
-                                 :tag "Research"
-                                 :order 15)
-                          (:name "To read"
-                                 :tag ("BOOK" "READ")
-                                 :order 30)
-                          (:name "Waiting"
-                                 :todo "⚑ WAITING"
-                                 :order 18)
-                          (:name "trivial"
-                                 :priority<= "C"
-                                 :todo ("SOMEDAY")
-                                 :order 90)))))
+                                 ))))
           ))))

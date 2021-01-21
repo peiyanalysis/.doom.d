@@ -185,3 +185,4 @@
 (package! sx)
 
 (package! evil-multiedit)
+(package! helm-descbinds)

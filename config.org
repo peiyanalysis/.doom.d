@@ -132,7 +132,6 @@
 | =Spc w u=   | winner-undo         | undo winodws 改变  |
 | =Spc w C-r= | winner-redo         | redo windows 改变 |
 |-------------+---------------------+-------------------|
-
 * Chinese
 
 ** Emacs-rime
@@ -358,11 +357,11 @@
 #+end_src
 
 
-|--------+------------------------------+---------|
-| 快捷键 | 命令                         | 描述    |
-|--------+------------------------------+---------|
+|--------+------------------------------+----------|
+| 快捷键 | 命令                         | 描述     |
+|--------+------------------------------+----------|
 | f12    | gif-screencast-start-or-stop | 录制 gif |
-|--------+------------------------------+---------|
+|--------+------------------------------+----------|
 ** Poporg
    将文章里面的注释, 用 org-mode 的形式来修改.
 #+begin_src emacs-lisp
@@ -592,6 +591,13 @@
         (if undo-fu-session-compression
             (concat (file-name-sans-extension filename) ".zst")
           filename)))))
+#+end_src
+** which-key
+#+begin_src emacs-lisp
+(use-package which-key
+  :init
+  (which-key-mode)
+  (which-key-setup-side-window-right))
 #+end_src
 
 * Reader
@@ -881,6 +887,15 @@
        (:prefix-map ("m" . "modify")
         :desc "item or text"             "i" #'org-toggle-item
         :desc "heading or text"          "h" #'org-toggle-heading )))
+#+end_src
+
+
+
+** evil org-mode
+
+#+begin_src emacs-lisp
+(after! org
+  (add-hook 'org-mode-hook (lambda () (evil-org-mode 1))))
 #+end_src
 
 * org-mode and workflow
@@ -1371,6 +1386,9 @@ use the basic org-pomodoro
 
 **** roam-capture
 ***** roam-protocol
+:PROPERTIES:
+:ID:       423d963d-3149-4cb9-8386-ec2e61e16454
+:END:
 #+begin_src emacs-lisp
 (use-package! org-roam-protocol
   :after org-protocol)
@@ -1461,7 +1479,7 @@ We discuss different agendas here
 
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
-      `(("B" "BrainDump"
+      `(("b" "BrainDump"
          ((todo "🎬 TODO|🗡 INPROCESS"
                 ((org-agenda-overriding-header "To Refile")
                  (org-agenda-files '(,(expand-file-name py/braindump-inbox)))))
@@ -1474,7 +1492,7 @@ We discuss different agendas here
           (todo "🎬 TODO|🗡 INPROCESS"
                 ((org-agenda-overriding-header "Arts, To Detail")
                  (org-agenda-files (directory-files-recursively py/arts-dir (rx ".org" eos)))))))
-        ("A" "Pei's Agenda"
+        ("p" "Pei's Agenda"
          ((agenda "" ((org-agenda-span 2)
                       (org-agenda-start-day "-1d")
                       (org-super-agenda-groups
@@ -1489,90 +1507,9 @@ We discuss different agendas here
                         '((:name "Next to do"
                                  :priority>= "B"
                                  :order 2)
-                          (:name "Important"
-                                 :todo "✰ Important"
-                                 :order 6)
-                          (:name "Due Today"
-                                 :deadline today
-                                 :order 3)
-                          (:name "Due Soon"
-                                 :deadline future
-                                 :order 8)
-                          (:name "Overdue"
-                                 :deadline past
-                                 :order 20)
-                          (:name "Issues"
-                                 :tag "Issue"
-                                 :order 12)
-                          (:name "Projects"
-                                 :tag "Project"
-                                 :order 14)
-                          (:name "Emacs"
-                                 :tag "Emacs"
-                                 :order 13)
-                          (:name "Research"
-                                 :tag "Research"
-                                 :order 15)
-                          (:name "To read"
-                                 :tag ("BOOK" "READ")
-                                 :order 30)
-                          (:name "Waiting"
-                                 :todo "⚑ WAITING"
-                                 :order 18)
-                          (:name "trivial"
-                                 :priority<= "C"
-                                 :todo ("SOMEDAY")
-                                 :order 90)))))
+                                 ))))
           ))))
 #+end_src
-
-*** ☯ DONE braindump detailize
-怎么排除 py/braindump 中的 的py/braindump-inbox 文件？
-- part: braindump_inbox
-  + file: py/braindump_inbox
-  + span: 365
-  + todo keywords: TODO and INPROCESS
-  + time grid: nil
-  + schedual: nil
-  + deadline: nil
-  + priority: sort by this order 1
-  + order: 1
-  + tags: nil
-  + effort: sort by this order 2
-- part: braindump/  without inbox
-  + file: all files in py/braindump (without files in arts/ and py/braindump_inbox and py/daily)
-  + span: 365
-  + todo keywords: TODO and INPROCESS
-  + time grid: nil
-  + schedual: nil
-  + deadline: nil
-  + priority: sort by this order 1
-  + order: 1
-  + tags: nil
-  + effort: sort by this order 2
-- part: art.org
-  + file: py/art
-  + span: 365
-  + todo keywords: TODO and INPROCESS
-  + time grid: nil
-  + schedual: nil
-  + deadline: nil
-  + priority: sort by this order 1
-  + order: 1
-  + tags: nil
-  + effort: sort by this order 2
-- part: art/ without inbox
-  + name: all files in py/arts (without files in arts.org)
-  + file: braindump_inbox
-  + span: 365
-  + todo keywords: TODO and INPROCESS
-  + time grid: nil
-  + schedual: nil
-  + deadline: nil
-  + priority: sort by this order 1
-  + order: 1
-  + tags: nil
-  + effort: sort by this order
 
 * Metacog
 ** Notes
@@ -1580,457 +1517,6 @@ We discuss different agendas here
 :PROPERTIES:
 :ID:       e37fa0af-d194-471d-9f67-1803f1e6be44
 :END:
-***** Question
-#+begin_export html
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<!-- Created by htmlize-1.56 in css mode. -->
-<html>
-  <head>
-    <title>*sx-question*</title>
-    <style type="text/css">
-    <!--
-      body {
-        color: #f8f8f2;
-        background-color: #1E2029;
-      }
-      .markdown-inline-code {
-        /* markdown-inline-code-face */
-        color: #f1fa8c;
-        background-color: #252631;
-      }
-      .markdown-markup {
-        /* markdown-markup-face */
-        color: #6272a4;
-      }
-      .region {
-        /* region */
-        background-color: #44475a;
-      }
-      .sx-question-mode-content {
-        /* sx-question-mode-content-face */
-        background-color: #090909;
-      }
-      .sx-question-mode-date {
-        /* sx-question-mode-date */
-        color: #f1fa8c;
-      }
-      .sx-question-mode-header {
-      }
-      .sx-question-mode-score {
-      }
-      .sx-question-mode-title {
-        /* sx-question-mode-title */
-        color: #f8f8f2;
-        background-color: #1E2029;
-        font-weight: bold;
-      }
-      .sx-question-mode-title-comments {
-        /* sx-question-mode-title-comments */
-        color: #f8f8f2;
-        background-color: #1E2029;
-        font-weight: bold;
-      }
-      .sx-tag {
-        /* sx-tag */
-        color: #50fa7b;
-      }
-      .sx-user-name {
-        /* sx-user-name */
-        color: #ffb86c;
-      }
-      .sx-user-reputation {
-        /* sx-user-reputation */
-        color: #6272a4;
-      }
-      .underline {
-        /* underline */
-        text-decoration: underline;
-      }
-
-      a {
-        color: inherit;
-        background-color: inherit;
-        font: inherit;
-        text-decoration: inherit;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-    -->
-    </style>
-  </head>
-  <body>
-    <pre>
-<span class="sx-question-mode-title"><span class="region"><span class="region">Org-mode: Can you set up context-dependent refile targets?</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Author:    </span></span></span><span class="sx-user-name"><span class="region"><span class="region">wiuah</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region"> </span></span></span><span class="sx-user-reputation"><span class="region"><span class="region">31</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Posted on: </span></span></span><span class="sx-question-mode-date"><span class="region"><span class="region">12:17  1 Aug 2016</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Score:     </span></span></span><span class="sx-question-mode-score"><span class="region"><span class="region">3</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Tags:      </span></span></span><span class="sx-tag"><span class="region"><span class="region">[org-mode]</span></span></span><span class="region"><span class="region">
-</span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="region">                                                                        </span></span></span></span><span class="region"><span class="region">
-</span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-I'm new to org-mode (and emacs in general), and have been trying to follow the
-tutorials and manuals to set up a GTD-like system.
-
-I currently have an "inbox.org" file with two first-level headings ("Inbox" and
-"Processing"). I also have a "todo.org" file with a "Projects" heading.
-
-I've set up </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> so that any task in inbox.org can be refiled to
-todo.org. When I refile something, it shows me all the headings in all my org
-files to choose.
-
-However, what I'd really like to do is have the refile targets change based on
-the heading or file I'm currently in.
-
-So, for example, for tasks under the "Inbox" heading, the only refile target
-available should be "Processing".
-
-For tasks under "Processing", the only refile targets available should be
-"Projects", "Someday" (goes to a someday.org file), or "Reference" (goes to a
-reference.org file).
-
-This way, I can create sort of a directional "workflow" to enforce the GTD
-decision model. Is it possible to set this up with org-mode?
-</span></span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="sx-question-mode-content"><span class="region">                                                                        </span></span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-</span></span></span><span class="region"><span class="region">
-</span></span><span class="sx-question-mode-title-comments"><span class="region"><span class="region"> Comments</span></span></span><span class="region"><span class="region">
-</span></span><span class="sx-user-name"><span class="region"><span class="sx-question-mode-content"><span class="region">lurdan</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">: You can control refile target with </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">. (i.e. C-h v
-   org-refile-targets)
-</span></span></span></pre>
-  </body>
-</html>
-#+end_export
-***** Answer 1
-#+begin_export html
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<!-- Created by htmlize-1.56 in css mode. -->
-<html>
-  <head>
-    <title>*sx-question*</title>
-    <style type="text/css">
-    <!--
-      body {
-        color: #f8f8f2;
-        background-color: #1E2029;
-      }
-      .builtin {
-        /* font-lock-builtin-face */
-        color: #ffb86c;
-      }
-      .constant {
-        /* font-lock-constant-face */
-        color: #8be9fd;
-      }
-      .doc {
-        /* font-lock-doc-face */
-        color: #8995ba;
-      }
-      .function-name {
-        /* font-lock-function-name-face */
-        color: #50fa7b;
-      }
-      .keyword {
-        /* font-lock-keyword-face */
-        color: #ff79c6;
-      }
-      .markdown-inline-code {
-        /* markdown-inline-code-face */
-        color: #f1fa8c;
-        background-color: #252631;
-      }
-      .markdown-markup {
-        /* markdown-markup-face */
-        color: #6272a4;
-      }
-      .region {
-        /* region */
-        background-color: #44475a;
-      }
-      .string {
-        /* font-lock-string-face */
-        color: #f1fa8c;
-      }
-      .sx-question-mode-content {
-        /* sx-question-mode-content-face */
-        background-color: #090909;
-      }
-      .sx-question-mode-date {
-        /* sx-question-mode-date */
-        color: #f1fa8c;
-      }
-      .sx-question-mode-header {
-      }
-      .sx-question-mode-score {
-      }
-      .sx-question-mode-title {
-        /* sx-question-mode-title */
-        color: #f8f8f2;
-        background-color: #1E2029;
-        font-weight: bold;
-      }
-      .sx-user-name {
-        /* sx-user-name */
-        color: #ffb86c;
-      }
-      .sx-user-reputation {
-        /* sx-user-reputation */
-        color: #6272a4;
-      }
-      .type {
-        /* font-lock-type-face */
-        color: #bd93f9;
-      }
-      .underline {
-        /* underline */
-        text-decoration: underline;
-      }
-      .variable-name {
-      }
-
-      a {
-        color: inherit;
-        background-color: inherit;
-        font: inherit;
-        text-decoration: inherit;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-    -->
-    </style>
-  </head>
-  <body>
-    <pre>
-<span class="sx-question-mode-title"><span class="region"><span class="region">Answer</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Author:    </span></span></span><span class="sx-user-name"><span class="region"><span class="region">erikstokes</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region"> </span></span></span><span class="sx-user-reputation"><span class="region"><span class="region">11215</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Posted on: </span></span></span><span class="sx-question-mode-date"><span class="region"><span class="region">00:57 12 Sep 2016 (edited 7mo ago by Chris Hunt)</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Score:     </span></span></span><span class="sx-question-mode-score"><span class="region"><span class="region">4</span></span></span><span class="region"><span class="region">
-</span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="region">                                                                        </span></span></span></span><span class="region"><span class="region">
-</span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-</span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-mode</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> already has a feature like this for </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> and </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-agenda</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">. We can
-use that to bootstrap a similar feature for </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">:
-
-    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">require</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> '</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">dash</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
-
-    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defvar</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Contexts for `</span></span></span></span><span class="string"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">'.
-
-    Takes the same values as `</span></span></span></span><span class="string"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture-templates-contexts</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">' except
-    that the first value of each entry should be a valid setting for
-    `</span></span></span></span><span class="string"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">'."</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
-
-    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defun</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile--get-context-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> ()
-      </span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">"Get the refile targets for the current headline.
-
-    Returns the first set of targets in `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">' that
-    the current headline satisfies, or `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">' if there
-    are no such."</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">or</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">car</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">-first</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">lambda</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (x)
-                                (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-contextualize-validate-key</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-                                 (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">car</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> x)
-                                 org-refile-contexts))
-                              org-refile-contexts
-                     ))
-          </span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
-      )
-
-    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defun</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-with-context</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="type"><span class="region"><span class="sx-question-mode-content"><span class="region">&amp;optional</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer rfloc msg)
-      </span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">"Refile the headline to a location based on `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">'.
-
-    Changes the set of available refile targets based on `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">', but is otherwise identical to `</span></span></span></span><span class="doc"><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">'"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">interactive</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"P"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)
-      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">let</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> ((</span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (org-refile--get-context-targets)))
-        (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer rfloc msg)
-        )
-      )
-
-Set the contexts you want in </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-contexts</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> using the same rules as
-</span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture-templates-contexts</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">: it is a list of pairs </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">(targets conditions)</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">,
-where </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> is the desired setting for </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-targets</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> and </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">conditions</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> is a
-list of predicates to test the current headline against (most generally, these
-can be any function taking no arguments).
-
-For example this setting will cause anything in the "notes.org" file under the
-"Inbox" heading to be refiled to "Projects"
-
-    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">setq</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> org-refile-contexts
-          '(((((</span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"notes.org"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">) . (</span></span></span><span class="builtin"><span class="region"><span class="sx-question-mode-content"><span class="region">:regexp</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> . </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Projects"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)))
-             ((</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">lambda</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> () (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">string=</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-find-top-headline</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">) </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Inbox"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">)))
-             )
-            ))
-
-More conditions and more targets can be added to achieve almost any workflow.
-
-Bind </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-capture-with-context</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> to the key normally bound to </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> and it
-should replace it seamlessly:
-
-    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">define-key</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="variable-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-mode-map</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">kbd</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"C-c C-w"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">) #'org-refile-with-context)
-</span></span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="sx-question-mode-content"><span class="region">                                                                        </span></span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-</span></span></span></pre>
-  </body>
-</html>
-
-#+end_export
-***** Answer 2
-#+begin_export html
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<!-- Created by htmlize-1.56 in css mode. -->
-<html>
-  <head>
-    <title>*sx-question*</title>
-    <style type="text/css">
-    <!--
-      body {
-        color: #f8f8f2;
-        background-color: #1E2029;
-      }
-      .button {
-        /* button */
-        color: #bd93f9;
-        font-weight: bold;
-        text-decoration: underline;
-      }
-      .comment {
-        /* font-lock-comment-face */
-        color: #6272a4;
-      }
-      .comment-delimiter {
-        /* font-lock-comment-delimiter-face */
-        color: #6272a4;
-      }
-      .constant {
-        /* font-lock-constant-face */
-        color: #8be9fd;
-      }
-      .doc {
-        /* font-lock-doc-face */
-        color: #8995ba;
-      }
-      .function-name {
-        /* font-lock-function-name-face */
-        color: #50fa7b;
-      }
-      .keyword {
-        /* font-lock-keyword-face */
-        color: #ff79c6;
-      }
-      .markdown-comment {
-        /* markdown-comment-face */
-        color: #6272a4;
-      }
-      .markdown-inline-code {
-        /* markdown-inline-code-face */
-        color: #f1fa8c;
-        background-color: #252631;
-      }
-      .markdown-markup {
-        /* markdown-markup-face */
-        color: #6272a4;
-      }
-      .region {
-        /* region */
-        background-color: #44475a;
-      }
-      .string {
-        /* font-lock-string-face */
-        color: #f1fa8c;
-      }
-      .sx-question-mode-content {
-        /* sx-question-mode-content-face */
-        background-color: #090909;
-      }
-      .sx-question-mode-date {
-        /* sx-question-mode-date */
-        color: #f1fa8c;
-      }
-      .sx-question-mode-header {
-      }
-      .sx-question-mode-score {
-      }
-      .sx-question-mode-title {
-        /* sx-question-mode-title */
-        color: #f8f8f2;
-        background-color: #1E2029;
-        font-weight: bold;
-      }
-      .sx-user-name {
-        /* sx-user-name */
-        color: #ffb86c;
-      }
-      .sx-user-reputation {
-        /* sx-user-reputation */
-        color: #6272a4;
-      }
-      .type {
-        /* font-lock-type-face */
-        color: #bd93f9;
-      }
-      .underline {
-        /* underline */
-        text-decoration: underline;
-      }
-      .warning {
-        /* font-lock-warning-face */
-        color: #f1fa8c;
-      }
-
-      a {
-        color: inherit;
-        background-color: inherit;
-        font: inherit;
-        text-decoration: inherit;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-    -->
-    </style>
-  </head>
-  <body>
-    <pre>
-<span class="sx-question-mode-title"><span class="region"><span class="region">Answer</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Author:    </span></span></span><span class="sx-user-name"><span class="region"><span class="region">mutbuerger</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region"> </span></span></span><span class="sx-user-reputation"><span class="region"><span class="region">3099</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Posted on: </span></span></span><span class="sx-question-mode-date"><span class="region"><span class="region">16:58  1 Aug 2016 (edited 4y ago by Community)</span></span></span><span class="sx-question-mode-header"><span class="region"><span class="region">
-Score:     </span></span></span><span class="sx-question-mode-score"><span class="region"><span class="region">1</span></span></span><span class="region"><span class="region">
-</span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="region">                                                                        </span></span></span></span><span class="region"><span class="region">
-</span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-</span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> uses a </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">rfloc</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> argument that, after reading the docstring,
-unfortunately remains mysterious. </span></span></span><span class="button"><span class="region"><span class="sx-question-mode-content"><span class="region">This answer</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> clarifies how </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">rfloc</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> should look
-like. The following function sets the </span></span></span><span class="markdown-inline-code"><span class="region"><span class="sx-question-mode-content"><span class="region">rfloc</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> based on a FILE argument, that is
-the target file, a HEADING argument, specifying the target heading the current
-heading should be refiled to (must be exact, meaning you have to include tags
-and todo states if there are any), and a PARENT argument that describes the
-top-level heading whose subitems will be refiled to that target:
-
-</span></span></span><span class="markdown-comment"><span class="region"><span class="sx-question-mode-content"><span class="region">&lt;!-- language: lang-el --&gt;</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-
-    (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">defun</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile-enh</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (file heading parent </span></span></span><span class="type"><span class="region"><span class="sx-question-mode-content"><span class="region">&amp;optional</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer msg)
-      </span></span></span><span class="doc"><span class="region"><span class="sx-question-mode-content"><span class="region">"Refile entries with top-level PARENT under the (exact) HEADING in FILE."</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-      (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">let</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> ((rfloc
-             (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">if</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">equal</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> parent
-                  (</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">save-excursion</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-                    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">re-search-backward</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"^</span></span></span></span><span class="string"><span class="warning"><span class="region"><span class="sx-question-mode-content"><span class="region">\</span></span></span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">* "</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> nil 'noerror 1)
-                    (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">nth</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> 4 (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-heading-components</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">))))
-                 `(,heading
-                   ,file
-                   nil
-                   ,(</span></span></span><span class="keyword"><span class="region"><span class="sx-question-mode-content"><span class="region">with-current-buffer</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> (</span></span></span><span class="constant"><span class="region"><span class="sx-question-mode-content"><span class="region">find-file-noselect</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> file)
-                      (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-find-exact-headline-in-buffer</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> heading))))))
-        (</span></span></span><span class="function-name"><span class="region"><span class="sx-question-mode-content"><span class="region">org-refile</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> arg default-buffer rfloc msg)))
-
-In your case, refiling subitems from "Inbox" under the "Processing" heading in
-the same file would be:
-
-</span></span></span><span class="markdown-comment"><span class="region"><span class="sx-question-mode-content"><span class="region">&lt;!-- language: lang-el --&gt;</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-
-    (org-refile-enh </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"~/path/to/inbox.org"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region"> </span></span></span><span class="comment-delimiter"><span class="region"><span class="sx-question-mode-content"><span class="region">;</span></span></span></span><span class="comment"><span class="region"><span class="sx-question-mode-content"><span class="region">target file
-    </span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">                </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Processing"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">          </span></span></span><span class="comment-delimiter"><span class="region"><span class="sx-question-mode-content"><span class="region">;</span></span></span></span><span class="comment"><span class="region"><span class="sx-question-mode-content"><span class="region">target heading
-    </span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">                </span></span></span><span class="string"><span class="region"><span class="sx-question-mode-content"><span class="region">"Inbox"</span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">               </span></span></span><span class="comment-delimiter"><span class="region"><span class="sx-question-mode-content"><span class="region">;</span></span></span></span><span class="comment"><span class="region"><span class="sx-question-mode-content"><span class="region">top-level heading of refiled item
-    </span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">                )
-</span></span></span><span class="sx-question-mode-header"><span class="underline"><span class="region"><span class="sx-question-mode-content"><span class="region">                                                                        </span></span></span></span></span><span class="region"><span class="sx-question-mode-content"><span class="region">
-</span></span></span></pre>
-  </body>
-</html>
-
-#+end_export
 *** 🎬 TODO 考虑弄个 id 直接插入的函数
 :PROPERTIES:
 :INIT:       [2021-01-11 Mon 16:22]
