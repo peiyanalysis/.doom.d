@@ -1,8 +1,13 @@
 (setq rime-user-data-dir "~/.local/share/fcitx5/rime/")
 
 (setq mathpix-dir (concat doom-private-dir "mathpix/"))
-(setq mathpix-app-id (with-temp-buffer (insert-file-contents "secretes/mathpix-app-id") (buffer-string))
-      mathpix-app-key (with-temp-buffer (insert-file-contents "secretes/mathpix-app-key") (buffer-string)))
+
+(setq secretes-path (concat doom-private-dir "scretes/"))
+
+(setq mathpix-app-id (concat secretes-path "mathpix-app-id")
+      mathpix-app-key (concat secretes-path "mathpix-app-key"))
+
+(setq org-directory "~/Dropbox/Org/")
 
 (setq org-directory "~/Dropbox/Org/")
 
@@ -26,6 +31,8 @@
 
 (setq doom-theme 'doom-dracula)
 
+(setq doom-theme 'doom-dracula)
+
 (setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 14)
       doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
       doom-variable-pitch-font (font-spec :family "Monaco" :size 18))
@@ -33,6 +40,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+
+(setq display-line-numbers-type t)
 
 (setq display-line-numbers-type t)
 
@@ -58,6 +67,8 @@
   (doom-modeline-buffer-modification-icon t)
   (doom-modeline-modal-icon t)
   (doom-modeline-buffer-encoding nil))
+
+(use-package posframe)
 
 (use-package posframe)
 
@@ -136,6 +147,10 @@
 
 (setq TeX-engine 'xetex)
 
+(setq TeX-engine 'xetex)
+
+;(use-package latex-auto-activating-snippets)
+
 ;(use-package latex-auto-activating-snippets)
 
 ;(use-package auto-activating-snippets
@@ -155,74 +170,6 @@
 (map! "C-x m" #'mathpix-screenshot)
 
 (setq      mathpix-screenshot-method "scrot -s %s")
-
-(require 'awesome-pair)
-(dolist (hook (list
-               'c-mode-common-hook
-               'c-mode-hook
-               'c++-mode-hook
-               'java-mode-hook
-               'haskell-mode-hook
-               'latex-mode-hook
-               'emacs-lisp-mode-hook
-               'lisp-interaction-mode-hook
-               'lisp-mode-hook
-               'maxima-mode-hook
-               'ielm-mode-hook
-               'sh-mode-hook
-               'makefile-gmake-mode-hook
-               'php-mode-hook
-               'python-mode-hook
-               'js-mode-hook
-               'go-mode-hook
-               'qml-mode-hook
-               'jade-mode-hook
-               'css-mode-hook
-               'ruby-mode-hook
-               'coffee-mode-hook
-               'rust-mode-hook
-               'qmake-mode-hook
-               'lua-mode-hook
-               'swift-mode-hook
-               'minibuffer-inactive-mode-hook
-               ))
-  (add-hook hook '(lambda () (awesome-pair-mode 1))))
-
-(define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
-(define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
-(define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
-(define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
-(define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
-(define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
-(define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
-(define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
-(define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
-(define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
-(define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
-(define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
-(define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
-(define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
-(define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
-(define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
-(define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
-(define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
-
-(use-package maple-iedit
-  :ensure nil
-  :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
-  :config
-  (setq maple-iedit-ignore-case t)
-
-  (defhydra maple/iedit ()
-    ("n" maple-iedit-match-next "next")
-    ("t" maple-iedit-skip-and-match-next "skip and next")
-    ("T" maple-iedit-skip-and-match-previous "skip and previous")
-    ("p" maple-iedit-match-previous "prev"))
-  :bind (:map evil-visual-state-map
-              ("n" . maple/iedit/body)
-              ("C-n" . maple-iedit-match-next)
-              ("C-p" . maple-iedit-match-previous)
-              ("C-t" . maple-iedit-skip-and-match-next)))
 
 (use-package! evil-visual-replace
   :init
@@ -244,9 +191,6 @@
         "C-(" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-barf-sexp))
-
-(use-package poporg
-  :bind ((  "C-c '" . poporg-dwim)))
 
 ;; hl-todo-mode
 (use-package hl-todo
@@ -309,24 +253,7 @@
         :desc "show level"               "l" #'hs-show-level
         :desc "show all"                 "a" #'hs-show-all )))
 
-(use-package whitespace
-  :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
-  :config
-  (setq whitespace-style '(face trailing)))
-
-(use-package autorevert
-  :hook (after-init . global-auto-revert-mode))
-
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
-
-(use-package writeroom-mode
-  :hook
-  (w3m-mode . writeroom-mode)
-  :config
-  (advice-add 'text-scale-adjust :after
-              #'visual-fill-column-adjust)
-  ;;https://github.com/joostkremers/writeroom-mode#fullscreen-effect
-  (setq writeroom-fullscreen-effect 'maximized))
 
 (use-package grugru
   :config (grugru-default-setup))
@@ -400,13 +327,11 @@
 
 (setq org-ellipsis " ··· ")
 
+(setq org-ellipsis " ··· ")
+
 (setq org-hide-emphasis-markers t)
 
-(use-package valign
-  :init
-  (require 'valign)
-  :hook
-  ('org-mode . #'valign-mode))
+(setq org-hide-emphasis-markers t)
 
 (map! :leader
       (:prefix "m"
@@ -614,6 +539,8 @@ only headings."
     (widen)
     (goto-char m)
     (set-marker m nil)))
+
+(setq org-refile-targets nil)
 
 (setq org-refile-targets nil)
 

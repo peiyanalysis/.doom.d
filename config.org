@@ -23,9 +23,19 @@
 
 #+begin_src emacs-lisp :tangle yes
 (setq mathpix-dir (concat doom-private-dir "mathpix/"))
-(setq mathpix-app-id (with-temp-buffer (insert-file-contents "secretes/mathpix-app-id") (buffer-string))
-      mathpix-app-key (with-temp-buffer (insert-file-contents "secretes/mathpix-app-key") (buffer-string)))
 #+end_src
+** secretes paht
+记录app-id, app-key的位置
+
+#+begin_src emacs-lisp :tangle yes
+(setq secretes-path (concat doom-private-dir "scretes/"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(setq mathpix-app-id (concat secretes-path "mathpix-app-id")
+      mathpix-app-key (concat secretes-path "mathpix-app-key"))
+#+end_src
+
 ** org-mode path
 记录了 org-mode 相关的路径位置.
 *** org-files
@@ -537,6 +547,7 @@
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
 #+end_src
+
 
 ** ☯ DONE So-long
 把太长的行用 ... 来显示
