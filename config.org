@@ -23,8 +23,8 @@
 
 #+begin_src emacs-lisp :tangle yes
 (setq mathpix-dir (concat doom-private-dir "mathpix/"))
-(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
-      mathpix-app-key "b667a7350e26f378b208")
+(setq mathpix-app-id (with-temp-buffer (insert-file-contents "./secrets/mathpix-app-id") (buffer-string))
+      mathpix-app-key (with-temp-buffer (insert-file-contents "./secrets/mathpix-app-key") (buffer-string)))
 #+end_src
 ** org-mode path
 记录了 org-mode 相关的路径位置.
