@@ -23,8 +23,8 @@
 
 #+begin_src emacs-lisp :tangle yes
 (setq mathpix-dir (concat doom-private-dir "mathpix/"))
-(setq mathpix-app-id (with-temp-buffer (insert-file-contents "./secrets/mathpix-app-id") (buffer-string))
-      mathpix-app-key (with-temp-buffer (insert-file-contents "./secrets/mathpix-app-key") (buffer-string)))
+(setq mathpix-app-id (with-temp-buffer (insert-file-contents "secretes/mathpix-app-id") (buffer-string))
+      mathpix-app-key (with-temp-buffer (insert-file-contents "secretes/mathpix-app-key") (buffer-string)))
 #+end_src
 ** org-mode path
 记录了 org-mode 相关的路径位置.
@@ -437,7 +437,7 @@
    将文章里面的注释, 用 org-mode 的形式来修改.
 #+begin_src emacs-lisp
 (use-package poporg
-  :bind (("C-c '" . poporg-dwim)))
+  :bind ((  "C-c '" . poporg-dwim)))
 #+end_src
 
 |--------+-------------+------------|
