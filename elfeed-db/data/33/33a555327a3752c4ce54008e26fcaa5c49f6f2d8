@@ -1,2 +1,0 @@
-<p>the unhacky way would be <code>fnmatch()</code> although i would prefer to not add it either.</p>
-<p>this would be the only place where wildcards are used in tt-rss and in general i don&rsquo;t like the &ldquo;comma separated list of wildcards&rdquo; UI very much.</p>

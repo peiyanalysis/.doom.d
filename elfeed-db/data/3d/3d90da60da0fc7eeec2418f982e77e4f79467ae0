@@ -1,8 +1,0 @@
-<p>In this article we find necessary and sufficient conditions for the strong
-maximum principle and compact support principle for non-negative solutions to
-the quasilinear elliptic inequalities $$\Delta_\infty u + G(|Du|) - f(u)\,\leq
-0\quad \text{in}\; \mathcal{O},$$ and $$\Delta_\infty u + G(|Du|) - f(u)\,\geq
-0\quad \text{in}\; \mathcal{O},$$ where $\mathcal{O}$ denotes the infinity
-Laplacian, $G$ is an appropriate continuous function and $f$ is a
-nondecreasing, continuous function with $f(0)=0$.
-</p>

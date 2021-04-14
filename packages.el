@@ -50,139 +50,142 @@
 ;(unpin! t)
 
 
-(package! eaf :recipe
-  (:host github
-   :repo "manateelazycat/emacs-application-framework"
-   :files ("*.el" "*.py" "core" "app")
-   :no-byte-compile t))
-(package! dired-narrow)
-(package! easy-kill)
-(package! company-posframe)
+;bibtex-manger
+(package! ebib)
+(package! helm-bibtex)
+
+;blog
+(package! easy-hugo)
+(package! ox-hugo)
+
+;Chinese
 (package! ace-pinyin)
 (package! evil-find-char-pinyin
   :recipe (:host github :repo "cute-jumper/evil-find-char-pinyin"))
 (package! ace-jump-mode)
-(package! gif-screencast
-  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
+(package! rime
+  :recipe (:host github
+           :repo "DogLooksGood/emacs-rime"
+           :files ("*.el" "Makefile" "lib.c")))
+
+;company
+(package! company-posframe)
+
+;code
+(package! awesome-pair
+  :recipe (:host github :repo "manateelazycat/awesome-pair"))
+(package! grugru
+  :recipe (:host github :repo "ROCKTAKEY/grugru"))
+(package! hungry-delete)
+
+;dire
+(package! dired-narrow)
+
+;dot-graphviz
+(package! graphviz-dot-mode)
+(package! dot-mode)
+
+;EAF
+;(package! eaf :recipe
+;  (:host github
+;   :repo "manateelazycat/emacs-application-framework"
+;   :files ("*.el" "*.py" "core" "app")
+;   :no-byte-compile t))
+;(package! epc)
+;(package! ctable)
+;(package! deferred)
+
+;editor
+(package! beacon)
+
+;evil-visual-replace
+(package! evil-visual-replace)
+
+;frame
+(package! burly
+  :recipe (:host github :repo "alphapapa/burly.el"))
+
+;gif
+;(package! gif-screencast
+;  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
+
+;nov
+(package! nov)
+
+;org
+(package! valign
+  :recipe (:host github :repo "casouri/valign"))
+(package! org-superstar)
+(package! org-pomodoro)
+(package! org-treeusage)
+
+;org-agenda
+(package! org-super-agenda)
+(package! org-pomodoro)
+
+;org-capture
+(package! doct
+  :recipe (:host github :repo "progfolio/doct"))
+
+;org-download
 (package! org-download)
-(package! modus-operandi-theme)
-(package! outshine)
-(package! git-link)
-(package! vterm)
-(package! vterm-toggle)
-(package! cnfonts
-  :recipe (:host github :repo "tumashu/cnfonts"))
-(package! window-purpose)
-;; TODO initial punctution , ; Thu 03 Dec 2020 03:42:48 PM CST
+
+;org-journal
+;(package! org-journal)
+
+;org-notes-manger
+(package! notdeft
+  :recipe (:host github :repo "hasu/notdeft"))
+
+;org-ref
+(package! org-ref)
+
+;org-roam
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
-(package! ace-window
-  :recipe (:host github
-           :repo "notmgsk/ace-window"
-           :branch "feature/posframe"
-           :files ("ace-window.el" "ace-window-posframe.el")))
-(package! org-bullets)
-(package! org-superstar)
-;; TODO Add Notifications like sound/vib/blink ;; Thu 03 Dec 2020 03:31:15 PM CST
-(package! org-pomodoro)
-(package! telega
-  :recipe (:host github :repo "zevlg/telega.el"))
-(package! dash)
-(package! f)
-;; TODO Add the todo supports on magit todos ; Thu 03 Dec 2020 03:32:59 PM CST
-(package! magit-todos
-  :recipe (:host github :repo "alphapapa/magit-todos"))
-;; DONE Thu 03 Dec 2020 03:30:41 PM CST
-;; Added the todos
-(package! hl-todo)
-;; use poporg to edit commentaries in org-mode
+(package! org-roam-bibtex)
+
+;org-mode outside org
 (package! poporg)
-;; baidu-translate with unicode-escape support
-(package! baidu-translate)
-(package! unicode-escape)
-(package! easy-hugo)
-(package! ox-hugo)
-(package! nano-emacs
-  :recipe (:host github :repo "rougier/nano-emacs"))
-;; (when IS-LINUX
-;;   (package! eaf :recipe (:host github
-;;                             :repo "manateelazycat/emacs-application-framework"
-;;                             :files ("*")
-;;                             :no-byte-compile t)))
+
+;pdf
+(package! pdf-tools)
+(package! org-pdftools)
 (package! org-noter-pdftools)
-(package! elfeed-protocol)
-;; (package! nyan-mode)
+(package! org-noter)
+
+;rss
 (package! elfeed)
 (package! elfeed-org)
 (package! elfeed-goodies)
 (package! elfeed-dashboard)
 (package! elfeed-protocol)
-(package! rime
-  :recipe (:host github
-           :repo "DogLooksGood/emacs-rime"
-           :files ("*.el" "Makefile" "lib.c")))
-(package! org-drill)
-(package! org-roam-bibtex)
-(package! org-ref)
-(package! ebib)
-(package! doct
-  :recipe (:host github :repo "progfolio/doct"))
+
+;snippet
 (package! auto-activating-snippets
   :recipe (:host github :repo "ymarco/auto-activating-snippets"))
 (package! LaTeX-auto-activating-snippets
   :recipe (:host github :repo "tecosaur/LaTeX-auto-activating-snippets"))
-(package! cdlatex)
 (package! yasnippet)
 (package! yasnippet-snippets)
 (package! ivy-yasnippet)
-(package! helm-bibtex)
-(package! hungry-delete)
-(package! org-journal)
-(package! org-protocol-capture-html
-  :recipe (:host github :repo "alphapapa/org-protocol-capture-html"))
-(package! nov)
-;; (package! mathpix.el
-  ;; :recipe (:host github :repo "jethrokuan/mathpix.el"))
+(package! cdlatex)
 
-(package! org-web-tools)
-(package! org-noter)
-(package! org-noter-pdftools)
-(package! valign
-  :recipe (:host github :repo "casouri/valign"))
+;translator
+(package! baidu-translate)
 
-(package! poet-theme)
-(package! org-super-agenda)
-(package! dash)
-(package! ts)
+;telega.el
+(package! telega.el
+  :recipe (:host github :repo "zevlg/telega.el"))
+(package! rainbow-identifiers)
+(package! visual-fill-column)
 
-(package! s)
-(package! ht)
-(package! org-starter)
-(package! notdeft
-  :recipe (:host github :repo "hasu/notdeft"))
-(package! good-scroll.el
-  :recipe (:host github :repo "io12/good-scroll.el"))
-(package! maple-iedit
-  :recipe (:host github :repo "honmaple/emacs-maple-iedit"))
-(package! org-latex-impatient)
-(package! beacon)
-(package! berrys-theme)
-(package! burly
-  :recipe (:host github :repo "alphapapa/burly.el"))
-(package! awesome-pair
-  :recipe (:host github :repo "manateelazycat/awesome-pair"))
-(package! grugru
-  :recipe (:host github :repo "ROCKTAKEY/grugru"))
-(package! org-treeusage)
+;unicode
+(package! unicode-escape)
 
-(package! org-superstar)
-(package! undo-fu)
-(package! undo-fu-session)
-
-(package! emacs-maple-explorer
-  :recipe (:host github :repo "honmaple/emacs-maple-explorer"))
-
-(package! sx)
-
-(package! evil-multiedit)
-(package! helm-descbinds)
+;windows
+(package! ace-window
+  :recipe (:host github
+           :repo "notmgsk/ace-window"
+           :branch "feature/posframe"
+           :files ("ace-window.el" "ace-window-posframe.el")))

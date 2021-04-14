@@ -1,7 +1,0 @@
-<p>In this note, we consider a non-commutative analogy of the classical
-Fefferman multiplier problem for the ball. More precisely, if $\chi$ is the
-characteristic function of the unit interval $I=[0,1],$ we investigate a family
-of differential operators $\mathcal{R}$ on a graded Lie group $G,$ for which
-the multipliers $\chi(\mathcal{R})$ are bounded on $L^p(G),$ if and only if
-$p=2.$
-</p>

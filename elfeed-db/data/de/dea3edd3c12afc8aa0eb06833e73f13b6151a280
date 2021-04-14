@@ -1,9 +1,0 @@
-<p>The persistent homology of random processes has been a question of interest
-in the TDA community. This paper aims to extend a result of Chazal and Divol
-and to reconcile the probabilistic approach to the study of the topology of
-superlevel sets of random processes in dimension 1. We provide explicit
-descriptions of the barcode for Brownian motion and the Brownian bridge.
-Additionally, we use these results on almost surely $C^0$-processes to describe
-the barcodes of sequences which admit these objects as limits, up to some
-quantifiable error.
-</p>

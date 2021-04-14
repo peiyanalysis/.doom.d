@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name:norm-lr
-# key:normlr
-# --
-\left\| $1 \right\|_{ $2 } $0

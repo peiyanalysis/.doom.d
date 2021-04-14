@@ -3,14 +3,96 @@
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 #+end_src
 
-* Appearance
-** theme
+* 🎬 TODO personal data
+
+#+begin_src emacs-lisp
+(setq user-full-name "Pei Yu"
+      user-mail-address "yp9106@outlook.com")
+#+END_SRC
+
+* ☯ DONE Global variables
+注意到 =doom-privae-dir= 是 doom 的个人配置文件夹，一般为 =~/.doom.d/=
+** rime path
+记录了 [[https://wiki.archlinux.org/index.php/Fcitx5][archlinux fcitx5]] 中 [[https://github.com/fcitx/fcitx5-rime][fcitx5-rime]] 输入法的位置
+#+begin_src emacs-lisp :tangle yes
+(setq rime-user-data-dir "~/.local/share/fcitx5/rime/")
+#+end_src
+
+** mathpix path
+记录了 [[https://github.com/jethrokuan/mathpix.el][jethrokuan/mathpix.el]] 存储位置,
+
+#+begin_src emacs-lisp :tangle yes
+(setq mathpix-dir (concat doom-private-dir "mathpix/"))
+(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
+      mathpix-app-key "b667a7350e26f378b208")
+#+end_src
+** org-mode path
+记录了 org-mode 相关的路径位置.
+*** org-files
+记录了标准的 org-mode 相关的文件位置
+#+begin_src emacs-lisp
+(setq org-directory "~/Dropbox/Org/")
+#+end_src
+*** org-things
+- 记录了
+  + things: 所有记录的东西
+  + braindump: [[https://www.orgroam.com/][org-roam]] 的内容存储位置
+  + project: 记录工作项目
+  + image: 记录喜欢的图片
+  + thoughts: 记录不知道从何而来的想法
+  + arts: 记录看到的图片
+#+begin_src emacs-lisp
+(setq py/things-dir     (concat org-directory   "things/") ;things stand for roams
+      py/braindump-dir  (concat py/things-dir   "braindump/") ;second brain
+      py/project-dir    (concat py/things-dir   "project/") ;projects for project files
+      py/image-dir      (concat py/things-dir   "image/")   ;image stored
+      py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
+      py/arts-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+#+end_src
+- 记录了
+  + inbox: 到脑子里的想法
+  + next: 待处理的想法
+  + braindump-inbox: 从inbox转移到 [[https://www.orgroam.com/][org-roam]] 的想法
+  + brain-index: 记录 [[https://www.orgroam.com/][org-roam]] 内的所有内容
+  + thoughts: 记录想法的所有内容
+  + arts: 记录所享受的所有艺术品
+#+begin_src emacs-lisp
+(setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
+        py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
+        py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
+        py/braindump-index      (concat py/braindump-dir "Index.org")
+        py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
+        py/arts                 (concat py/arts-dir     "arts.org"))     ;tempo ideas of pastime
+#+end_src
+
+*** bipolar
+记录自己对抗双向情感障碍的表格(时常失败,但要永远昂扬), 表格来源是:
+
+
+#+DOWNLOADED: file:///home/py06/.doom.d/images/bipolarform.jpg @ 2021-04-13 22:00:29
+[[file:images/config/bipolarform.jpg]]
+#+begin_src emacs-lisp :tangle yes
+(setq   py/bipolar (concat org-directory   "logs/bipolar.org"));idea records
+#+end_src
+
+
+
+* ☯ DONE Scratch
+用这个来编辑最基本的 doom-emacs 操作。(不知道有什么用)
+#+begin_src emacs-lisp
+(map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
+#+end_src
+
+
+* ☯ DONE Appearance
+** ☯ DONE theme
+使用 doom-dracula 主题
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-dracula)
 #+end_src
 
-** Fonts
-
+** ☯ DONE Fonts
+无耻地抄袭, 连抄哪儿都忘了.
 #+begin_src emacs-lisp
 (setq doom-font (font-spec :family "Sarasa Mono SC Nerd" :size 14)
       doom-big-font (font-spec :family "Sarasa Mono SC Nerd" :size 20)
@@ -21,24 +103,16 @@
 ;; `load-theme' function. This is the default:
 #+end_src
 
-** line-number
-
+** ☯ DONE line-number
+默认显示行号
 #+begin_src emacs-lisp
-(setq display-line-numbers-type nil)
-#+end_src
-** cursor
-#+begin_src emacs-lisp
-(use-package beacon
-  :ensure t
-  :config
-  (beacon-mode 1))
+(setq display-line-numbers-type t)
 #+end_src
 
-** modeline
+** ☯ DONE modeline
+一些modeline显示问题, 基本是抄的
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :hook
-  (window-setup . doom-modeline-mode)
   :config
   ;; (use-package nyan-mode
   ;;   :hook (doom-modeline-mode . nyan-mode)
@@ -50,20 +124,28 @@
   ;;         (list
   ;;          '(:eval (list (nyan-create))))))
   (display-time-mode t)
-  (setq doom-modeline-icon (display-graphic-p))
-  (setq doom-modeline-height 40)
-  (setq doom-modeline-bar-width 3)
-  (setq doom-modeline-major-mode-icon t)
-  (setq doom-modeline-major-mode-color-icon t)
-  (setq doom-modeline-buffer-state-icon t)
-  (setq doom-modeline-buffer-modification-icon t)
-  (setq doom-modeline-modal-icon t)
-  (setq doom-modeline-buffer-encoding nil))
+  :custom
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-height 40)
+  (doom-modeline-bar-width 3)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-modal-icon t)
+  (doom-modeline-buffer-encoding nil))
+#+end_src
+
+** ☯ DONE DONE posfroame
+使用posframe解决显示问题, 例如 [[id:0d79d819-3848-4506-b2b5-5d3f55ee1721][Emacs-rime]] 中的问题
+#+begin_src emacs-lisp
 (use-package posframe)
 #+end_src
 
-* Frames, Worksapces and windows
-** Frame
+
+* ☯ DONE Frames, Worksapces and windows
+** ☯ DONE Frame
+转移到另一个frame
 #+begin_src emacs-lisp
 (map! :leader
       :desc "Other frame"                       "o o" #'other-frame)
@@ -75,13 +157,13 @@
 | =Spc o o= | other-frame | 跳转到另一个 frame |
 |-----------+-------------+-------------------|
 
-** Workspace
-*** Savespace
+** ☯ DONE Workspace
+*** ☯ DONE Savespace
 #+begin_src emacs-lisp
 (use-package saveplace
   :hook (after-init . save-place-mode))
 #+end_src
-*** Workspace selection
+*** ☯ DONE Workspace selection
 #+begin_src emacs-lisp
 ;; keybindings
 (map! :leader
@@ -98,10 +180,10 @@
 | =TAB w= | +workspace/switch-to    |                    |
 |---------+-------------------------+--------------------|
 
-** Windows
-*** Ace-windows
+** ☯ DONE Ace-windows
+用 ace-windows 来操作窗口
 #+begin_src emacs-lisp
-(use-package! ace-window
+(use-package ace-window
   :config
   (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
   :init
@@ -116,25 +198,12 @@
 | Spc w a | ace-window-select | 测试 |
 |---------+-------------------+------|
 
-*** Winner-mode
-#+begin_src emacs-lisp
-(use-package winner-mode
-  :hook (after-init . winner-mode))
-(map! :leader
-      :prefix "w"
-      :desc   "winner-undo"  "u"        #'winner-undo
-      :desc   "winner-redo"  "C-r"      #'winner-redo)
-#+end_src
 
-|-------------+---------------------+-------------------|
-| 快捷键      | 命令                | 描述              |
-|-------------+---------------------+-------------------|
-| =Spc w u=   | winner-undo         | undo winodws 改变  |
-| =Spc w C-r= | winner-redo         | redo windows 改变 |
-|-------------+---------------------+-------------------|
-* Chinese
-
-** Emacs-rime
+* ☯ DONE Chinese
+** ☯ DONE Emacs-rime
+:PROPERTIES:
+:ID:       0d79d819-3848-4506-b2b5-5d3f55ee1721
+:END:
    emacs-china 论坛推荐使用 emacs-rime 包进行中文输入。用后感觉：UI 现代，选词快速，好用。
 #+begin_src emacs-lisp
 (use-package rime
@@ -164,7 +233,6 @@
   ("C-`" . 'rime-send-keybinding)    ;; <----
   ("M-j" . 'rime-force-enable)))
 #+end_src
-
 |--------+---------------------+--------------|
 | 快捷键 | 命令                | 描述         |
 |--------+---------------------+--------------|
@@ -172,11 +240,14 @@
 | C-:    | rime-inline-ascii   | 使用英文标点 |
 |--------+---------------------+--------------|
 
-** Avy-pinyin
+** ☯ DONE Avy-pinyin
+:PROPERTIES:
+:ID:       fb83cec2-75f4-4164-a692-2b423736016c
+:END:
    利用 ace-pinyin/evil-find-char-pinyin 来快速查找字符, 快速 vim 操作.
 #+begin_src emacs-lisp
 ;; search
-(use-package! ace-pinyin
+(use-package ace-pinyin
   :after evil
   :config
   ;; 允许avy跨窗口搜索
@@ -185,7 +256,7 @@
   (ace-pinyin-global-mode t))
 
 ;; evil-find-char-pinyin
-(use-package! evil-find-char-pinyin
+(use-package evil-find-char-pinyin
   :after evil
   :config
   ;;  允许avy跨窗口搜索
@@ -194,11 +265,10 @@
   (evil-find-char-pinyin-mode t))
 #+end_src
 
-* Coding
-** Latex
-*** forward and inverse search
+* 🎬 TODO Coding
+** 🎬 TODO Latex
+*** 🎬 TODO forward and inverse search
     向前向后搜索能大幅增加 $\LaTeX$ 的修改速度.
-
     在 Emacs 中的配置:
 #+begin_src emacs-lisp
 (setq TeX-auto-save t)
@@ -218,24 +288,26 @@
     | .tex -> .pdf | 使用命令 TeX-preview (C-c C-v)            |
     | .pdf -> .tex | 在 okular borwser 模式下, Shift+Left Click |
 
-*** set engine
+*** 🎬 TODO set engine
     设置 xetex 为基本的 $\LaTeX$ 编译器.
 #+begin_src emacs-lisp
 (setq TeX-engine 'xetex)
 #+end_src
 
-*** auto-activating-snippets
+*** CANCELED auto-activating-snippets
+- State "CANCELED"   from              [2021-04-13 Tue 22:29] \\
+  暂时先取消掉这个
     设置 $\LaTeX$ 的 yasnippet
 #+begin_src emacs-lisp
-(use-package! latex-auto-activating-snippets)
+;(use-package latex-auto-activating-snippets)
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package auto-activating-snippets
-  :hook (latex-mode . latex-auto-activating-snippets-mode))
+;(use-package auto-activating-snippets
+;  :hook (latex-mode . latex-auto-activating-snippets-mode))
 #+end_src
 
-*** cdlatex
+*** ☯ DONE cdlatex
     设置快速输入数学符号 cdlatex
 #+begin_src emacs-lisp
 (use-package cdlatex
@@ -248,22 +320,19 @@
           ( ?/  "\\slashed" nil t nil nil ))))
 #+end_src
 
-*** mathpix.el
+*** 🎬 TODO mathpix.el 发布前要隐藏id和key
+
 #+begin_src emacs-lisp
-(add-to-list 'load-path "/home/py06/.doom.d/packages")
+(add-to-list 'load-path mathpix-dir)
 (require 'mathpix)
-(map! "" #'mathpix-screenshot)
-(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
-      mathpix-app-key "b667a7350e26f378b208"
-      mathpix-screenshot-method "scrot -s %s")
+(map! "C-x m" #'mathpix-screenshot)
 #+end_src
 
-|--------+--------------------+-------------|
-| 快捷键 | 命令               | 描述        |
-|--------+--------------------+-------------|
-| C-x m  | mathpix-screenshot | mathpix 操作 |
-|--------+--------------------+-------------|
-*** awesome pair
+#+begin_src emacs-lisp
+(setq      mathpix-screenshot-method "scrot -s %s")
+#+end_src
+*** 🎬 TODO COMMENT awesome pair
+不知道有啥用
 #+begin_src emacs-lisp
 (require 'awesome-pair)
 (dolist (hook (list
@@ -316,7 +385,8 @@
 (define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
 (define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
 #+end_src
-** maple-edit
+** 🎬 TODO COMMENT maple-edit
+不知道有啥用
 #+begin_src emacs-lisp
 (use-package maple-iedit
   :ensure nil
@@ -335,11 +405,18 @@
               ("C-p" . maple-iedit-match-previous)
               ("C-t" . maple-iedit-skip-and-match-next)))
 #+end_src
-** Smartparens
+** evil-visual-replace
+#+begin_src emacs-lisp
+(use-package! evil-visual-replace
+  :init
+  (evil-visual-replace-visual-bindings))
+#+end_src
+
+** 🎬 TODO Smartparens
    修改成 leader 键
 #+begin_src emacs-lisp
 ;; smartparens
-(use-package! smartparens
+(use-package smartparens
   :init
   (map! :map smartparens-mode-map
         "C-M-f" #'sp-forward-sexp
@@ -356,16 +433,10 @@
         "C-M-)" #'sp-backward-barf-sexp))
 #+end_src
 
-
-|--------+------------------------------+----------|
-| 快捷键 | 命令                         | 描述     |
-|--------+------------------------------+----------|
-| f12    | gif-screencast-start-or-stop | 录制 gif |
-|--------+------------------------------+----------|
-** Poporg
+** 🎬 TODO COMMENT Poporg
    将文章里面的注释, 用 org-mode 的形式来修改.
 #+begin_src emacs-lisp
-(use-package! poporg
+(use-package poporg
   :bind (("C-c '" . poporg-dwim)))
 #+end_src
 
@@ -375,10 +446,10 @@
 | C-c '  | poporg-dwim | 开启 poporg |
 |--------+-------------+------------|
 
-** Hl-todo
+** 🎬 TODO Hl-todo
 #+begin_src emacs-lisp
 ;; hl-todo-mode
-(use-package! hl-todo
+(use-package hl-todo
   :init
   (setq hl-todo-keyword-faces
         '(("TODO"    . 'hl-todo-TODO)
@@ -437,7 +508,8 @@
 |------------+-----------------+----------------|
 | =SPC g i = | ivy-magit-todos | 展示每个关键词 |
 |------------+-----------------+----------------|
-** Yasnippet
+** ☯ DONE Yasnippet
+一些快速输入模板
 #+begin_src emacs-lisp
 (use-package yasnippet
   :config
@@ -451,28 +523,29 @@
 #+begin_src emacs-lisp
 (use-package ivy-yasnippet)
 #+end_src
-** Hungry delete
+** ☯ DONE Hungry delete
+快速删除太多的空格/制表符
 #+begin_src emacs-lisp
-(use-package! hungry-delete
+(use-package hungry-delete
   :config
-  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
+  (add-hook 'after-init-hook #'global-hungry-delete-mode))
 #+end_src
 
-#+RESULTS:
-: t
-
-** Company-poseframe
+** ☯ DONE Company-poseframe
+不知道有什么用, 拿来做company的显示?
 #+begin_src emacs-lisp
-(use-package! company-posframe
+(use-package company-posframe
   :hook (company-mode . company-posframe-mode))
 #+end_src
 
-** So-long
+** ☯ DONE So-long
+把太长的行用 ... 来显示
 #+begin_src emacs-lisp
 (use-package so-long
   :config (global-so-long-mode 1))
 #+end_src
-** Hide-show-mode
+** ☯ DONE Hide-show-mode
+显示-隐藏 code blocks
 #+begin_src emacs-lisp
 (map! :leader
       (:prefix-map  ("e" . "edit")
@@ -489,7 +562,8 @@
 #+RESULTS:
 : hs-show-all
 
-** Whitespace
+** 🎬 TODO COMMENT Whitespace
+不知道是啥
 #+begin_src emacs-lisp
 (use-package whitespace
   :hook ((prog-mode markdown-mode conf-mode latex-mode ) . whitespace-mode)
@@ -497,31 +571,21 @@
   (setq whitespace-style '(face trailing)))
 #+end_src
 
-** Buildin modes
-** Autorevert
+** 🎬 TODO COMMENT Autorevert
+不知道是啥
 #+begin_src emacs-lisp
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode))
 #+end_src
-** Time-insert
-#+begin_src emacs-lisp
-;; feature-functions
-(defun insert-time ()
-  "Insert a timestamp according to locale's date and time format."
-  (interactive)
-  (insert (format-time-string "%c" (current-time))))
-;; key-bindings
-(map! :leader
-      :desc "insert time"                "i t" #'insert-time)
-#+end_src
-
-** Commentaries
+** ☯ DONE Commentaries
+用来快速注释文本
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
 #+end_src
-** White-room
+** 🎬 TODO COMMENT White-room
+不知道是啥
 #+begin_src emacs-lisp
-(use-package! writeroom-mode
+(use-package writeroom-mode
   :hook
   (w3m-mode . writeroom-mode)
   :config
@@ -530,16 +594,18 @@
   ;;https://github.com/joostkremers/writeroom-mode#fullscreen-effect
   (setq writeroom-fullscreen-effect 'maximized))
 #+end_src
-** grugru
+** ☯ DONE grugru
+一个有趣的文本更换器 [[https://github.com/ROCKTAKEY/grugru][ROCKTAKEY/grugru]]
 #+begin_src emacs-lisp
 (use-package grugru
   :config (grugru-default-setup))
 #+end_src
 
 #+RESULTS:
-** undo-fu
+** 🎬 TODO undo-fu
+还不会用的, 类似undo-tree的东西, 而且有点复杂...
 #+begin_src emacs-lisp
-(use-package! undo-fu
+(use-package undo-fu
   :after-call doom-switch-buffer after-find-file
   :init
   (after! undo-tree
@@ -573,7 +639,7 @@
        :desc "undo-fu-session-save"       "e"      #'undo-fu-session-save
        :desc "undo-fu-session-recover"    "d"      #'undo-fu-session-recover ))
 
-(use-package! undo-fu-session
+(use-package undo-fu-session
   :hook (undo-fu-mode . global-undo-fu-session-mode)
   :preface
   (setq undo-fu-session-directory (concat doom-cache-dir "undo-fu-session/")
@@ -592,295 +658,53 @@
             (concat (file-name-sans-extension filename) ".zst")
           filename)))))
 #+end_src
-** which-key
+** ☯ DONE which-key
+展示使用的 key-bindings
 #+begin_src emacs-lisp
 (use-package which-key
   :init
-  (which-key-mode)
-  (which-key-setup-side-window-right))
+  (which-key-mode))
 #+end_src
 
-* Reader
-** Nov
-#+begin_src emacs-lisp
-(use-package! nov)
-#+end_src
-** Pdf-noter
-#+begin_src emacs-lisp
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link))
-
-(use-package org-noter-pdftools
-  :after org-noter
-  :config
-  (with-eval-after-load 'pdf-annot
-    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
-#+end_src
-** Pdf-tools
-* Applications
-** Emacs-hugo
-** Easy-hugo
-#+begin_src emacs-lisp
-(use-package! easy-hugo
-  :config
-  (setq! easy-hugo-root "~/Blog/RandN/"
-         easy-hugo-basedir "~/Blog/RandN/"
-         easy-hugo-url "https://peiyanalysis.github.io"
-         easy-hugo-previewtime "300"
-         easy-hugo-default-ext ".md"
-         easy-hugo-server-flags "-D"
-         easy-hugo-postdir "content/post/")
-  (map! :leader :desc "hugo blog" "B" #'easy-hugo)
-  (map! :map easy-hugo-mode-map
-      :nivm "n" 'easy-hugo-newpost
-      :nivm "D" 'easy-hugo-article
-      :nivm "p" 'easy-hugo-preview
-      :nivm "P" 'easy-hugo-publish
-      :nivm "o" 'easy-hugo-open
-      :nivm "d" 'easy-hugo-delete
-      :nivm "e" 'easy-hugo-open
-      :nivm "c" 'easy-hugo-open-config
-      :nivm "f" 'easy-hugo-open
-      :nivm "N" 'easy-hugo-no-help
-      :nivm "v" 'easy-hugo-view
-      :nivm "r" 'easy-hugo-refresh
-      :nivm "g" 'easy-hugo-refresh
-      :nivm "s" 'easy-hugo-sort-time
-      :nivm "S" 'easy-hugo-sort-char
-      :nivm "G" 'easy-hugo-github-deploy
-      :nivm "A" 'easy-hugo-amazon-s3-deploy
-      :nivm "C" 'easy-hugo-google-cloud-storage-deploy
-      :nivm "q" 'evil-delete-buffer
-      :nivm "TAB" 'easy-hugo-open
-      :nivm "RET" 'easy-hugo-preview))
- #+end_src
-** Ox-hugo
-#+begin_src emacs-lisp
-(use-package ox-hugo
-  :after ox)
-#+end_src
-** Baidu-translate
-#+begin_src emacs-lisp
-;; Baidu translate
-(use-package! baidu-translate
-  :init
-  (global-set-key (kbd "C-c m") 'baidu-translate-zh-mark)
-  (global-set-key (kbd "C-c M") 'baidu-translate-zh-whole-buffer)
-  ;;设置你的百度翻译 APPID
-  (setq baidu-translate-appid "20200510000447604")
-  ;;设置你的秘钥
-  (setq baidu-translate-security "Z5Ga8KOYLjto3H3VN8Pi")
-  (map! :leader
-        :desc "EN->ZH marks"            "a z" #'baidu-translate-zh-mark
-        :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
-        :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
-        :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
-#+end_src
-
-** Elfeed
-
-#+begin_src emacs-lisp
-(setq elfeed-use-curl nil)
-(setq elfeed-protocol-ttrss-maxsize 200) ;; bigger than 200 is invalid
-(setq elfeed-feeds
-      '(("ttrss+https://pei@rss.archpei.ink"
-         :password "fee8deb91c")))
-(elfeed-protocol-enable)
-#+end_src
-
-
-#+begin_src emacs-lisp
-(use-package elfeed
-  :config
-  (setq elfeed-use-curl t)
-  (setq elfeed-curl-max-connections 10)
-  (setq elfeed-db-directory "~/.doom.d/elfeed-db/")) ; customize this ofc
-#+end_src
-
-*** elfeed-goodies
-#+begin_src emacs-lisp
-(use-package elfeed-goodies
-  :config
-  (elfeed-goodies/setup))
-#+end_src
-
-** Eaf
-#+begin_src emacs-lisp
-(use-package! eaf
-  :config
-  ;; (setq eaf-enable-debug t) ; should only be used when eaf is wigging out
-  (eaf-setq eaf-browser-dark-mode "false")
-  (setq eaf-browser-default-search-engine "duckduckgo")
-  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com"))
-#+end_src
-
-** Telega
-#+begin_src emacs-lisp
-;; telega
-(setq telega-proxies
-      (list
-       '(:server "127.0.0.1" :port 1080 :enable t
-                 :type (:@type "proxyTypeSocks5"
-                               :username "" :password ""))))
-(map! :leader
-      (:prefix "a"
-       :desc "Telega" "t" #'telega))
-
-(require 'telega)
-(map! :after telega
-      :map telega-root-mode-map
-      :leader
-      (:prefix ("l" . "Telega")
-       :desc "Open chat with" "w" #'telega-chat-with
-       :desc "View folders" "f" #'telega-view-folders
-       :desc "Kill telega" "K" #'telega-kill
-       :desc "Browse url" "u" #'telega-browse-url))
-
-(require 'telega)
-(map! :after telega
-      :map telega-chat-mode-map
-      :leader
-      (:prefix "l"
-       :desc "Attach" "a" #'telega-chatbuf-attach
-       :desc "Cancel aux" "x" #'telega-chatbuf-cancel-aux))
-#+end_src
-** maple-explorer
-#+begin_src emacs-lisp
-(use-package maple-explorer
-  :commands (maple-explorer-file maple-explorer-buffer maple-explorer-imenu maple-explorer-recentf)
-  :config
-  (setq maple-explorer-file-display-alist '((side . left) (slot . -1))))
-#+end_src
-
-** Bibliography
-*** ebib
-:PROPERTIES:
-:ID:       3a3c8b63-10e5-4f4a-b2bb-19e23a0802fd
-:END:
- #+begin_src emacs-lisp
-(use-package ebib
-  :config
-  (setq ebib-file-search-dirs  '("~/Dropbox/bibliography/"))
-  (setq ebib-preload-bib-files '("~/Dropbox/bibliography/references.bib" )))
-  (setq ebib-file-associations '(("pdf" . "PDF tools") ("djvu" . "PDF tools")))
-;; map the keys
-(global-set-key (kbd "<f5>") 'ebib)
- #+end_src
-
-*** helm-bibtex
-#+begin_src emacs-lisp
-(use-package helm-bibtex
-  :bind ("<f11>" . helm-bibtex)
-  :commands (helm-bibtex)
-  :init
-  (add-hook 'bibtex-completion-edit-notes 'org-ref-open-bibtex-notes)
-  (setq bibtex-completion-open-any 'org-ref-open-bibtex-pdf)
-  :config
-  (setq bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
-        bibtex-completion-library-path "~/Dropbox/bibliography/bibtex-pdfs"
-        bibtex-completion-notes-path   "~/Dropbox/bibliography/helm-bibtex-notes/")
-  ;(setq bibtex-completion-display-formats
-  ;  '((t . "${=type=:7} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${author:30} ${title:72} ")))
-  (setq bibtex-completion-additional-search-fields '(keywords))
-  (setq bibtex-completion-notes-template-one-file
-	(format "\n** TODO ${=key=} - ${title}\n  :PROPERTIES:\n    :Author: ${author-or-editor}\n    :Journal: ${journal}\n  :END:\n\n"))
-  (setq bibtex-completion-display-formats
-	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
-  (setq bibtex-completion-pdf-field "file")
-  (setq bibtex-completion-pdf-symbol "PDF")
-  (setq bibtex-completion-notes-symbol "N")
- )
-#+end_src
-
-*** org-ref
-#+begin_src emacs-lisp
-(use-package org-ref
-  :after (org)
-  :config
-  ;;(setq reftex-default-bibliography '("~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"))
-  ;; see org-ref for use of these variables
-  (setq bibtex-completion-pdf-field "file")
-  (setq org-ref-bibliography-notes  "~/Dropbox/bibliography/notes.org"
-      org-ref-default-bibliography  '("~/Dropbox/bibliography/references.bib")
-      org-ref-pdf-directory         "~/Dropbox/bibliography/bibtex-pdfs/")
-  ;;(setq bibtex-completion-bibliography "~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"
-  ;;    bibtex-completion-library-path "~/OneDrive/2020.03.28_PunchingShearReferences/PDFs"
-  ;;    bibtex-completion-notes-path "~/OneDrive/2020.03.28_PunchingShearReferences/Literature-manuscript.org")
-  (setq org-ref-show-broken-links nil)
-  (setq bibtex-completion-pdf-open-function 'org-open-file)
-  (setq org-ref-note-title-format
-   "** TODO %k - %t
- :PROPERTIES:
-  :CUSTOM_ID: %k
-  :AUTHOR: %9a
-  :JOURNAL: %j
-  :DOI: %D
-  :URL: %U
- :END:
-")
-
-  (setq bibtex-completion-display-formats
-	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
-  (defun my/org-ref-notes-function (candidates)
-    (let ((key (helm-marked-candidates)))
-      (funcall org-ref-notes-function (car key))))
-
-  (helm-delete-action-from-source "Edit notes" helm-source-bibtex)
-;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
-  (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
-)
-#+end_src
-
-* Scratch
-#+begin_src emacs-lisp
-(map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
-#+end_src
-用这个来编辑最基本的 doom-emacs 操作。
-
-* Security
-#+begin_src emacs-lisp
-(setq user-full-name "Pei Yu"
-      user-mail-address "yp9106@outlook.com")
-#+END_SRC
-
-* org-mode faces and operations
+* 🎬 TODO org-mode faces and operations
 :PROPERTIES:
 :ID:       c657f8f4-abbc-4d83-8198-822910968303
 :END:
-** heading-level-face
+** ☯ DONE heading-level-face
 #+begin_src emacs-lisp
 (custom-set-faces
  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
  '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
  '(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
 #+end_src
-** org-super-star
+** ☯ DONE org-super-star
 
 #+begin_src emacs-lisp
-(use-package! org-superstar
+(use-package org-superstar
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
   (setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
 #+end_src
 
-** ellipsis at the end of heading
+** ☯ DONE ellipsis at the end of heading
 
 #+begin_src emacs-lisp
 (setq org-ellipsis " ··· ")
 #+end_src
-** bold/delete/emph
+** ☯ DONE bold/delete/emph
 #+begin_src emacs-lisp
 (setq org-hide-emphasis-markers t)
 #+end_src
-** valign formate
+** 🎬 TODO COMMENT valign formate
 #+begin_src emacs-lisp
-(use-package! valign
+(use-package valign
   :init
   (require 'valign)
   :hook
   ('org-mode . #'valign-mode))
 #+end_src
-** org-heading and item
+** ☯ DONE org-heading and item
+用来更改heading到标题
 #+begin_src emacs-lisp
 (map! :leader
       (:prefix "m"
@@ -889,106 +713,87 @@
         :desc "heading or text"          "h" #'org-toggle-heading )))
 #+end_src
 
-
-
-** evil org-mode
+** ☯ DONE evil org-mode
+保证evil-mode 可以用在org-mode里面
 
 #+begin_src emacs-lisp
 (after! org
   (add-hook 'org-mode-hook (lambda () (evil-org-mode 1))))
 #+end_src
 
-* org-mode and workflow
-** files
+** ☯ DONE org-download
+Shamelessly copy [[https://github.com/jethrokuan/dots/edit/master/.doom.d/config.el][jethrokuan/dots/doom.d/config.el]]
+#+begin_src emacs-lisp :tangle yes
+(use-package! org-download
+  :commands
+  org-download-dnd
+  org-download-yank
+  org-download-screenshot
+  org-download-dnd-base64
+  :init
+  (map! :map org-mode-map
+        "s-Y" #'org-download-screenshot
+        "s-y" #'org-download-yank)
+  (pushnew! dnd-protocol-alist
+            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . org-download-dnd)
+            '("^data:" . org-download-dnd-base64))
+  (advice-add #'org-download-enable :override #'ignore)
+  :config
+  (defun +org/org-download-method (link)
+    (let* ((filename
+            (file-name-nondirectory
+             (car (url-path-and-query
+                   (url-generic-parse-url link)))))
+           ;; Create folder name with current buffer name, and place in root dir
+           (dirname (concat "./images/"
+                            (replace-regexp-in-string " " "_"
+                                                      (downcase (file-name-base buffer-file-name))))))
+      (make-directory dirname t)
+      (expand-file-name filename dirname)))
+  :config
+  (setq org-download-screenshot-method
+        (cond (IS-MAC "screencapture -i %s")
+              (IS-LINUX
+               (cond ((executable-find "maim")  "maim -u -s %s")
+                     ((executable-find "scrot") "scrot -s %s")))))
+  (setq org-download-method '+org/org-download-method))
+#+end_src
 
+* 🎬 TODO org-mode and workflow
+:PROPERTIES:
+:ID:       63085241-dd26-4300-9f13-1ad3ae3bfe18
+:END:
+** 🎬 TODO files
+jump o inbox/next quicker
 #+begin_src emacs-lisp
-(setq org-directory "~/Dropbox/.org/")
+(defun py/jump-to-inbox ()
+  (interactive)
+  (find-file py/inbox))
 #+end_src
 
 #+begin_src emacs-lisp
-(setq py/things-dir     (concat org-directory   "things/") ;things stand for roams
-      py/braindump-dir  (concat py/things-dir   "braindump/") ;second brain
-      py/project-dir    (concat py/things-dir   "project/") ;projects for project files
-      py/image-dir      (concat py/things-dir   "image/")   ;image stored
-      py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
-      py/arts-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+(defun py/jump-to-next()
+  (interactive)
+  (find-file py/next))
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "jump to inbox"             "n i" #'py/jump-to-inbox
+      :desc "jump to next"              "n N" #'py/jump-to-next)
 #+end_src
 
 #+RESULTS:
-: ~/Dropbox/.org/things/braindump/arts/
-
-#+begin_src emacs-lisp
-(setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
-        py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
-        py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
-        py/braindump-index      (concat py/braindump-dir "braindump_index.org")
-        py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
-        py/arts                 (concat py/arts-dir     "arts.org"))     ;tempo ideas of pastime
-#+end_src
-
-
-*** COMMENT What now
-
-#+begin_src sh
-cd ~/Dropbox/.org
-ls -R
-#+end_src
-
-#+RESULTS:
-| .:                                                                                                             |
-| inbox.org                                                                                                      |
-| inbox.org_archive                                                                                              |
-| next.org                                                                                                       |
-| things                                                                                                         |
-|                                                                                                                |
-| ./things:                                                                                                      |
-| braindump                                                                                                      |
-| image                                                                                                          |
-| project                                                                                                        |
-|                                                                                                                |
-| ./things/braindump:                                                                                            |
-| alphapapa_org_protocol_capture_html_capture_html_from_the_browser_selection_into_emacs_as_org_mode_content.org |
-| arts                                                                                                           |
-| bibliography_management.org                                                                                    |
-| braindump_inbox.org                                                                                            |
-| daily                                                                                                          |
-| ebib.org                                                                                                       |
-| elisp_学习笔记.org                                                                                             |
-| Index.org                                                                                                      |
-| ivy-bibtex.org                                                                                                 |
-| jethro_kuan.org                                                                                                |
-| org_mode_agaist_bipolar_disorder.org                                                                           |
-| org-ref.org                                                                                                    |
-| org_roam_bibtex.org                                                                                            |
-| pdf-noter.org                                                                                                  |
-| pdf_reading.org                                                                                                |
-| pdf-tools.org                                                                                                  |
-| redguardtoo_wucuo_fastest_solution_to_spell_check_camel_case_code_or_plain_text.org                            |
-| thoughts                                                                                                       |
-| webs.org                                                                                                       |
-| 为什么有的人很回避与领导接触_知乎.org                                                                          |
-| 互联网性别战争不可避免_但我们仍要寻找共识.org                                                                  |
-| 强大的_org_mode_4_使用_capture_功能快速记录_zmonster_s_blog.org                                                |
-| 您认为博士期间最重要的事情是什么_知乎.org                                                                      |
-| 田园终结_资本内卷_我们需要新的道路.org                                                                         |
-|                                                                                                                |
-| ./things/braindump/arts:                                                                                       |
-| arts.org                                                                                                       |
-|                                                                                                                |
-| ./things/braindump/daily:                                                                                      |
-|                                                                                                                |
-| ./things/braindump/thoughts:                                                                                   |
-| thoughts.org                                                                                                   |
-|                                                                                                                |
-| ./things/image:                                                                                                |
-|                                                                                                                |
-| ./things/project:                                                                                              |
+: py/jump-to-inbox
 
 ** task managerment
 Still wanna to use a collect and conquer (C&C) method to manage my tasks.
 *Capture* my random idea into the =inbox.org= file;
 *Refile* the captured idea to =project= =next.org= =things= =arts= =braindump= files or directories.
-*** capture
+*** 🎬 TODO capture
+:PROPERTIES:
+:ID:       feb39079-1ca8-4f92-8809-9cc77574a64b
+:END:
 keymap
 
 #+begin_src emacs-lisp
@@ -1004,8 +809,6 @@ doct
   :commands (doct))
 #+end_src
 
-tempaltes
-
 #+begin_src emacs-lisp
 (setq org-capture-templates
       (doct '(
@@ -1019,12 +822,6 @@ tempaltes
                           ":END:")
                :todo-state "🎬 TODO"
                :create-id t)
-              ;;org-protocol-capture-html
-              ;; ("Web Content"
-              ;;  :keys "w"
-              ;;  :file ""
-              ;;  :todo-state "TODO"
-              ;;  :template ("* %a :website:\n\n%U %?\n\n%:initial"))
               ;;Metacognition
               ("Metacog"
                :keys "m"
@@ -1033,8 +830,7 @@ tempaltes
                           ":PROPERTIES:"
                           ":INIT:       %U"
                           ":END:")
-               :children (;; MetaNotes
-                          ("MetaNotes"
+               :children (("MetaNotes"
                            :keys "n"
                            :type entry
                            :todo-state "🎬 TODO"
@@ -1048,9 +844,60 @@ tempaltes
                            :keys "t"
                            :type entry
                            :todo-state "🎬 TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos")))))
+              ("Bipolar"
+               :keys "b"
+               :prepend t
+               :children (("服药情况"
+                           :keys "1"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "服药情况"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{碳酸锂正常服用?} | %^{拉莫三嗪正常服用?} | %^{盐酸普拉克索正常服用?} | %^{唑吡坦正常服用？} |"))
+                          ("睡眠情况"
+                           :keys "2"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "睡眠情况"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{晚上睡了多久?} | %^{中午睡了多久?} |"))
+                          ("急躁&焦虑情况"
+                           :keys "3"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "急躁&焦虑情况"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{备注} | %^{急躁等级 (1-10)} | %^{急躁内容} | %^{焦虑等级} | %^{焦虑内容} |"))
+                          ("工作内容记录"
+                           :keys "4"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "工作内容记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{工作内容1} | %^{时长} | %^{工作内容2} | %^{时长} | %^{工作内容3} | %^{时长} | %^{工作内容4} | %^{时长} | "))
+                          ("抑郁&躁狂记录"
+                           :keys "5"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "抑郁&躁狂记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{抑郁程度} | %^{躁狂程度} |"))
+                          ("精神状态&幻觉&怪诞想法记录"
+                           :keys "6"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "精神状态 幻觉 怪诞想法记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{精神状态(随便说说)} | %^{幻觉?} | %^{怪诞想法} |"))
+                          ("快乐事件记录"
+                           :keys "7"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "快乐事件记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{内容1} | %^{内容2} | %^{内容3} |")))))))
 #+end_src
-
 
 Shameless copied functions
 #+begin_src emacs-lisp
@@ -1111,7 +958,7 @@ only headings."
     (set-marker m nil)))
 
 #+end_src
-*** refile
+*** 🎬 TODO refile
 :PROPERTIES:
 :ID:       dd1f4fcc-c04c-45c1-bc6c-7550ff84bba0
 :END:
@@ -1163,7 +1010,7 @@ Inspried by [[https://emacs.stackexchange.com/questions/24976/org-mode-can-you-s
 #+begin_src emacs-lisp
 (add-to-list 'org-refile-targets '(py/arts :maxlevel . 1))
 #+end_src
-** in-file structures
+** 🎬 TODO in-file structures
 *** todo keyword
 #+begin_src emacs-lisp
 (setq org-todo-keywords
@@ -1219,8 +1066,6 @@ Inspried by [[https://emacs.stackexchange.com/questions/24976/org-mode-can-you-s
 | ☯ DONE      | :foreground | forest green | :weight | bold |
 | CANCELLED   | :foreground | forest green | :weight | bold |
 
-
-
 *** tags
 keymap: =Spc m q= org-set-tag-command
 #+begin_src emacs-lisp
@@ -1237,8 +1082,7 @@ notes-id operations
 #+begin_src emacs-lisp
 (map! :leader
       :prefix "n"
-      (:prefix-map              ("i" . "id")
-       :desc "id-create"        "C" #'org-id-get-create
+      (:prefix-map              ("I" . "id")
        :desc "id-goto"          "g" #'org-id-goto
        :desc "id-copy"          "c" #'org-id-copy))
 #+end_src
@@ -1319,14 +1163,20 @@ clock-out
 clock-time-report
 **** pomodoro
 use the basic org-pomodoro
-** knowledge managerment
-*** notdeft -- file manager
+** 🎬 TODO knowledge managerment
+*** COMMENT notdeft -- file manager
+:PROPERTIES:
+:ID:       17320e65-cf37-4bfa-91ec-fea2af3308af
+:END:
 #+begin_src emacs-lisp
-(use-package! notdeft
+(use-package notdeft
   :config
   (setq notdeft-extension "org")
   (setq notdeft-directories '("~/Dropbox/.org/"))
   (setq notdeft-xapian-program "/home/py06/.local/share/notdeft-xapian")
+  (map! :leader
+        (:prefix "d"
+         :desc   "notdeft"      "d" #'notdeft ))
   :bind (:map notdeft-mode-map
          ("C-q" . notdeft-quit)
          ("C-r" . notdeft-refresh)))
@@ -1347,7 +1197,7 @@ use the basic org-pomodoro
 *** org-roam -- knowledge base
 **** directories, files and other basic settings
 #+begin_src emacs-lisp
-(use-package! org-roam
+(use-package org-roam
   :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
   :hook
   (after-init . org-roam-mode))
@@ -1385,12 +1235,15 @@ use the basic org-pomodoro
 : org-roam-capture
 
 **** roam-capture
+:PROPERTIES:
+:ID:       9bc394e5-f10a-4e4a-8363-79389f81156a
+:END:
 ***** roam-protocol
 :PROPERTIES:
 :ID:       423d963d-3149-4cb9-8386-ec2e61e16454
 :END:
 #+begin_src emacs-lisp
-(use-package! org-roam-protocol
+(use-package org-roam-protocol
   :after org-protocol)
 #+end_src
 
@@ -1433,10 +1286,9 @@ use the basic org-pomodoro
 #+RESULTS:
 | a | Annotation | plain | #'org-roam-capture--get-point | %U |
 
-*****
 **** roam-server
 #+begin_src emacs-lisp
-(use-package! org-roam-server
+(use-package org-roam-server
   :config
   (setq org-roam-server-host "127.0.0.1"
         org-roam-server-port 9090
@@ -1449,33 +1301,27 @@ use the basic org-pomodoro
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
-;; kept server running
-(unless (server-running-p)
-  (org-roam-server-mode))
 #+end_src
 
-** agenda customization
+** 🎬 TODO agenda customization
 We discuss different agendas here
 *** super-agenda
 #+begin_src emacs-lisp
-(use-package! org-super-agenda
+(use-package org-super-agenda
 :config
 (add-hook! 'after-init-hook 'org-super-agenda-mode)
-(setq
-   org-agenda-skip-scheduled-if-done t
-   org-agenda-skip-deadline-if-done t
-   org-agenda-include-deadlines t
-   org-agenda-include-diary nil
-   org-agenda-block-separator nil
-   org-agenda-compact-blocks t
-   org-agenda-start-with-log-mode t)
+(setq org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-include-deadlines t
+      org-agenda-include-diary nil
+      org-agenda-block-separator nil
+      org-agenda-compact-blocks t
+      org-agenda-start-with-log-mode t)
 (setq org-columns-default-format
-      "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-
-)
+      "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)"))
 #+end_src
 
-*** 🎬 TODO agenda
+*** agenda
 
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
@@ -1493,40 +1339,196 @@ We discuss different agendas here
                 ((org-agenda-overriding-header "Arts, To Detail")
                  (org-agenda-files (directory-files-recursively py/arts-dir (rx ".org" eos)))))))
         ("p" "Pei's Agenda"
-         ((agenda "" ((org-agenda-span 2)
+         ((alltodo "" ((org-agenda-overriding-header "To Refile")
+                       (org-agenda-files '(,(expand-file-name py/inbox)))))
+          (alltodo "" ((org-agenda-overriding-header "One-off-task" )
+                       (org-agenda-files '(,(expand-file-name py/next )))))
+          (agenda "" ((org-agenda-span 3)
                       (org-agenda-start-day "-1d")
+                      (org-agenda-files (directory-files-recursively py/project-dir (rx ".org" eos)))
                       (org-super-agenda-groups
-                       '((:name "Today List"
+                       '((:name "Schedual"
                                 :time-grid t
                                 :date today
-                                :todo "⚔ INPROCESS"
                                 :scheduled today
-                                :order 1)))))
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '((:name "Next to do"
-                                 :priority>= "B"
-                                 :order 2)
-                                 ))))
+                                :order 1)
+                         (:name "Deadline"
+                                :time-grid t
+                                :date today
+                                :deadline today
+                                :order 2)))))
           ))))
 #+end_src
 
+** COMMENT pdf annotation
+*** org-noter
+#+begin_src emacs-lisp
+(use-package org-noter
+  :config
+  ;; Your org-noter config ........
+  (require 'org-noter-pdftools))
+#+end_src
+*** org-pdftools
+#+begin_src emacs-lisp
+(use-package org-pdftools
+  :hook (org-mode . org-pdftools-setup-link))
+#+end_src
+*** org-noter-pdf-tools
+**** code
+#+begin_src emacs-lisp
+(use-package org-noter-pdftools
+  :after org-noter
+  :config
+  ;; Add a function to ensure precise note is inserted
+  (defun org-noter-pdftools-insert-precise-note (&optional toggle-no-questions)
+    (interactive "P")
+    (org-noter--with-valid-session
+     (let ((org-noter-insert-note-no-questions (if toggle-no-questions
+                                                   (not org-noter-insert-note-no-questions)
+                                                 org-noter-insert-note-no-questions))
+           (org-pdftools-use-isearch-link t)
+           (org-pdftools-use-freestyle-annot t))
+       (org-noter-insert-note (org-noter--get-precise-info)))))
+
+  ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
+  (defun org-noter-set-start-location (&optional arg)
+    "When opening a session with this document, go to the current location.
+With a prefix ARG, remove start location."
+    (interactive "P")
+    (org-noter--with-valid-session
+     (let ((inhibit-read-only t)
+           (ast (org-noter--parse-root))
+           (location (org-noter--doc-approx-location (when (called-interactively-p 'any) 'interactive))))
+       (with-current-buffer (org-noter--session-notes-buffer session)
+         (org-with-wide-buffer
+          (goto-char (org-element-property :begin ast))
+          (if arg
+              (org-entry-delete nil org-noter-property-note-location)
+            (org-entry-put nil org-noter-property-note-location
+                           (org-noter--pretty-print-location location))))))))
+  (with-eval-after-load 'pdf-annot
+    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+#+end_src
+**** usage
+- select a pdf file, use =org-noter= to open an related org-file
+- use =org-ref-creat-skelonton= to import toc or outline
+- use =org-noter-sync-*= to sync pdf-docview and org-mode
+- use =org-noter-insert-note= to insert note while your org-noter-sync- is buffering
+  + when the org-file is synced,
+
+** COMMENT org-mode for bipolar log
+
+*** 设置
+:PROPERTIES:
+:ID:       d356b6cd-7ab7-4698-aec5-5d48ca257bf5
+:END:
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates '("b" "Bipolar"))
+#+end_src
+
+*** 服药情况
+:PROPERTIES:
+:ID:       cc188716-00ee-4357-b38c-dd40f9e8cffa
+:END:
+
+| 记录日期 | 碳酸锂 | 拉莫三嗪 | 盐酸普拉克索 | 酒石酸唑吡坦 |
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b1"
+               "服药情况"
+               table-line
+               (file+headline py/bipolar "服药情况")
+               "| %t | %^{碳酸锂正常服用？} | %^{拉莫三嗪正常服用？} | %^{盐酸普拉克索正常服用？} | %^{唑吡坦正常服用？} |"))
+#+end_src
+
+*** 睡眠情况
+
+| 记录日期 | 睡眠时长·夜 | 睡眠时长·午 |
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b2"
+               "睡眠情况"
+               table-line
+               (file+headline py/bipolar "睡眠情况")
+               "| %t | %^{晚上睡了多久？} | %^{中午睡了多久？} |"))
+#+end_src
+
+*** 急躁&焦虑情况
+
+| 记录日期 | 心境表格备注 | 急躁等级 | 急躁内容 | 焦虑等级 | 焦虑内容 |
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b3"
+               "急躁&焦虑情况"
+               table-line
+               (file+headline py/bipolar "急躁&焦虑情况")
+               "| %t | %^{备注} | %^{急躁等级 (1-10)} | %^{及早内容} | %^{唑吡坦正常服用？} |"))
+#+end_src
+
+*** 工作内容记录
+
+| 记录日期 | 工作内容1 | 时长 | 工作内容2 | 时长 | 工作内容3 | 时长 | 工作内容4 | 时长 |
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b4"
+               "工作内容记录"
+               table-line
+               (file+headline py/bipolar "工作内容记录")
+               "| %t | %^{备注} | %^{工作内容1} | %^{时长} | %^{工作内容2} | %^{时长} | %^{工作内容3} | %^{时长} | %^{工作内容4} | %^{时长} | "))
+#+end_src
+
+*** 抑郁&躁狂记录
+:PROPERTIES:
+:ID:       2a89219b-5fec-477e-be97-57beff1580ff
+:END:
+
+| 记录日期 | 抑郁程度 | 躁狂程度 |
+
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b5"
+               "抑郁&躁狂记录"
+               table-line
+               (file+headline py/bipolar "抑郁&躁狂记录")
+               "| %t | %^{抑郁程度} | %^{躁狂程度} |"))
+#+end_src
+
+*** 精神状态 幻觉 怪诞想法记录
+
+| 记录日期 | 精神状态 | 幻觉 | 怪诞想法 |
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b6"
+               "精神状态 幻觉 怪诞想法记录"
+               table-line
+               (file+headline py/bipolar "精神状态 幻觉 怪诞想法记录")
+               "| %t | %^{精神状态（随便说说）} | %^{幻觉？} | %^{怪诞想法} |"))
+#+end_src
+
+*** 快乐事件记录
+
+| 记录日期 | 内容1 | 时长 | 内容2   | 时长 | 内容3   | 时长 | 内容4   | 时长 |
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+             '("b7"
+               "快乐事件记录"
+               table-line
+               (file+headline py/bipolar "快乐事件记录")
+               "| %t | %^{内容1} | %^{时长} | %^{内容2} | %^{时长} | %^{内容3} | %^{时长} | %^{内容4}| %^{时长} |"))
+#+end_src
+
 * Metacog
+
 ** Notes
-*** 🎬 TODO captured html
-:PROPERTIES:
-:ID:       e37fa0af-d194-471d-9f67-1803f1e6be44
-:END:
-*** 🎬 TODO 考虑弄个 id 直接插入的函数
-:PROPERTIES:
-:INIT:       [2021-01-11 Mon 16:22]
-:END:
-** Questions
-*** 🎬 TODO could I modify the valign mode make it applicable to the results in org-babal region
-:PROPERTIES:
-:INIT:       [2021-01-12 Tue 08:02]
-:END:
 *** 🎬 TODO
 :PROPERTIES:
-:INIT:       [2021-01-11 Mon 06:47]
+:INIT:       [2021-04-13 Tue 18:53]
 :END:

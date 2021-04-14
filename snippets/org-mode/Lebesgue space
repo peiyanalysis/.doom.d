@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name:Lebesgue space
-# key: lps
-# --
-L^{$1}$0

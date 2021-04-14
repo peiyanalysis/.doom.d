@@ -1,6 +1,28 @@
-;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+(setq rime-user-data-dir "~/.local/share/fcitx5/rime/")
 
-(setq doom-theme 'doom-dracula)
+(setq mathpix-dir (concat doom-private-dir "mathpix/"))
+(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
+      mathpix-app-key "b667a7350e26f378b208")
+
+(setq org-directory "~/Dropbox/Org/")
+
+(setq py/things-dir     (concat org-directory   "things/") ;things stand for roams
+      py/braindump-dir  (concat py/things-dir   "braindump/") ;second brain
+      py/project-dir    (concat py/things-dir   "project/") ;projects for project files
+      py/image-dir      (concat py/things-dir   "image/")   ;image stored
+      py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
+      py/arts-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+
+(setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
+        py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
+        py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
+        py/braindump-index      (concat py/braindump-dir "Index.org")
+        py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
+        py/arts                 (concat py/arts-dir     "arts.org"))     ;tempo ideas of pastime
+
+(setq   py/bipolar (concat org-directory   "logs/bipolar.org"));idea records
+
+(map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
 
 (setq doom-theme 'doom-dracula)
 
@@ -12,18 +34,9 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 
-(setq display-line-numbers-type nil)
-
-(setq display-line-numbers-type nil)
-
-(use-package beacon
-  :ensure t
-  :config
-  (beacon-mode 1))
+(setq display-line-numbers-type t)
 
 (use-package doom-modeline
-  :hook
-  (window-setup . doom-modeline-mode)
   :config
   ;; (use-package nyan-mode
   ;;   :hook (doom-modeline-mode . nyan-mode)
@@ -35,15 +48,17 @@
   ;;         (list
   ;;          '(:eval (list (nyan-create))))))
   (display-time-mode t)
-  (setq doom-modeline-icon (display-graphic-p))
-  (setq doom-modeline-height 40)
-  (setq doom-modeline-bar-width 3)
-  (setq doom-modeline-major-mode-icon t)
-  (setq doom-modeline-major-mode-color-icon t)
-  (setq doom-modeline-buffer-state-icon t)
-  (setq doom-modeline-buffer-modification-icon t)
-  (setq doom-modeline-modal-icon t)
-  (setq doom-modeline-buffer-encoding nil))
+  :custom
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-height 40)
+  (doom-modeline-bar-width 3)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-modal-icon t)
+  (doom-modeline-buffer-encoding nil))
+
 (use-package posframe)
 
 (map! :leader
@@ -58,20 +73,13 @@
       :desc "Right workspace"                   "TAB ." #'+workspace/switch-right
       :desc "Switch workspace"                  "TAB w" #'+workspace/switch-to)
 
-(use-package! ace-window
+(use-package ace-window
   :config
   (setq aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
   :init
   (map! :leader
         :prefix "w"
         :desc "ace-window-select" "a" #'ace-window))
-
-(use-package winner-mode
-  :hook (after-init . winner-mode))
-(map! :leader
-      :prefix "w"
-      :desc   "winner-undo"  "u"        #'winner-undo
-      :desc   "winner-redo"  "C-r"      #'winner-redo)
 
 (use-package rime
   :config
@@ -101,7 +109,7 @@
   ("M-j" . 'rime-force-enable)))
 
 ;; search
-(use-package! ace-pinyin
+(use-package ace-pinyin
   :after evil
   :config
   ;; 允许avy跨窗口搜索
@@ -110,7 +118,7 @@
   (ace-pinyin-global-mode t))
 
 ;; evil-find-char-pinyin
-(use-package! evil-find-char-pinyin
+(use-package evil-find-char-pinyin
   :after evil
   :config
   ;;  允许avy跨窗口搜索
@@ -128,14 +136,10 @@
 
 (setq TeX-engine 'xetex)
 
-(setq TeX-engine 'xetex)
+;(use-package latex-auto-activating-snippets)
 
-(use-package! latex-auto-activating-snippets)
-
-(use-package! latex-auto-activating-snippets)
-
-(use-package auto-activating-snippets
-  :hook (latex-mode . latex-auto-activating-snippets-mode))
+;(use-package auto-activating-snippets
+;  :hook (latex-mode . latex-auto-activating-snippets-mode))
 
 (use-package cdlatex
   :hook ((LaTeX-mode . turn-on-cdlatex)
@@ -146,12 +150,11 @@
           ( ?b  nil         nil t nil nil )
           ( ?/  "\\slashed" nil t nil nil ))))
 
-(add-to-list 'load-path "/home/py06/.doom.d/packages")
+(add-to-list 'load-path mathpix-dir)
 (require 'mathpix)
-(map! "" #'mathpix-screenshot)
-(setq mathpix-app-id "yp9106_outlook_com_58f781_c2e02c"
-      mathpix-app-key "b667a7350e26f378b208"
-      mathpix-screenshot-method "scrot -s %s")
+(map! "C-x m" #'mathpix-screenshot)
+
+(setq      mathpix-screenshot-method "scrot -s %s")
 
 (require 'awesome-pair)
 (dolist (hook (list
@@ -221,8 +224,12 @@
               ("C-p" . maple-iedit-match-previous)
               ("C-t" . maple-iedit-skip-and-match-next)))
 
+(use-package! evil-visual-replace
+  :init
+  (evil-visual-replace-visual-bindings))
+
 ;; smartparens
-(use-package! smartparens
+(use-package smartparens
   :init
   (map! :map smartparens-mode-map
         "C-M-f" #'sp-forward-sexp
@@ -238,11 +245,11 @@
         "C-M-)" #'sp-backward-slurp-sexp
         "C-M-)" #'sp-backward-barf-sexp))
 
-(use-package! poporg
+(use-package poporg
   :bind (("C-c '" . poporg-dwim)))
 
 ;; hl-todo-mode
-(use-package! hl-todo
+(use-package hl-todo
   :init
   (setq hl-todo-keyword-faces
         '(("TODO"    . 'hl-todo-TODO)
@@ -281,11 +288,11 @@
 
 (use-package ivy-yasnippet)
 
-(use-package! hungry-delete
+(use-package hungry-delete
   :config
-  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
+  (add-hook 'after-init-hook #'global-hungry-delete-mode))
 
-(use-package! company-posframe
+(use-package company-posframe
   :hook (company-mode . company-posframe-mode))
 
 (use-package so-long
@@ -310,18 +317,9 @@
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode))
 
-;; feature-functions
-(defun insert-time ()
-  "Insert a timestamp according to locale's date and time format."
-  (interactive)
-  (insert (format-time-string "%c" (current-time))))
-;; key-bindings
-(map! :leader
-      :desc "insert time"                "i t" #'insert-time)
-
 (global-set-key (kbd "C-c C-\\") (quote comment-line))
 
-(use-package! writeroom-mode
+(use-package writeroom-mode
   :hook
   (w3m-mode . writeroom-mode)
   :config
@@ -333,7 +331,7 @@
 (use-package grugru
   :config (grugru-default-setup))
 
-(use-package! undo-fu
+(use-package undo-fu
   :after-call doom-switch-buffer after-find-file
   :init
   (after! undo-tree
@@ -367,7 +365,7 @@
        :desc "undo-fu-session-save"       "e"      #'undo-fu-session-save
        :desc "undo-fu-session-recover"    "d"      #'undo-fu-session-recover ))
 
-(use-package! undo-fu-session
+(use-package undo-fu-session
   :hook (undo-fu-mode . global-undo-fu-session-mode)
   :preface
   (setq undo-fu-session-directory (concat doom-cache-dir "undo-fu-session/")
@@ -388,223 +386,23 @@
 
 (use-package which-key
   :init
-  (which-key-mode)
-  (which-key-setup-side-window-right))
-
-(use-package! nov)
-
-(use-package! nov)
-
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link))
-
-(use-package org-noter-pdftools
-  :after org-noter
-  :config
-  (with-eval-after-load 'pdf-annot
-    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
-
-(use-package! easy-hugo
-  :config
-  (setq! easy-hugo-root "~/Blog/RandN/"
-         easy-hugo-basedir "~/Blog/RandN/"
-         easy-hugo-url "https://peiyanalysis.github.io"
-         easy-hugo-previewtime "300"
-         easy-hugo-default-ext ".md"
-         easy-hugo-server-flags "-D"
-         easy-hugo-postdir "content/post/")
-  (map! :leader :desc "hugo blog" "B" #'easy-hugo)
-  (map! :map easy-hugo-mode-map
-      :nivm "n" 'easy-hugo-newpost
-      :nivm "D" 'easy-hugo-article
-      :nivm "p" 'easy-hugo-preview
-      :nivm "P" 'easy-hugo-publish
-      :nivm "o" 'easy-hugo-open
-      :nivm "d" 'easy-hugo-delete
-      :nivm "e" 'easy-hugo-open
-      :nivm "c" 'easy-hugo-open-config
-      :nivm "f" 'easy-hugo-open
-      :nivm "N" 'easy-hugo-no-help
-      :nivm "v" 'easy-hugo-view
-      :nivm "r" 'easy-hugo-refresh
-      :nivm "g" 'easy-hugo-refresh
-      :nivm "s" 'easy-hugo-sort-time
-      :nivm "S" 'easy-hugo-sort-char
-      :nivm "G" 'easy-hugo-github-deploy
-      :nivm "A" 'easy-hugo-amazon-s3-deploy
-      :nivm "C" 'easy-hugo-google-cloud-storage-deploy
-      :nivm "q" 'evil-delete-buffer
-      :nivm "TAB" 'easy-hugo-open
-      :nivm "RET" 'easy-hugo-preview))
-
-(use-package ox-hugo
-  :after ox)
-
-(use-package ox-hugo
-  :after ox)
-
-;; Baidu translate
-(use-package! baidu-translate
-  :init
-  (global-set-key (kbd "C-c m") 'baidu-translate-zh-mark)
-  (global-set-key (kbd "C-c M") 'baidu-translate-zh-whole-buffer)
-  ;;设置你的百度翻译 APPID
-  (setq baidu-translate-appid "20200510000447604")
-  ;;设置你的秘钥
-  (setq baidu-translate-security "Z5Ga8KOYLjto3H3VN8Pi")
-  (map! :leader
-        :desc "EN->ZH marks"            "a z" #'baidu-translate-zh-mark
-        :desc "EN->ZH buffer"           "a Z" #'baidu-translate-zh-whole-buffer
-        :desc "ZH->EN marks"            "a e" #'baidu-translate-en-mark
-        :desc "ZH->EN buffer"           "a E" #'baidu-translate-en-whole-buffer))
-
-(setq elfeed-use-curl nil)
-(setq elfeed-protocol-ttrss-maxsize 200) ;; bigger than 200 is invalid
-(setq elfeed-feeds
-      '(("ttrss+https://pei@rss.archpei.ink"
-         :password "fee8deb91c")))
-(elfeed-protocol-enable)
-
-(use-package elfeed
-  :config
-  (setq elfeed-use-curl t)
-  (setq elfeed-curl-max-connections 10)
-  (setq elfeed-db-directory "~/.doom.d/elfeed-db/")) ; customize this ofc
-
-(use-package elfeed-goodies
-  :config
-  (elfeed-goodies/setup))
-
-(use-package! eaf
-  :config
-  ;; (setq eaf-enable-debug t) ; should only be used when eaf is wigging out
-  (eaf-setq eaf-browser-dark-mode "false")
-  (setq eaf-browser-default-search-engine "duckduckgo")
-  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com"))
-
-;; telega
-(setq telega-proxies
-      (list
-       '(:server "127.0.0.1" :port 1080 :enable t
-                 :type (:@type "proxyTypeSocks5"
-                               :username "" :password ""))))
-(map! :leader
-      (:prefix "a"
-       :desc "Telega" "t" #'telega))
-
-(require 'telega)
-(map! :after telega
-      :map telega-root-mode-map
-      :leader
-      (:prefix ("l" . "Telega")
-       :desc "Open chat with" "w" #'telega-chat-with
-       :desc "View folders" "f" #'telega-view-folders
-       :desc "Kill telega" "K" #'telega-kill
-       :desc "Browse url" "u" #'telega-browse-url))
-
-(require 'telega)
-(map! :after telega
-      :map telega-chat-mode-map
-      :leader
-      (:prefix "l"
-       :desc "Attach" "a" #'telega-chatbuf-attach
-       :desc "Cancel aux" "x" #'telega-chatbuf-cancel-aux))
-
-(use-package maple-explorer
-  :commands (maple-explorer-file maple-explorer-buffer maple-explorer-imenu maple-explorer-recentf)
-  :config
-  (setq maple-explorer-file-display-alist '((side . left) (slot . -1))))
-
-(use-package ebib
-  :config
-  (setq ebib-file-search-dirs  '("~/Dropbox/bibliography/"))
-  (setq ebib-preload-bib-files '("~/Dropbox/bibliography/references.bib" )))
-  (setq ebib-file-associations '(("pdf" . "PDF tools") ("djvu" . "PDF tools")))
-;; map the keys
-(global-set-key (kbd "<f5>") 'ebib)
-
-(use-package helm-bibtex
-  :bind ("<f11>" . helm-bibtex)
-  :commands (helm-bibtex)
-  :init
-  (add-hook 'bibtex-completion-edit-notes 'org-ref-open-bibtex-notes)
-  (setq bibtex-completion-open-any 'org-ref-open-bibtex-pdf)
-  :config
-  (setq bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
-        bibtex-completion-library-path "~/Dropbox/bibliography/bibtex-pdfs"
-        bibtex-completion-notes-path   "~/Dropbox/bibliography/helm-bibtex-notes/")
-  ;(setq bibtex-completion-display-formats
-  ;  '((t . "${=type=:7} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${author:30} ${title:72} ")))
-  (setq bibtex-completion-additional-search-fields '(keywords))
-  (setq bibtex-completion-notes-template-one-file
-	(format "\n** TODO ${=key=} - ${title}\n  :PROPERTIES:\n    :Author: ${author-or-editor}\n    :Journal: ${journal}\n  :END:\n\n"))
-  (setq bibtex-completion-display-formats
-	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
-  (setq bibtex-completion-pdf-field "file")
-  (setq bibtex-completion-pdf-symbol "PDF")
-  (setq bibtex-completion-notes-symbol "N")
- )
-
-(use-package org-ref
-  :after (org)
-  :config
-  ;;(setq reftex-default-bibliography '("~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"))
-  ;; see org-ref for use of these variables
-  (setq bibtex-completion-pdf-field "file")
-  (setq org-ref-bibliography-notes  "~/Dropbox/bibliography/notes.org"
-      org-ref-default-bibliography  '("~/Dropbox/bibliography/references.bib")
-      org-ref-pdf-directory         "~/Dropbox/bibliography/bibtex-pdfs/")
-  ;;(setq bibtex-completion-bibliography "~/OneDrive/2020.03.28_PunchingShearReferences/Literature.bib"
-  ;;    bibtex-completion-library-path "~/OneDrive/2020.03.28_PunchingShearReferences/PDFs"
-  ;;    bibtex-completion-notes-path "~/OneDrive/2020.03.28_PunchingShearReferences/Literature-manuscript.org")
-  (setq org-ref-show-broken-links nil)
-  (setq bibtex-completion-pdf-open-function 'org-open-file)
-  (setq org-ref-note-title-format
-   "** TODO %k - %t
- :PROPERTIES:
-  :CUSTOM_ID: %k
-  :AUTHOR: %9a
-  :JOURNAL: %j
-  :DOI: %D
-  :URL: %U
- :END:
-")
-
-  (setq bibtex-completion-display-formats
-	'((t . "${author:20} ${year:4} ${=has-pdf=:3} ${=has-note=:1} ${=type=:7} ${title:90}")))
-  (defun my/org-ref-notes-function (candidates)
-    (let ((key (helm-marked-candidates)))
-      (funcall org-ref-notes-function (car key))))
-
-  (helm-delete-action-from-source "Edit notes" helm-source-bibtex)
-;; Note that 7 is a magic number of the index where you want to insert the command. You may need to change yours.
-  (helm-add-action-to-source "Edit notes" 'my/org-ref-notes-function helm-source-bibtex 7)
-)
-
-(map! :leader :desc "doom/scratch"            "X" #'doom/open-scratch-buffer)
-
-(setq user-full-name "Pei Yu"
-      user-mail-address "yp9106@outlook.com")
+  (which-key-mode))
 
 (custom-set-faces
  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
  '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
  '(org-level-3 ((t (:inherit outline-3 :height 1.1)))))
 
-(use-package! org-superstar
+(use-package org-superstar
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
   (setq org-superstar-headline-bullets-list '("☰" "☷" "☵" "☲"  "☳" "☴"  "☶"  "☱" )))
 
 (setq org-ellipsis " ··· ")
 
-(setq org-ellipsis " ··· ")
-
 (setq org-hide-emphasis-markers t)
 
-(setq org-hide-emphasis-markers t)
-
-(use-package! valign
+(use-package valign
   :init
   (require 'valign)
   :hook
@@ -619,23 +417,51 @@
 (after! org
   (add-hook 'org-mode-hook (lambda () (evil-org-mode 1))))
 
-(setq org-directory "~/Dropbox/.org/")
+(use-package! org-download
+  :commands
+  org-download-dnd
+  org-download-yank
+  org-download-screenshot
+  org-download-dnd-base64
+  :init
+  (map! :map org-mode-map
+        "s-Y" #'org-download-screenshot
+        "s-y" #'org-download-yank)
+  (pushnew! dnd-protocol-alist
+            '("^\\(?:https?\\|ftp\\|file\\|nfs\\):" . org-download-dnd)
+            '("^data:" . org-download-dnd-base64))
+  (advice-add #'org-download-enable :override #'ignore)
+  :config
+  (defun +org/org-download-method (link)
+    (let* ((filename
+            (file-name-nondirectory
+             (car (url-path-and-query
+                   (url-generic-parse-url link)))))
+           ;; Create folder name with current buffer name, and place in root dir
+           (dirname (concat "./images/"
+                            (replace-regexp-in-string " " "_"
+                                                      (downcase (file-name-base buffer-file-name))))))
+      (make-directory dirname t)
+      (expand-file-name filename dirname)))
+  :config
+  (setq org-download-screenshot-method
+        (cond (IS-MAC "screencapture -i %s")
+              (IS-LINUX
+               (cond ((executable-find "maim")  "maim -u -s %s")
+                     ((executable-find "scrot") "scrot -s %s")))))
+  (setq org-download-method '+org/org-download-method))
 
-(setq org-directory "~/Dropbox/.org/")
+(defun py/jump-to-inbox ()
+  (interactive)
+  (find-file py/inbox))
 
-(setq py/things-dir     (concat org-directory   "things/") ;things stand for roams
-      py/braindump-dir  (concat py/things-dir   "braindump/") ;second brain
-      py/project-dir    (concat py/things-dir   "project/") ;projects for project files
-      py/image-dir      (concat py/things-dir   "image/")   ;image stored
-      py/thoughts-dir   (concat py/braindump-dir  "thoughts/") ;like roaming, but more glue
-      py/arts-dir        (concat py/braindump-dir  "arts/")) ;novel, music, films, animate, comics, games, notes after reading
+(defun py/jump-to-next()
+  (interactive)
+  (find-file py/next))
 
-(setq   py/inbox                (concat org-directory   "inbox.org") ;idea records
-        py/next                 (concat org-directory   "next.org")  ;one-off tasks as a todolist
-        py/braindump-inbox      (concat py/braindump-dir "braindump_inbox.org")
-        py/braindump-index      (concat py/braindump-dir "braindump_index.org")
-        py/thoughts             (concat py/thoughts-dir "thoughts.org") ;some tempo ideas
-        py/arts                 (concat py/arts-dir     "arts.org"))     ;tempo ideas of pastime
+(map! :leader
+      :desc "jump to inbox"             "n i" #'py/jump-to-inbox
+      :desc "jump to next"              "n N" #'py/jump-to-next)
 
 (after! org
   (map! :leader :desc "org-capture"           "x" #'org-capture))
@@ -657,12 +483,6 @@
                           ":END:")
                :todo-state "🎬 TODO"
                :create-id t)
-              ;;org-protocol-capture-html
-              ;; ("Web Content"
-              ;;  :keys "w"
-              ;;  :file ""
-              ;;  :todo-state "TODO"
-              ;;  :template ("* %a :website:\n\n%U %?\n\n%:initial"))
               ;;Metacognition
               ("Metacog"
                :keys "m"
@@ -671,8 +491,7 @@
                           ":PROPERTIES:"
                           ":INIT:       %U"
                           ":END:")
-               :children (;; MetaNotes
-                          ("MetaNotes"
+               :children (("MetaNotes"
                            :keys "n"
                            :type entry
                            :todo-state "🎬 TODO"
@@ -686,7 +505,59 @@
                            :keys "t"
                            :type entry
                            :todo-state "🎬 TODO"
-                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos"))))))))
+                           :function (lambda () (jethro/olp-current-buffer "Metacog" "Todos")))))
+              ("Bipolar"
+               :keys "b"
+               :prepend t
+               :children (("服药情况"
+                           :keys "1"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "服药情况"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{碳酸锂正常服用?} | %^{拉莫三嗪正常服用?} | %^{盐酸普拉克索正常服用?} | %^{唑吡坦正常服用？} |"))
+                          ("睡眠情况"
+                           :keys "2"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "睡眠情况"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{晚上睡了多久?} | %^{中午睡了多久?} |"))
+                          ("急躁&焦虑情况"
+                           :keys "3"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "急躁&焦虑情况"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{备注} | %^{急躁等级 (1-10)} | %^{急躁内容} | %^{焦虑等级} | %^{焦虑内容} |"))
+                          ("工作内容记录"
+                           :keys "4"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "工作内容记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{工作内容1} | %^{时长} | %^{工作内容2} | %^{时长} | %^{工作内容3} | %^{时长} | %^{工作内容4} | %^{时长} | "))
+                          ("抑郁&躁狂记录"
+                           :keys "5"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "抑郁&躁狂记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{抑郁程度} | %^{躁狂程度} |"))
+                          ("精神状态&幻觉&怪诞想法记录"
+                           :keys "6"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "精神状态 幻觉 怪诞想法记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{精神状态(随便说说)} | %^{幻觉?} | %^{怪诞想法} |"))
+                          ("快乐事件记录"
+                           :keys "7"
+                           :type table-line
+                           :file py/bipolar
+                           :headline "快乐事件记录"
+                           :table-line-pos "I-1"
+                           :template ("| %t | %^{内容1} | %^{内容2} | %^{内容3} |")))))))
 
 (defun jethro/find-or-create-olp (path &optional this-buffer)
   "Return a marker pointing to the entry at outline path OLP.
@@ -746,8 +617,6 @@ only headings."
 
 (setq org-refile-targets nil)
 
-(setq org-refile-targets nil)
-
 (add-to-list 'org-refile-targets '(nil :maxlevel . 9))
 
 (add-to-list 'org-refile-targets '(py/next :maxlevel . 1))
@@ -796,8 +665,7 @@ only headings."
 
 (map! :leader
       :prefix "n"
-      (:prefix-map              ("i" . "id")
-       :desc "id-create"        "C" #'org-id-get-create
+      (:prefix-map              ("I" . "id")
        :desc "id-goto"          "g" #'org-id-goto
        :desc "id-copy"          "c" #'org-id-copy))
 
@@ -827,22 +695,7 @@ when you realize it IS initalized."
 (add-to-list 'org-global-properties
       '("Effort_ALL". "0:05 0:15 0:30 1:00 1:30 2:00 3:00 4:00"))
 
-(use-package! notdeft
-  :config
-  (setq notdeft-extension "org")
-  (setq notdeft-directories '("~/Dropbox/.org/"))
-  (setq notdeft-xapian-program "/home/py06/.local/share/notdeft-xapian")
-  :bind (:map notdeft-mode-map
-         ("C-q" . notdeft-quit)
-         ("C-r" . notdeft-refresh)))
-
-(setenv "XAPIAN_CJK_NGRAM" "1")
-
-(map! :leader
-      (:prefix "n"
-       :desc "notdeft" "n" #'notdeft ))
-
-(use-package! org-roam
+(use-package org-roam
   :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
   :hook
   (after-init . org-roam-mode))
@@ -871,7 +724,7 @@ when you realize it IS initalized."
        :desc "Roam buffer"                   "r" #'org-roam
        :desc "Org Roam Capture"              "x" #'org-roam-capture))
 
-(use-package! org-roam-protocol
+(use-package org-roam-protocol
   :after org-protocol)
 
 (setq org-roam-capture-templates
@@ -905,7 +758,7 @@ when you realize it IS initalized."
                :immediate-finish t
                :unnarrowed t))
 
-(use-package! org-roam-server
+(use-package org-roam-server
   :config
   (setq org-roam-server-host "127.0.0.1"
         org-roam-server-port 9090
@@ -918,25 +771,19 @@ when you realize it IS initalized."
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
-;; kept server running
-(unless (server-running-p)
-  (org-roam-server-mode))
 
-(use-package! org-super-agenda
+(use-package org-super-agenda
 :config
 (add-hook! 'after-init-hook 'org-super-agenda-mode)
-(setq
-   org-agenda-skip-scheduled-if-done t
-   org-agenda-skip-deadline-if-done t
-   org-agenda-include-deadlines t
-   org-agenda-include-diary nil
-   org-agenda-block-separator nil
-   org-agenda-compact-blocks t
-   org-agenda-start-with-log-mode t)
+(setq org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-include-deadlines t
+      org-agenda-include-diary nil
+      org-agenda-block-separator nil
+      org-agenda-compact-blocks t
+      org-agenda-start-with-log-mode t)
 (setq org-columns-default-format
-      "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
-
-)
+      "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)"))
 
 (setq org-agenda-custom-commands
       `(("b" "BrainDump"
@@ -953,19 +800,22 @@ when you realize it IS initalized."
                 ((org-agenda-overriding-header "Arts, To Detail")
                  (org-agenda-files (directory-files-recursively py/arts-dir (rx ".org" eos)))))))
         ("p" "Pei's Agenda"
-         ((agenda "" ((org-agenda-span 2)
+         ((alltodo "" ((org-agenda-overriding-header "To Refile")
+                       (org-agenda-files '(,(expand-file-name py/inbox)))))
+          (alltodo "" ((org-agenda-overriding-header "One-off-task" )
+                       (org-agenda-files '(,(expand-file-name py/next )))))
+          (agenda "" ((org-agenda-span 3)
                       (org-agenda-start-day "-1d")
+                      (org-agenda-files (directory-files-recursively py/project-dir (rx ".org" eos)))
                       (org-super-agenda-groups
-                       '((:name "Today List"
+                       '((:name "Schedual"
                                 :time-grid t
                                 :date today
-                                :todo "⚔ INPROCESS"
                                 :scheduled today
-                                :order 1)))))
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '((:name "Next to do"
-                                 :priority>= "B"
-                                 :order 2)
-                                 ))))
+                                :order 1)
+                         (:name "Deadline"
+                                :time-grid t
+                                :date today
+                                :deadline today
+                                :order 2)))))
           ))))
